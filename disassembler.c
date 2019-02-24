@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 const int MAX_BYTE_COUNT = 3;
 
@@ -1508,6 +1509,8 @@ int printOp(unsigned char *opPtr, int pc) {
     break;
 
     default:
+      byteCount = 1;
+      printBytes(opPtr, byteCount);
       printf("UNKNOWN");
   }
 
@@ -1516,14 +1519,48 @@ int printOp(unsigned char *opPtr, int pc) {
   return byteCount;
 }
 
-void main() {
-
-  int bufSize = 8;
-  unsigned char a[8] = "\x00\x01\xf0\x21\x00\x02\x06\x10";
-
+void read_file(char *filename) {
+  FILE *file;
+  unsigned long filesize;
+  char *buf;
   int pc = 0;
 
-  while (pc < bufSize) {
-    pc += printOp(&a[pc], pc);
+  file = fopen(filename, "rb");
+
+  if (file == NULL) {
+    printf("Failed to open file\n");
+    return;
+  }
+
+  fseek(file, 0, SEEK_END);
+	filesize=ftell(file);
+	fseek(file, 0, SEEK_SET);
+
+  printf("- Dissassembling %ld bytes -\n\n", filesize);
+
+  buf = (char *)malloc(filesize + 1);
+
+  if (!buf) {
+    printf("Failed to allocate memory\n");
+    fclose(file);
+    return;
+  }
+
+  fread(buf, filesize, 1, file);
+	fclose(file);
+
+  while (pc < filesize) {
+    pc += printOp(&buf[pc], pc);
+  }
+
+  free(buf);
+}
+
+void main(int argc, char *argv[]) {
+
+  if (argc == 2) {
+    read_file(argv[1]);
+  } else {
+    printf("Invalid argument count\n");
   }
 }
