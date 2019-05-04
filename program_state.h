@@ -12,9 +12,9 @@ void set_reg_l(char new_val);
 
 void set_reg_a(char new_val);
 
-void set_sp(short new_val);
+void set_sp(unsigned short new_val);
 
-void set_pc(short new_val);
+void set_pc(unsigned short new_val);
 
 void set_sign(int new_val);
 
@@ -26,9 +26,12 @@ void set_carry(int new_val);
 
 void set_aux_carry(int new_val);
 
-void set_mem_byte(short mem_location, char new_val);
+void set_mem_byte(unsigned short mem_location, char new_val);
 
 //void set_mem_word(short mem_location, char new_val);
+
+void copy_to_mem(unsigned short mem_location,
+  unsigned short data_length, char *data);
 
 char get_reg_b();
 
@@ -44,9 +47,9 @@ char get_reg_l();
 
 char get_reg_a();
 
-short get_sp();
+unsigned short get_sp();
 
-short get_pc();
+unsigned short get_pc();
 
 int get_sign();
 
@@ -58,4 +61,4 @@ int get_carry();
 
 int get_aux_carry();
 
-char get_mem_byte(short mem_location);
+char get_mem_byte(unsigned short mem_location);
