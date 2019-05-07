@@ -19,14 +19,22 @@ int main(int argc, char const *argv[]) {
     OpCode op_code = OP_CODES[get_mem_byte(state, pc)];
 
     switch (op_code.code) {
-
-      // TODO: OPS other than NOP and HLT
-
       case 0x00:
-        printf("%x\n", 0x00);
+        // NOP
         break;
+
+      //....
+      case 0x40:
+        // NOP
+        break;
+      case 0x41:
+        set_reg_b(state, get_reg_c(state));
+        break;
+      case 0x42:
+        set_reg_b(state, get_reg_d(state));
+        break;
+      //....
       case 0x76:
-        printf("%x\n", 0x76);
         return 0;
     }
 
