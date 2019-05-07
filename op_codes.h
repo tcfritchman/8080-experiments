@@ -1,3 +1,6 @@
+#ifndef _STRUCT_OP_CODE_
+#define _STRUCT_OP_CODE_
+
 struct OpCode;
 
 typedef struct OpCode {
@@ -7,3 +10,5 @@ typedef struct OpCode {
 } OpCode;
 
 extern const OpCode OP_CODES[];
+
+#endif
