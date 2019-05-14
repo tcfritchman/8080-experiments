@@ -127,3 +127,28 @@ int get_aux_carry(ProcState state) {
 char get_mem_byte(ProcState state, unsigned short mem_location) {
   return state.mem[mem_location];
 }
+
+int parity(char byte) {
+  int set_bit_count = 0;
+
+  for (int i = 0; i < 8; i++) {
+    char tmp = byte >> i;
+    if (tmp & 1) {
+      set_bit_count++;
+    }
+  }
+
+  return !(set_bit_count % 2);
+}
+
+int sign(char byte) {
+  return byte < 0;
+}
+
+int zero(char byte) {
+  return byte == 0;
+}
+
+char complement(char byte) {
+  return byte ^ byte;
+}

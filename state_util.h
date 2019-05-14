@@ -64,3 +64,9 @@ int get_carry(ProcState state);
 int get_aux_carry(ProcState state);
 
 char get_mem_byte(ProcState state, unsigned short mem_location);
+
+int parity(char byte);
+
+int sign(char byte);
+
+char complement(char byte);
