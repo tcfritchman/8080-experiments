@@ -11,7 +11,7 @@ typedef struct ProcState {
   char reg_e;
   char reg_h;
   char reg_l;
-  char reg_a;
+  char reg_a; // "Accumulator"
   int sign;
   int zero;
   int parity;

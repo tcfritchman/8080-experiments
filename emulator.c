@@ -52,26 +52,38 @@ void update_state(ProcState state) {
       break;
 
     case 0x27:
+      // DAA
       // TODO
       break;
 
+    // Data Transfer instructions
+
     //....
     case 0x40:
-      // NOP
+      // MOV B,B (NOP)
       break;
     case 0x41:
+      // MOV B,C
       set_reg_b(state, get_reg_c(state));
       break;
     case 0x42:
+      // MOV B,D
       set_reg_b(state, get_reg_d(state));
       break;
     case 0x43:
+      // MOV B,E
       set_reg_b(state, get_reg_e(state));
       break;
     case 0x44:
+      // MOV B,H
       set_reg_b(state, get_reg_h(state));
       break;
     //....
+
+    case 0x02:
+      // STAX B
+      set_mem_byte(state, get_reg_pair_b_c(state), get_reg_a(state));
+      break;
 
     case 0x76:
       // HLT

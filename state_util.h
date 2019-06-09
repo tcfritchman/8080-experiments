@@ -35,6 +35,12 @@ void set_mem_byte(ProcState state, unsigned short mem_location, char new_val);
 void copy_to_mem(ProcState state, unsigned short mem_location,
   unsigned short data_length, char *data);
 
+short get_reg_pair_b_c(ProcState state);
+
+short get_reg_pair_d_e(ProcState state);
+
+short get_reg_pair_h_l(ProcState state);
+
 char get_reg_b(ProcState state);
 
 char get_reg_c(ProcState state);
@@ -68,5 +74,7 @@ char get_mem_byte(ProcState state, unsigned short mem_location);
 int parity(char byte);
 
 int sign(char byte);
+
+int zero(char byte);
 
 char complement(char byte);

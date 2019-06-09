@@ -68,6 +68,18 @@ void copy_to_mem(ProcState state, unsigned short mem_location,
   memcpy(&state.mem[mem_location], data, data_length);
 }
 
+short get_reg_pair_b_c(ProcState state) {
+  return state.reg_b | (((short)state.reg_c) << 8);
+}
+
+short get_reg_pair_d_e(ProcState state) {
+  return state.reg_d | (((short)state.reg_e) << 8);
+}
+
+short get_reg_pair_h_l(ProcState state) {
+  return state.reg_h | (((short)state.reg_l) << 8);
+}
+
 char get_reg_b(ProcState state) {
   return state.reg_b;
 }
