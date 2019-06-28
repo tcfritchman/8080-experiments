@@ -4,14 +4,14 @@
 struct ProcState;
 
 typedef struct ProcState {
-  char mem[65536];
-  char reg_b;
-  char reg_c;
-  char reg_d;
-  char reg_e;
-  char reg_h;
-  char reg_l;
-  char reg_a; // "Accumulator"
+  unsigned char mem[65536];
+  unsigned char reg_b;
+  unsigned char reg_c;
+  unsigned char reg_d;
+  unsigned char reg_e;
+  unsigned char reg_h;
+  unsigned char reg_l;
+  unsigned char reg_a; // "Accumulator"
   int sign;
   int zero;
   int parity;
