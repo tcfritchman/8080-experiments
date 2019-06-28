@@ -77,4 +77,8 @@ int sign(char byte);
 
 int zero(char byte);
 
+int add_carry(char byte_1, char byte_2);
+
+int add_aux_carry(char byte_1, char byte_2);
+
 char complement(char byte);

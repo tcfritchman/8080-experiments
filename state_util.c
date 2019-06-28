@@ -1,4 +1,6 @@
 #include <string.h>
+#include <limits.h>
+#include <stdio.h>
 #include "state.h"
 
 void set_reg_b(ProcState state, char new_val) {
@@ -69,15 +71,15 @@ void copy_to_mem(ProcState state, unsigned short mem_location,
 }
 
 short get_reg_pair_b_c(ProcState state) {
-  return state.reg_b | (((short)state.reg_c) << 8);
+  return state.reg_b | (((short)state.reg_c) << CHAR_BIT);
 }
 
 short get_reg_pair_d_e(ProcState state) {
-  return state.reg_d | (((short)state.reg_e) << 8);
+  return state.reg_d | (((short)state.reg_e) << CHAR_BIT);
 }
 
 short get_reg_pair_h_l(ProcState state) {
-  return state.reg_h | (((short)state.reg_l) << 8);
+  return state.reg_h | (((short)state.reg_l) << CHAR_BIT);
 }
 
 char get_reg_b(ProcState state) {
@@ -143,7 +145,7 @@ char get_mem_byte(ProcState state, unsigned short mem_location) {
 int parity(char byte) {
   int set_bit_count = 0;
 
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < CHAR_BIT; i++) {
     char tmp = byte >> i;
     if (tmp & 1) {
       set_bit_count++;
@@ -159,6 +161,27 @@ int sign(char byte) {
 
 int zero(char byte) {
   return byte == 0;
+}
+
+int add_carry(char byte_1, char byte_2) {
+  if ((byte_1 < 0 && byte_2 >= 0) || (byte_2 < 0 && byte_1 >= 0)) {
+    // One of the bytes is negative and the other positive.
+    // No chance of carry.
+    return 0;
+  } else {
+    // Both bytes have same sign. Carry is possible and can be determined by
+    // whether either byte has the same sign as the sum of the two.
+    if (byte_1 < 0) {
+      return byte_1 + byte_2 < CHAR_MIN;
+    } else {
+      return byte_1 + byte_2 > CHAR_MAX;
+    }
+  }
+}
+
+int add_aux_carry(char byte_1, char byte_2) {
+  // TODO
+  return 0;
 }
 
 char complement(char byte) {

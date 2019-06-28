@@ -85,6 +85,22 @@ void update_state(ProcState state) {
       set_mem_byte(state, get_reg_pair_b_c(state), get_reg_a(state));
       break;
 
+    case 0x0a:
+      // LDAX B
+      set_reg_a(state, get_mem_byte(state, get_reg_pair_b_c(state)));
+      break;
+
+    // Register or Memory to Accumulator instructions
+    case 0x80:
+      // ADD B
+      set_carry(state, add_aux_carry(get_reg_a(state), get_reg_b(state)));
+      // TODO: Aux carry
+      set_reg_a(state, get_reg_a(state) + get_reg_b(state));
+      set_parity(state, parity(get_reg_a(state)));
+      set_zero(state, zero(get_reg_a(state)));
+      set_sign(state, sign(get_reg_a(state)));
+      break;
+
     case 0x76:
       // HLT
       return;
