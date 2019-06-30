@@ -61,3 +61,33 @@ void sbbx(unsigned char *mem_addr, ProcState *state) {
   state->carry = !carry_bit;
   state->aux_carry = aux_carry_bit;
 }
+
+void anax(unsigned char *mem_addr, ProcState *state) {
+  unsigned char result = state->reg_a & *mem_addr;
+  state->reg_a = result;
+  state->carry = 0;
+  state->aux_carry = 0;
+  state->parity = parity(result);
+  state->zero = zero(result);
+  state->sign = sign(result);
+}
+
+void xrax(unsigned char *mem_addr, ProcState *state) {
+  unsigned char result = state->reg_a ^ *mem_addr;
+  state->reg_a = result;
+  state->carry = 0;
+  state->aux_carry = 0;
+  state->parity = parity(result);
+  state->zero = zero(result);
+  state->sign = sign(result);
+}
+
+void orax(unsigned char *mem_addr, ProcState *state) {
+  unsigned char result = state->reg_a | *mem_addr;
+  state->reg_a = result;
+  state->carry = 0;
+  state->aux_carry = 0;
+  state->parity = parity(result);
+  state->zero = zero(result);
+  state->sign = sign(result);
+}

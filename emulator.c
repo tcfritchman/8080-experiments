@@ -120,6 +120,27 @@ void update_state(ProcState state) {
 
       //...
 
+    case 0xa0:
+      // ANA B
+      anax(&state.reg_b, &state);
+      break;
+
+      //...
+    
+    case 0xa8:
+      // XRA B
+      xrax(&state.reg_b, &state);
+      break;
+
+      //...
+
+    case 0xb0:
+      // ORA B
+      orax(&state.reg_b, &state);
+      break;
+
+      //...
+
     case 0x76:
       // HLT
       return;
@@ -141,9 +162,9 @@ int main(int argc, char const *argv[]) {
 
   // return 0;
 
-  state.reg_a=0b00000100;
-  state.reg_b=0b00000010;
+  state.reg_a=0b00000101;
+  state.reg_b=0b00000110;
   state.carry=1;
-  sbbx(&state.reg_b, &state);
+  xrax(&state.reg_b, &state);
   print_registers(state);
 }
