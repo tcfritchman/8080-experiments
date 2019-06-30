@@ -13,3 +13,14 @@ void addx(unsigned char *mem_addr, ProcState *state);
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
 void adcx(unsigned char *mem_addr, ProcState *state);
+
+/* 
+ * SUB - Subtract contents of mem_addr from accumulator
+ * Description: The specified byte is subtracted from the
+ * accumulator using two's complement arithmetic.
+ * If there is no carry out of the high-order bit position,
+ * indicating that a borrow occurred, the Carry bit is set;
+ * otherwise it is reset. (Note that this differs from an add operation, which resets the carry if no overflow occurs).
+ * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
+ */
+void subx(unsigned char *mem_addr, ProcState *state);
