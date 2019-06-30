@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "op_codes.h"
 #include "state_util.h"
+#include "instructions.h"
 #include "state.h"
 
 unsigned char TEST_BYTES[] = {0x78, 0xB1, 0xC8, 0x1A, 0x77, 0x13, 0x23, 0x0B, 0x78, 0xB1, 0xC2, 0x03, 0x10, 0xC9};
@@ -93,12 +94,7 @@ void update_state(ProcState state) {
     // Register or Memory to Accumulator instructions
     case 0x80:
       // ADD B
-      set_carry(state, add_aux_carry(get_reg_a(state), get_reg_b(state)));
-      // TODO: Aux carry
-      set_reg_a(state, get_reg_a(state) + get_reg_b(state));
-      set_parity(state, parity(get_reg_a(state)));
-      set_zero(state, zero(get_reg_a(state)));
-      set_sign(state, sign(get_reg_a(state)));
+      addx(&state.reg_b, &state);
       break;
 
     case 0x76:

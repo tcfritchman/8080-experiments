@@ -82,3 +82,5 @@ int add_carry(unsigned char byte_1, unsigned char byte_2);
 int add_aux_carry(unsigned char byte_1, unsigned char byte_2);
 
 unsigned char complement(unsigned char byte);
+
+void print_registers(ProcState state);

@@ -156,7 +156,7 @@ int parity(unsigned char byte) {
 }
 
 int sign(unsigned char byte) {
-  return byte < 0;
+  return (byte & 0x80) >> 7;
 }
 
 int zero(unsigned char byte) {
@@ -186,4 +186,29 @@ int add_aux_carry(unsigned char byte_1, unsigned char byte_2) {
 
 unsigned char complement(unsigned char byte) {
   return byte ^ byte;
+}
+
+void print_registers(ProcState state) {
+  printf("\
+  BC: 0x%x 0x%x\n\
+  DE: 0x%x 0x%x\n\
+  HL: 0x%x 0x%x\n\
+  ACC: 0x%x\n\
+  SIGN: %d\n\
+  ZERO: %d\n\
+  PARITY: %d\n\
+  CARRY: %d\n\
+  AUX_CARRY: %d\n\
+  ", state.reg_b,
+  state.reg_c,
+  state.reg_d,
+  state.reg_e,
+  state.reg_h,
+  state.reg_l,
+  state.reg_a,
+  state.sign,
+  state.zero,
+  state.parity,
+  state.carry,
+  state.aux_carry);
 }
