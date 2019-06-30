@@ -97,6 +97,15 @@ void update_state(ProcState state) {
       addx(&state.reg_b, &state);
       break;
 
+      //...
+
+    case 0x88:
+      // ADC B
+      adcx(&state.reg_b, &state);
+      break;
+
+      //...
+
     case 0x76:
       // HLT
       return;
@@ -108,13 +117,19 @@ void update_state(ProcState state) {
 int main(int argc, char const *argv[]) {
   ProcState state;
 
-  // Load Memory
-  copy_to_mem(state, 0, sizeof(TEST_BYTES), TEST_BYTES);
+  // // Load Memory
+  // copy_to_mem(state, 0, sizeof(TEST_BYTES), TEST_BYTES);
 
-  // Program Loop
-  while (1) {
-    update_state(state);
-  }
+  // // Program Loop
+  // while (1) {
+  //   update_state(state);
+  // }
 
-  return 0;
+  // return 0;
+
+  state.reg_a=0xFF;
+  state.reg_b=0xFF;
+  state.carry=1;
+  adcx(&state.reg_b, &state);
+  print_registers(state);
 }
