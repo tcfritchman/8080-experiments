@@ -45,3 +45,19 @@ void subx(unsigned char *mem_addr, ProcState *state) {
   state->carry = !carry_bit;
   state->aux_carry = aux_carry_bit;
 }
+
+void sbbx(unsigned char *mem_addr, ProcState *state) {
+  // Flip only the last 8 bits of the value in mem_addr
+  unsigned int mem_addr_flipped = (~((*mem_addr + state->carry) | (~0xff)));
+  // Perform sums using 2's compliment subtraction
+  unsigned int sum = state->reg_a + mem_addr_flipped + 1;
+  int carry_bit = (0x100 & sum) >> BYTE_SIZE;
+  unsigned int aux_sum = (state->reg_a & 0xf) + ((~(*mem_addr + state->carry)) & 0xf) + 1;
+  int aux_carry_bit = (0x10 & aux_sum) >> NIBBLE_SIZE;
+  state->reg_a = sum;
+  state->parity = parity(sum);
+  state->zero = zero(sum);
+  state->sign = sign(sum);
+  state->carry = !carry_bit;
+  state->aux_carry = aux_carry_bit;
+}

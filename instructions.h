@@ -24,3 +24,14 @@ void adcx(unsigned char *mem_addr, ProcState *state);
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
 void subx(unsigned char *mem_addr, ProcState *state);
+
+/* 
+ * SBB - Subtract contents of mem_addr from accumulator with borrow
+ * Description: The Carry bit is internally added to the
+ * contents of the specified byte. This value is then subtracted
+ * from the accumulator using two's complement arithmetic.
+ * This instruction is most useful when performing subtractions. It adjusts the result of subtracting two bytes when
+ * a previous subtraction has produced a negative result (a borrow).
+ * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
+ */
+void sbbx(unsigned char *mem_addr, ProcState *state);

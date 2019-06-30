@@ -111,6 +111,15 @@ void update_state(ProcState state) {
       subx(&state.reg_b, &state);
       break;
 
+      //...
+
+    case 0x98:
+      // SBB B
+      sbbx(&state.reg_b, &state);
+      break;
+
+      //...
+
     case 0x76:
       // HLT
       return;
@@ -132,9 +141,9 @@ int main(int argc, char const *argv[]) {
 
   // return 0;
 
-  state.reg_a=0b00111110; // 3E
-  state.reg_b=0b00111110;
+  state.reg_a=0b00000100;
+  state.reg_b=0b00000010;
   state.carry=1;
-  subx(&state.reg_b, &state);
+  sbbx(&state.reg_b, &state);
   print_registers(state);
 }
