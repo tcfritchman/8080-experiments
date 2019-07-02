@@ -66,3 +66,21 @@ void xrax(unsigned char *mem_addr, ProcState *state);
  * Condition bits affected: Carry, Zero, Sign, Parity
  */
 void orax(unsigned char *mem_addr, ProcState *state);
+
+/*
+ * CMP - Compare Register or Memory With Accumulator
+ * Description: The specified byte is compared to the
+ * contents of the accumulator. The comparison is performed
+ * by internally subtracting the contents of REG from the accumulator 
+ * (leaving both unchanged) and setting the condition bits according 
+ * to the result. In particular, the Zero bit is
+ * set if the quantities are equal, and reset if they are unequal.
+ * Since a subtract operation is performed, the Carry bit will be
+ * set if there is no carry out of bit 7, indicati ng that the
+ * contents of REG are greater than the contents of the accumulator, and reset otherwise.
+ * NOTE: If the two quantities to be compared differ in sign,
+ * the sense of the Carry bit is reversed.
+ * Condition bits affected: Carry, Zero, Sign, Parity,
+ * Auxiliary Carry
+ */
+void cmpx(unsigned char *mem_addr, ProcState *state);
