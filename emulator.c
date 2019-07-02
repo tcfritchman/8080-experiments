@@ -141,6 +141,11 @@ void update_state(ProcState state) {
 
       //...
 
+    case 0xb8:
+      // CMP B
+      cmpx(&state.reg_b, &state);
+      break;
+
     case 0x76:
       // HLT
       return;
@@ -162,9 +167,12 @@ int main(int argc, char const *argv[]) {
 
   // return 0;
 
-  state.reg_a=0b00000101;
-  state.reg_b=0b00000110;
+printf("%d\n", state.aux_carry);
+    print_registers(state);
+
+  state.reg_a=0b10000101;
+  state.reg_b=0b00001011;
   state.carry=1;
-  xrax(&state.reg_b, &state);
+  rlc(&state);
   print_registers(state);
 }

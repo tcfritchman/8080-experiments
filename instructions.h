@@ -84,3 +84,12 @@ void orax(unsigned char *mem_addr, ProcState *state);
  * Auxiliary Carry
  */
 void cmpx(unsigned char *mem_addr, ProcState *state);
+
+/*
+ * RLC - Rotate Accumulator Left
+ * Description: The Carry bit is set equal to the highorder bit of the accumulator. 
+ * The contents of the accumulator are rotated one bit position to the left, with the 
+ * highorder bit being transferred to the low-order bit position of the accumulator.
+ * Condition bits affected: Carry
+ */
+void rlc(ProcState *state);

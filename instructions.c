@@ -107,3 +107,10 @@ void cmpx(unsigned char *mem_addr, ProcState *state) {
   state->aux_carry = aux_carry_bit;
 }
 
+void rlc(ProcState *state) {
+  unsigned int result = state->reg_a << 1;
+  int carry_bit = (0x100 & result) >> BYTE_SIZE;
+  result |= carry_bit;
+  state->reg_a = result;
+  state->carry = carry_bit;
+}
