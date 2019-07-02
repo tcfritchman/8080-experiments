@@ -167,12 +167,9 @@ int main(int argc, char const *argv[]) {
 
   // return 0;
 
-printf("%d\n", state.aux_carry);
-    print_registers(state);
-
-  state.reg_a=0b10000101;
-  state.reg_b=0b00001011;
+  state.reg_a=0b00100000;
+  state.reg_b=0b10010000;
   state.carry=1;
-  rlc(&state);
+  rar(&state);
   print_registers(state);
 }

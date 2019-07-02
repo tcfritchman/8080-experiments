@@ -93,3 +93,34 @@ void cmpx(unsigned char *mem_addr, ProcState *state);
  * Condition bits affected: Carry
  */
 void rlc(ProcState *state);
+
+/*
+ * RRC - Rotate Accumulator Right
+ * Description: The carry bit is set equal to the low-order
+ * bit of the accumulator. The contents of the accumulator are
+ * rotated one bit position to the right, with the low-order bit
+ * being transferred to the high-order bit position of the
+ * accumulator.
+ * Condition bits affected: Carry
+ */
+void rrc(ProcState *state);
+
+/*
+ * RAL - Rotate Accumulator Left Through Carry
+ * Description: The contents of the accumulator are rotated one bit position to the left.
+ * The high-order bit of the accumulator replaces the
+ * Carry bit, while the Carry bit replaces the high-order bit of
+ * the accumulator.
+ * Condition bits affected: Carry
+ */
+void ral(ProcState *state);
+
+/*
+ * RAR - Rotate Accumulator Right Through Carry
+ * Description: The contents of the accumulator are rotated one bit position to the right.
+ * The low-order bit of the accumulator replaces the
+ * carry bit, while the carry bit replaces the high-order bit of
+ * the accumulator.
+ * Condition bits affected: Carry
+ */
+void rar(ProcState *state);

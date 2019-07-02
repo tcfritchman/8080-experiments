@@ -114,3 +114,29 @@ void rlc(ProcState *state) {
   state->reg_a = result;
   state->carry = carry_bit;
 }
+
+void rrc(ProcState *state) {
+  int carry_bit = (0x1 & state->reg_a);
+  unsigned int result = state->reg_a >> 1;
+  result |= carry_bit << (BYTE_SIZE - 1);
+  state->reg_a = result;
+  state->carry = carry_bit;
+}
+
+void ral(ProcState *state) {
+  unsigned int result = state->reg_a << 1;
+  int old_carry_bit = state->carry;
+  int new_carry_bit = (0x100 & result) >> BYTE_SIZE;
+  result |= old_carry_bit;
+  state->reg_a = result;
+  state->carry = new_carry_bit;
+}
+
+void rar(ProcState *state) {
+  int new_carry_bit = (0x1 & state->reg_a);
+  unsigned int result = state->reg_a >> 1;
+  int old_carry_bit = state->carry;
+  result |= old_carry_bit << (BYTE_SIZE - 1);
+  state->reg_a = result;
+  state->carry = new_carry_bit;
+}
