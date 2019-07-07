@@ -190,16 +190,18 @@ unsigned char complement(unsigned char byte) {
 
 void print_registers(ProcState state) {
   printf("\
-  BC: 0x%x 0x%x\n\
-  DE: 0x%x 0x%x\n\
-  HL: 0x%x 0x%x\n\
-  ACC: 0x%x\n\
-  SIGN: %d\n\
-  ZERO: %d\n\
-  PARITY: %d\n\
-  CARRY: %d\n\
-  AUX_CARRY: %d\n\
-  ", state.reg_b,
+BC: 0x%02x 0x%02x\n\
+DE: 0x%02x 0x%02x\n\
+HL: 0x%02x 0x%02x\n\
+ACC: 0x%02x\n\
+SIGN: %d\n\
+ZERO: %d\n\
+PARITY: %d\n\
+CARRY: %d\n\
+AUX_CARRY: %d\n\
+SP: 0x%04x\n\
+PC: 0x%04x\n",
+  state.reg_b,
   state.reg_c,
   state.reg_d,
   state.reg_e,
@@ -210,5 +212,21 @@ void print_registers(ProcState state) {
   state.zero,
   state.parity,
   state.carry,
-  state.aux_carry);
+  state.aux_carry,
+  state.sp,
+  state.pc);
+}
+
+void print_mem_r(unsigned short mem_addr, unsigned short pre_bytes, unsigned short post_bytes, ProcState *state) {
+  for (int i = mem_addr - pre_bytes; i < mem_addr + post_bytes; i++) {
+    printf("Ox%04x: 0x%02x\n", i, state->mem[i]);
+  }
+}
+
+void print_mem_c(unsigned short mem_addr, unsigned short post_bytes, ProcState *state) {
+  print_mem_r(mem_addr, 0, post_bytes, state);
+}
+
+void print_mem(unsigned short mem_addr, ProcState *state) {
+  print_mem_r(mem_addr, 0, 8, state);
 }

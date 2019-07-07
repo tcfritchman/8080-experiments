@@ -169,7 +169,14 @@ int main(int argc, char const *argv[]) {
 
   state.reg_a=0b00100000;
   state.reg_b=0b10010000;
-  state.carry=1;
-  rar(&state);
+  state.reg_c=0b10101010;
+  state.sp=0x100;
+  state.carry=0;
+  state.aux_carry=0;
+  state.zero=0;
+  state.parity=0;
+  state.sign=0;
+  push_psw(&state);
   print_registers(state);
+  print_mem_r(state.sp, 4, 4, &state);
 }
