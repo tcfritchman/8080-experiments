@@ -140,3 +140,21 @@ void rar(ProcState *state) {
   state->reg_a = result;
   state->carry = new_carry_bit;
 }
+
+void push(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state) {
+  unsigned short sp = state->sp;
+  state->mem[sp-1] = *mem_addr_1;
+  state->mem[sp-2] = *mem_addr_2;
+  state->sp -= 2;
+}
+
+void push_psw(ProcState *state) {
+  unsigned char psw_bits = 0 |
+   state->sign << 7 |
+   state->zero << 6 |
+   state->aux_carry << 4 |
+   state->parity << 2 |
+   1 << 1 |
+   state->carry;
+   push(&state->reg_a, &psw_bits, state);
+}

@@ -124,3 +124,19 @@ void ral(ProcState *state);
  * Condition bits affected: Carry
  */
 void rar(ProcState *state);
+
+/*
+ * PUSH - Push Data Onto Stack
+ * Description: The contents of the specified register pair
+ * are saved in two bytes of memory indicated by the stack
+ * pointer SP.
+ * Condition bits affected: None
+ */
+void push(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state);
+
+/*
+ * PUSH PSW - Push specifically PSW Onto Stack
+ * Condition bits affected: None
+ */
+void push_psw(ProcState *state);
+
