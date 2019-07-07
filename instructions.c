@@ -158,3 +158,20 @@ void push_psw(ProcState *state) {
    state->carry;
    push(&state->reg_a, &psw_bits, state);
 }
+
+void pop(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state) {
+  unsigned short sp = state->sp;
+  *mem_addr_2 = state->mem[sp];
+  *mem_addr_1 = state->mem[sp+1];
+  state->sp += 2;
+}
+
+void pop_psw(ProcState *state) {
+  unsigned char psw_bits;
+  pop(&state->reg_a, &psw_bits, state);
+  state->sign = (0x80 & psw_bits) >> 7;
+  state->zero = (0x40 & psw_bits) >> 6;
+  state->aux_carry = (0x10 & psw_bits >> 4);
+  state->parity = (0x04 & psw_bits) >> 2;
+  state->carry = (0x01 & psw_bits);
+}

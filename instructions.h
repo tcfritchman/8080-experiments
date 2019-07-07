@@ -140,3 +140,7 @@ void push(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state
  */
 void push_psw(ProcState *state);
 
+void pop(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state);
+
+void pop_psw(ProcState *state);
+
