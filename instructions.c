@@ -2,6 +2,7 @@
 #include "state_util.h"
 
 const int BYTE_SIZE = 8;
+const int DOUBLE_BYTE_SIZE = 16;
 const int NIBBLE_SIZE = 4;
 
 void addx(unsigned char *mem_addr, ProcState *state) {
@@ -174,4 +175,28 @@ void pop_psw(ProcState *state) {
   state->aux_carry = (0x10 & psw_bits >> 4);
   state->parity = (0x04 & psw_bits) >> 2;
   state->carry = (0x01 & psw_bits);
+}
+
+void dad(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state) {
+  unsigned short hl_bits = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
+  unsigned short in_bits = (*mem_addr_1 << BYTE_SIZE) ^ *mem_addr_2;
+  unsigned int sum = hl_bits + in_bits;
+  int carry_bit = (0x10000 & sum) >> DOUBLE_BYTE_SIZE;
+  state->reg_h = sum >> BYTE_SIZE;
+  state->reg_l = sum;
+  state->carry = carry_bit;
+}
+
+void inx(unsigned char *mem_addr_1, unsigned char *mem_addr_2) {
+  unsigned short in_bits = (*mem_addr_1 << BYTE_SIZE) ^ *mem_addr_2;
+  in_bits++;
+  *mem_addr_1 = in_bits >> BYTE_SIZE;
+  *mem_addr_2 = in_bits;
+}
+
+void dcx(unsigned char *mem_addr_1, unsigned char *mem_addr_2) {
+  unsigned short in_bits = (*mem_addr_1 << BYTE_SIZE) ^ *mem_addr_2;
+  in_bits--;
+  *mem_addr_1 = in_bits >> BYTE_SIZE;
+  *mem_addr_2 = in_bits;
 }

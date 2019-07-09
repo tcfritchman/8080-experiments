@@ -144,3 +144,8 @@ void pop(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state)
 
 void pop_psw(ProcState *state);
 
+void dad(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state);
+
+void inx(unsigned char *mem_addr_1, unsigned char *mem_addr_2);
+
+void dcx(unsigned char *mem_addr_1, unsigned char *mem_addr_2);
