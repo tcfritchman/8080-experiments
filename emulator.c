@@ -182,7 +182,7 @@ int main(int argc, char const *argv[]) {
   state.sign=0;
   state.mem[0x100] = 0x88;
   state.mem[0x101] = 0x99;
-  xthl(&state);
+  sphl(&state);
   print_registers(state);
   print_mem(0x100, &state);
 }

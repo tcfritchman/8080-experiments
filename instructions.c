@@ -218,3 +218,8 @@ void xthl(ProcState *state) {
   state->mem[state->sp + 1] = temp_a;
   state->mem[state->sp] = temp_b;
 }
+
+void sphl(ProcState *state) {
+  unsigned short hl_bits = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
+  state->sp = hl_bits;
+}

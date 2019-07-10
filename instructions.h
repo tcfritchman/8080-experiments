@@ -153,3 +153,5 @@ void dcx(unsigned char *mem_addr_1, unsigned char *mem_addr_2);
 void xchg(ProcState *state);
 
 void xthl(ProcState *state);
+
+void sphl(ProcState *state);
