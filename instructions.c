@@ -200,3 +200,21 @@ void dcx(unsigned char *mem_addr_1, unsigned char *mem_addr_2) {
   *mem_addr_1 = in_bits >> BYTE_SIZE;
   *mem_addr_2 = in_bits;
 }
+
+void xchg(ProcState *state) {
+  unsigned char temp_a = state->reg_h;
+  unsigned char temp_b = state->reg_l;
+  state->reg_h = state->reg_d;
+  state->reg_l = state->reg_e;
+  state->reg_d = temp_a;
+  state->reg_e = temp_b;
+}
+
+void xthl(ProcState *state) {
+  unsigned char temp_a = state->reg_h;
+  unsigned char temp_b = state->reg_l;
+  state->reg_h = state->mem[state->sp + 1];
+  state->reg_l = state->mem[state->sp];
+  state->mem[state->sp + 1] = temp_a;
+  state->mem[state->sp] = temp_b;
+}

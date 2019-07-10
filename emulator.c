@@ -170,15 +170,19 @@ int main(int argc, char const *argv[]) {
   state.reg_a=0b11111111;
   state.reg_b=0b11111111;
   state.reg_c=0b10101010;
-  state.reg_h=0b11111111;
-  state.reg_l=0b11111111;
+  state.reg_d=0x10;
+  state.reg_e=0x20;
+  state.reg_h=0x30;
+  state.reg_l=0x40;
   state.sp=0x100;
   state.carry=0;
   state.aux_carry=0;
   state.zero=0;
   state.parity=0;
   state.sign=0;
-  //dad(&state.reg_a, &state.reg_b, &state);
-  inx(&state.reg_h, &state.reg_l);
+  state.mem[0x100] = 0x88;
+  state.mem[0x101] = 0x99;
+  xthl(&state);
   print_registers(state);
+  print_mem(0x100, &state);
 }

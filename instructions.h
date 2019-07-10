@@ -149,3 +149,7 @@ void dad(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state)
 void inx(unsigned char *mem_addr_1, unsigned char *mem_addr_2);
 
 void dcx(unsigned char *mem_addr_1, unsigned char *mem_addr_2);
+
+void xchg(ProcState *state);
+
+void xthl(ProcState *state);
