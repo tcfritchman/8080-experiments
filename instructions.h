@@ -27,14 +27,14 @@
  * Description: The specified byte is added to the contents of the accumulator using two's complement arithmetic
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
-void addx(unsigned char *mem_addr, ProcState *state);
+void addx(unsigned char mem_addr, ProcState *state);
 
 /* 
  * ADC - Add contents of mem_addr to accumulator with carry
  * Description: The specified byte plus the content of the Carry bit is added to the contents of the accumulator
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
-void adcx(unsigned char *mem_addr, ProcState *state);
+void adcx(unsigned char mem_addr, ProcState *state);
 
 /* 
  * SUB - Subtract contents of mem_addr from accumulator
@@ -45,7 +45,7 @@ void adcx(unsigned char *mem_addr, ProcState *state);
  * otherwise it is reset. (Note that this differs from an add operation, which resets the carry if no overflow occurs).
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
-void subx(unsigned char *mem_addr, ProcState *state);
+void subx(unsigned char mem_addr, ProcState *state);
 
 /* 
  * SBB - Subtract contents of mem_addr from accumulator with borrow
@@ -56,7 +56,7 @@ void subx(unsigned char *mem_addr, ProcState *state);
  * a previous subtraction has produced a negative result (a borrow).
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
-void sbbx(unsigned char *mem_addr, ProcState *state);
+void sbbx(unsigned char mem_addr, ProcState *state);
 
 /* 
  * ANA - Logical AND contents of mem_addr with accumulator
@@ -67,7 +67,7 @@ void sbbx(unsigned char *mem_addr, ProcState *state);
  * if both the bits equal 1.
  * Condition bits affected: Carry, Zero, Sign, Parity
  */
-void anax(unsigned char *mem_addr, ProcState *state);
+void anax(unsigned char mem_addr, ProcState *state);
 
 /* 
  * XRA - Logical Exclusive-Or Register or Memory 
@@ -78,7 +78,7 @@ void anax(unsigned char *mem_addr, ProcState *state);
  * Condition bits affected: Carry, Zero, Sign, Parity,
  * Auxiliary Carry
  */
-void xrax(unsigned char *mem_addr, ProcState *state);
+void xrax(unsigned char mem_addr, ProcState *state);
 
 /* 
  * ORA - Logical or Register or Memory With Accumulator
@@ -87,7 +87,7 @@ void xrax(unsigned char *mem_addr, ProcState *state);
  * is reset to zero.
  * Condition bits affected: Carry, Zero, Sign, Parity
  */
-void orax(unsigned char *mem_addr, ProcState *state);
+void orax(unsigned char mem_addr, ProcState *state);
 
 /*
  * CMP - Compare Register or Memory With Accumulator
@@ -105,7 +105,7 @@ void orax(unsigned char *mem_addr, ProcState *state);
  * Condition bits affected: Carry, Zero, Sign, Parity,
  * Auxiliary Carry
  */
-void cmpx(unsigned char *mem_addr, ProcState *state);
+void cmpx(unsigned char mem_addr, ProcState *state);
 
 /*
  * ROTATE ACCUMULATOR INSTRUCTIONS
@@ -162,7 +162,7 @@ void rar(ProcState *state);
  * pointer SP.
  * Condition bits affected: None
  */
-void push(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state);
+void push(unsigned char mem_addr_1, unsigned char mem_addr_2, ProcState *state);
 
 /*
  * PUSH PSW - Push specifically PSW Onto Stack
@@ -170,15 +170,15 @@ void push(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state
  */
 void push_psw(ProcState *state);
 
-void pop(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state);
+void pop(unsigned char mem_addr_1, unsigned char mem_addr_2, ProcState *state);
 
 void pop_psw(ProcState *state);
 
-void dad(unsigned char *mem_addr_1, unsigned char *mem_addr_2, ProcState *state);
+void dad(unsigned char mem_addr_1, unsigned char mem_addr_2, ProcState *state);
 
-void inx(unsigned char *mem_addr_1, unsigned char *mem_addr_2);
+void inx(unsigned char mem_addr_1, unsigned char mem_addr_2);
 
-void dcx(unsigned char *mem_addr_1, unsigned char *mem_addr_2);
+void dcx(unsigned char mem_addr_1, unsigned char mem_addr_2);
 
 void xchg(ProcState *state);
 
@@ -197,13 +197,13 @@ void sphl(ProcState *state);
  * DIRECT ADDRESSING INSTRUCTIONS
  */
 
-void sta(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void sta(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void lda(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void lda(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void shld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void shld(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void lhld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void lhld(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
 /*
  * JUMP INSTRUCTIONS
@@ -211,28 +211,45 @@ void lhld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *sta
 
 void pchl(ProcState *state);
 
-void jmp(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jmp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void jc(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void jnc(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jnc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void jz(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void jnz(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jnz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void jm(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jm(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void jp(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void jpe(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jpe(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
-void jpo(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+void jpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
 /*
  * CALL SUBROUTINE INSTRUCTIONS
  */
 
+void call(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void cc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void cnc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void cz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void cnz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void cm(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void cp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void cpe(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void cpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
 /*
  * RETURN FROM SUBROUTINE INSTRUCTIONS

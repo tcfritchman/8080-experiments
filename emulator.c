@@ -94,56 +94,56 @@ void update_state(ProcState state) {
     // Register or Memory to Accumulator instructions
     case 0x80:
       // ADD B
-      addx(&state.reg_b, &state);
+      addx(state.reg_b, &state);
       break;
 
       //...
 
     case 0x88:
       // ADC B
-      adcx(&state.reg_b, &state);
+      adcx(state.reg_b, &state);
       break;
 
       //...
 
     case 0x90:
       // SUB B
-      subx(&state.reg_b, &state);
+      subx(state.reg_b, &state);
       break;
 
       //...
 
     case 0x98:
       // SBB B
-      sbbx(&state.reg_b, &state);
+      sbbx(state.reg_b, &state);
       break;
 
       //...
 
     case 0xa0:
       // ANA B
-      anax(&state.reg_b, &state);
+      anax(state.reg_b, &state);
       break;
 
       //...
     
     case 0xa8:
       // XRA B
-      xrax(&state.reg_b, &state);
+      xrax(state.reg_b, &state);
       break;
 
       //...
 
     case 0xb0:
       // ORA B
-      orax(&state.reg_b, &state);
+      orax(state.reg_b, &state);
       break;
 
       //...
 
     case 0xb8:
       // CMP B
-      cmpx(&state.reg_b, &state);
+      cmpx(state.reg_b, &state);
       break;
 
     case 0x76:
@@ -185,7 +185,7 @@ int main(int argc, char const *argv[]) {
   state.sign=0;
   state.mem[0x3040] = 0x88;
   state.mem[0x3041] = 0x99;
-  jnc(&x, &y, &state);
+  jnc(x, y, &state);
   print_registers(state);
   print_mem(0x3040, &state);
 }
