@@ -209,6 +209,25 @@ void lhld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *sta
  * JUMP INSTRUCTIONS
  */
 
+void pchl(ProcState *state);
+
+void jmp(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void jc(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void jnc(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void jz(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void jnz(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void jm(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void jp(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void jpe(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void jpo(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
 
 /*
  * CALL SUBROUTINE INSTRUCTIONS

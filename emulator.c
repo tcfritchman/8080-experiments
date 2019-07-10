@@ -176,15 +176,16 @@ int main(int argc, char const *argv[]) {
   state.reg_e=0x20;
   state.reg_h=0x30;
   state.reg_l=0x40;
+  state.pc=0x777;
   state.sp=0x100;
   state.carry=0;
   state.aux_carry=0;
   state.zero=0;
   state.parity=0;
   state.sign=0;
-  state.mem[0x100] = 0x88;
-  state.mem[0x101] = 0x99;
-  lhld(&x, &y, &state);
+  state.mem[0x3040] = 0x88;
+  state.mem[0x3041] = 0x99;
+  jnc(&x, &y, &state);
   print_registers(state);
-  print_mem(0x100, &state);
+  print_mem(0x3040, &state);
 }

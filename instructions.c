@@ -245,3 +245,61 @@ void lhld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *sta
   state->reg_l = state->mem[mem_addr];
   state->reg_h = state->mem[mem_addr + 1];
 }
+
+void pchl(ProcState *state) {
+  unsigned short mem_addr = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
+  state->pc = mem_addr;
+}
+
+void jmp(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  unsigned short mem_addr = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
+  state->pc = mem_addr;
+}
+
+void jc(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  if (state->carry) {
+    jmp(mem_addr_hi, mem_addr_lo, state);
+  }
+}
+
+void jnc(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  if (!state->carry) {
+    jmp(mem_addr_hi, mem_addr_lo, state);
+  }
+}
+
+void jz(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  if (state->zero) {
+    jmp(mem_addr_hi, mem_addr_lo, state);
+  }
+}
+
+void jnz(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  if (!state->zero) {
+    jmp(mem_addr_hi, mem_addr_lo, state);
+  }
+}
+
+void jm(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  if (state->sign) {
+    jmp(mem_addr_hi, mem_addr_lo, state);
+  }
+}
+
+void jp(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  if (!state->sign) {
+    jmp(mem_addr_hi, mem_addr_lo, state);
+  }
+}
+
+void jpe(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  if (state->parity) {
+    jmp(mem_addr_hi, mem_addr_lo, state);
+  }
+}
+
+void jpo(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  if (!state->parity) {
+    jmp(mem_addr_hi, mem_addr_lo, state);
+  }
+}
