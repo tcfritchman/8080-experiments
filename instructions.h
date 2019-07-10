@@ -162,7 +162,7 @@ void rar(ProcState *state);
  * pointer SP.
  * Condition bits affected: None
  */
-void push(unsigned char mem_addr_1, unsigned char mem_addr_2, ProcState *state);
+void push(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
 /*
  * PUSH PSW - Push specifically PSW Onto Stack
@@ -170,15 +170,15 @@ void push(unsigned char mem_addr_1, unsigned char mem_addr_2, ProcState *state);
  */
 void push_psw(ProcState *state);
 
-void pop(unsigned char mem_addr_1, unsigned char mem_addr_2, ProcState *state);
+void pop(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
 
 void pop_psw(ProcState *state);
 
-void dad(unsigned char mem_addr_1, unsigned char mem_addr_2, ProcState *state);
+void dad(unsigned char data_hi, unsigned char data_lo, ProcState *state);
 
-void inx(unsigned char mem_addr_1, unsigned char mem_addr_2);
+void inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
 
-void dcx(unsigned char mem_addr_1, unsigned char mem_addr_2);
+void dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
 
 void xchg(ProcState *state);
 
