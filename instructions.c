@@ -223,3 +223,25 @@ void sphl(ProcState *state) {
   unsigned short hl_bits = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
   state->sp = hl_bits;
 }
+
+void sta(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  unsigned short mem_addr = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
+  state->mem[mem_addr] = state->reg_a;
+}
+
+void lda(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  unsigned short mem_addr = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
+  state->reg_a = state->mem[mem_addr];
+}
+
+void shld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  unsigned short mem_addr = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
+  state->mem[mem_addr] = state->reg_l;
+  state->mem[mem_addr + 1] = state->reg_h;
+}
+
+void lhld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+  unsigned short mem_addr = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
+  state->reg_l = state->mem[mem_addr];
+  state->reg_h = state->mem[mem_addr + 1];
+}

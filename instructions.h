@@ -197,6 +197,13 @@ void sphl(ProcState *state);
  * DIRECT ADDRESSING INSTRUCTIONS
  */
 
+void sta(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void lda(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void shld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+
+void lhld(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
 
 /*
  * JUMP INSTRUCTIONS
