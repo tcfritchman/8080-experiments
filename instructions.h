@@ -1,5 +1,27 @@
 #include "state.h"
 
+/*
+ * CARRY BIT INSTRUCTIONS
+ */
+
+// TODO: Move into this module
+
+/*
+ * SINGLE REGISTER INSTRUCTIONS
+ */
+
+// TODO: Move into this module
+
+/*
+ * DATA TRANSFER INSTRUCTIONS
+ */
+
+// TODO: Move into this module
+
+/*
+ * REGISTER OR MEMORY TO ACCUMULATOR INSTRUCTIONS
+ */
+
 /* 
  * ADD - Add contents of mem_addr to accumulator 
  * Description: The specified byte is added to the contents of the accumulator using two's complement arithmetic
@@ -86,6 +108,10 @@ void orax(unsigned char *mem_addr, ProcState *state);
 void cmpx(unsigned char *mem_addr, ProcState *state);
 
 /*
+ * ROTATE ACCUMULATOR INSTRUCTIONS
+ */
+
+/*
  * RLC - Rotate Accumulator Left
  * Description: The Carry bit is set equal to the highorder bit of the accumulator. 
  * The contents of the accumulator are rotated one bit position to the left, with the 
@@ -126,6 +152,10 @@ void ral(ProcState *state);
 void rar(ProcState *state);
 
 /*
+ * REGISTER PAIR INSTRUCTIONS
+ */
+
+/*
  * PUSH - Push Data Onto Stack
  * Description: The contents of the specified register pair
  * are saved in two bytes of memory indicated by the stack
@@ -155,3 +185,49 @@ void xchg(ProcState *state);
 void xthl(ProcState *state);
 
 void sphl(ProcState *state);
+
+/*
+ * IMMEDIATE INSTRUCTIONS
+ */
+
+// TODO: Note - I believe these instructions share the same functionality
+// as the REGISTER OR MEMORY TO ACCUMULATOR instructions.
+
+/*
+ * DIRECT ADDRESSING INSTRUCTIONS
+ */
+
+
+/*
+ * JUMP INSTRUCTIONS
+ */
+
+
+/*
+ * CALL SUBROUTINE INSTRUCTIONS
+ */
+
+
+/*
+ * RETURN FROM SUBROUTINE INSTRUCTIONS
+ */
+
+
+/*
+ * RST INSTRUCTION
+ */
+
+
+/*
+ * INTERRUPT FLIP-FLOP INSTRUCTIONS
+ */
+
+
+/*
+ * INPUT/OUTPUT INSTRUCTIONS
+ */
+
+
+/*
+ * HALT INSTRUCTION
+ */
