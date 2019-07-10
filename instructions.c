@@ -305,24 +305,56 @@ void jpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state)
 }
 
 void call(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
-  // unsigned short mem_addr = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
-  // unsigned short return_addr = state->pc + 3;
-  // push(return_addr >> BYTE_SIZE, )
-  // state->pc = mem_addr;
+  unsigned short return_addr = state->pc + 3;
+  push(return_addr >> BYTE_SIZE, return_addr, state);
+  unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
+  state->pc = mem_addr;
 }
 
-void cc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+void cc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  if (state->carry) {
+    call(mem_addr_hi, mem_addr_lo, state);
+  }
+}
 
-void cnc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+void cnc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  if (!state->carry) {
+    call(mem_addr_hi, mem_addr_lo, state);
+  }
+}
 
-void cz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+void cz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  if (state->zero) {
+    call(mem_addr_hi, mem_addr_lo, state);
+  }
+}
 
-void cnz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+void cnz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  if (!state->zero) {
+    call(mem_addr_hi, mem_addr_lo, state);
+  }
+}
 
-void cm(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+void cm(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  if (state->sign) {
+    call(mem_addr_hi, mem_addr_lo, state);
+  }
+}
 
-void cp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+void cp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  if (!state->sign) {
+    call(mem_addr_hi, mem_addr_lo, state);
+  }
+}
 
-void cpe(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+void cpe(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  if (state->parity) {
+    call(mem_addr_hi, mem_addr_lo, state);
+  }
+}
 
-void cpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+void cpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  if (!state->parity) {
+    call(mem_addr_hi, mem_addr_lo, state);
+  }
+}
