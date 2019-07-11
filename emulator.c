@@ -169,7 +169,7 @@ int main(int argc, char const *argv[]) {
   unsigned char x = 0x01;
   unsigned char y = 0x00;
 
-  state.reg_a=0b11111110;
+  state.reg_a=0b10011011;
   state.reg_b=0b11111111;
   state.reg_c=0b10101010;
   state.reg_d=0x10;
@@ -185,7 +185,7 @@ int main(int argc, char const *argv[]) {
   state.sign=0;
   state.mem[0x100] = 0x88;
   state.mem[0x101] = 0x99;
-  rst(0x7, &state);
+  daa(&state);
   print_registers(state);
   print_mem(0xfc, &state);
 }

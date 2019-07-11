@@ -12,7 +12,13 @@ void stc(ProcState *state);
  * SINGLE REGISTER INSTRUCTIONS
  */
 
-// TODO: Move into this module
+void inr(unsigned char *data);
+
+void dcr(unsigned char *data);
+
+void cma(ProcState *state);
+
+void daa(ProcState *state);
 
 /*
  * DATA TRANSFER INSTRUCTIONS

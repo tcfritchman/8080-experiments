@@ -13,6 +13,38 @@ void stc(ProcState *state) {
   state->carry = 1;
 }
 
+void inr(unsigned char *data) {
+  *data++;
+}
+
+void dcr(unsigned char *data) {
+  *data--;
+}
+
+void cma(ProcState *state) {
+  state->reg_a = ~state->reg_a;
+}
+
+void daa(ProcState *state) {
+  unsigned char lo_four = (state->reg_a & 0x0f);
+  if (lo_four > 9 || state->aux_carry) {
+    lo_four += 6;
+    state->aux_carry = (lo_four > 0xf);
+    state->reg_a += 6;
+  }
+  unsigned char hi_four = (state->reg_a >> NIBBLE_SIZE);
+  if (hi_four > 9 || state->carry) {
+    hi_four += 6;
+    if (hi_four > 0xf) {
+      state->carry = 1;
+    }
+    state->reg_a += ((hi_four + 6) << NIBBLE_SIZE);
+  }
+  state->parity = parity(state->reg_a);
+  state->zero = zero(state->reg_a);
+  state->sign = sign(state->reg_a);
+}
+
 void addx(unsigned char data, ProcState *state) {
   unsigned int sum = data + state->reg_a;
   int carry_bit = (0x100 & sum) >> BYTE_SIZE;
