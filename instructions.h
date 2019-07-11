@@ -24,7 +24,11 @@ void daa(ProcState *state);
  * DATA TRANSFER INSTRUCTIONS
  */
 
-// TODO: Move into this module
+void mov(unsigned char data_src, unsigned char *mem_addr_dst);
+
+void stax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+
+void ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
 /*
  * REGISTER OR MEMORY TO ACCUMULATOR INSTRUCTIONS

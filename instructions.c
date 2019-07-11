@@ -45,6 +45,20 @@ void daa(ProcState *state) {
   state->sign = sign(state->reg_a);
 }
 
+void mov(unsigned char data_src, unsigned char *mem_addr_dst) {
+  *mem_addr_dst = data_src;
+}
+
+void stax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
+  state->mem[mem_addr] = state->reg_a;
+}
+
+void ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+  unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
+  state->reg_a = state->mem[mem_addr];
+}
+
 void addx(unsigned char data, ProcState *state) {
   unsigned int sum = data + state->reg_a;
   int carry_bit = (0x100 & sum) >> BYTE_SIZE;
