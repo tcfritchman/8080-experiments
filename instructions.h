@@ -291,7 +291,10 @@ void di(ProcState *state);
  * INPUT/OUTPUT INSTRUCTIONS
  */
 
+// TODO
 
 /*
  * HALT INSTRUCTION
  */
+
+// TODO
