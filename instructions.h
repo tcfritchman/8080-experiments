@@ -39,14 +39,14 @@ void ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state
  * Description: The specified byte is added to the contents of the accumulator using two's complement arithmetic
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
-void addx(unsigned char mem_addr, ProcState *state);
+void add(unsigned char mem_addr, ProcState *state);
 
 /* 
  * ADC - Add contents of mem_addr to accumulator with carry
  * Description: The specified byte plus the content of the Carry bit is added to the contents of the accumulator
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
-void adcx(unsigned char mem_addr, ProcState *state);
+void adc(unsigned char mem_addr, ProcState *state);
 
 /* 
  * SUB - Subtract contents of mem_addr from accumulator
@@ -57,7 +57,7 @@ void adcx(unsigned char mem_addr, ProcState *state);
  * otherwise it is reset. (Note that this differs from an add operation, which resets the carry if no overflow occurs).
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
-void subx(unsigned char mem_addr, ProcState *state);
+void sub(unsigned char mem_addr, ProcState *state);
 
 /* 
  * SBB - Subtract contents of mem_addr from accumulator with borrow
@@ -68,7 +68,7 @@ void subx(unsigned char mem_addr, ProcState *state);
  * a previous subtraction has produced a negative result (a borrow).
  * Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
  */
-void sbbx(unsigned char mem_addr, ProcState *state);
+void sbb(unsigned char mem_addr, ProcState *state);
 
 /* 
  * ANA - Logical AND contents of mem_addr with accumulator
@@ -79,7 +79,7 @@ void sbbx(unsigned char mem_addr, ProcState *state);
  * if both the bits equal 1.
  * Condition bits affected: Carry, Zero, Sign, Parity
  */
-void anax(unsigned char mem_addr, ProcState *state);
+void ana(unsigned char mem_addr, ProcState *state);
 
 /* 
  * XRA - Logical Exclusive-Or Register or Memory 
@@ -90,7 +90,7 @@ void anax(unsigned char mem_addr, ProcState *state);
  * Condition bits affected: Carry, Zero, Sign, Parity,
  * Auxiliary Carry
  */
-void xrax(unsigned char mem_addr, ProcState *state);
+void xra(unsigned char mem_addr, ProcState *state);
 
 /* 
  * ORA - Logical or Register or Memory With Accumulator
@@ -99,7 +99,7 @@ void xrax(unsigned char mem_addr, ProcState *state);
  * is reset to zero.
  * Condition bits affected: Carry, Zero, Sign, Parity
  */
-void orax(unsigned char mem_addr, ProcState *state);
+void ora(unsigned char mem_addr, ProcState *state);
 
 /*
  * CMP - Compare Register or Memory With Accumulator
@@ -117,7 +117,7 @@ void orax(unsigned char mem_addr, ProcState *state);
  * Condition bits affected: Carry, Zero, Sign, Parity,
  * Auxiliary Carry
  */
-void cmpx(unsigned char mem_addr, ProcState *state);
+void cmp(unsigned char mem_addr, ProcState *state);
 
 /*
  * ROTATE ACCUMULATOR INSTRUCTIONS

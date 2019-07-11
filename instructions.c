@@ -59,7 +59,7 @@ void ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state
   state->reg_a = state->mem[mem_addr];
 }
 
-void addx(unsigned char data, ProcState *state) {
+void add(unsigned char data, ProcState *state) {
   unsigned int sum = data + state->reg_a;
   int carry_bit = (0x100 & sum) >> BYTE_SIZE;
   unsigned int aux_sum = (data & 0xf) + (state->reg_a & 0xf);
@@ -72,7 +72,7 @@ void addx(unsigned char data, ProcState *state) {
   state->aux_carry = aux_carry_bit;
 }
 
-void adcx(unsigned char data, ProcState *state) {
+void adc(unsigned char data, ProcState *state) {
   unsigned int sum = data + state->reg_a + state->carry;
   int carry_bit = (0x100 & sum) >> BYTE_SIZE;
   unsigned int aux_sum = (data & 0xf) + (state->reg_a & 0xf) + state->carry;
@@ -85,7 +85,7 @@ void adcx(unsigned char data, ProcState *state) {
   state->aux_carry = aux_carry_bit;
 }
 
-void subx(unsigned char data, ProcState *state) {
+void sub(unsigned char data, ProcState *state) {
   // Flip only the last 8 bits of the value in data
   unsigned int data_flipped = (~(data | (~0xff)));
   // Perform sums using 2's compliment subtraction
@@ -101,7 +101,7 @@ void subx(unsigned char data, ProcState *state) {
   state->aux_carry = aux_carry_bit;
 }
 
-void sbbx(unsigned char data, ProcState *state) {
+void sbb(unsigned char data, ProcState *state) {
   // Flip only the last 8 bits of the value in data
   unsigned int data_flipped = (~((data + state->carry) | (~0xff)));
   // Perform sums using 2's compliment subtraction
@@ -117,7 +117,7 @@ void sbbx(unsigned char data, ProcState *state) {
   state->aux_carry = aux_carry_bit;
 }
 
-void anax(unsigned char data, ProcState *state) {
+void ana(unsigned char data, ProcState *state) {
   unsigned char result = state->reg_a & data;
   state->reg_a = result;
   state->carry = 0;
@@ -127,7 +127,7 @@ void anax(unsigned char data, ProcState *state) {
   state->sign = sign(result);
 }
 
-void xrax(unsigned char data, ProcState *state) {
+void xra(unsigned char data, ProcState *state) {
   unsigned char result = state->reg_a ^ data;
   state->reg_a = result;
   state->carry = 0;
@@ -137,7 +137,7 @@ void xrax(unsigned char data, ProcState *state) {
   state->sign = sign(result);
 }
 
-void orax(unsigned char data, ProcState *state) {
+void ora(unsigned char data, ProcState *state) {
   unsigned char result = state->reg_a | data;
   state->reg_a = result;
   state->carry = 0;
@@ -147,7 +147,7 @@ void orax(unsigned char data, ProcState *state) {
   state->sign = sign(result);
 }
 
-void cmpx(unsigned char data, ProcState *state) {
+void cmp(unsigned char data, ProcState *state) {
   // Flip only the last 8 bits of the value in data
   unsigned int data_flipped = (~(data | (~0xff)));
   // Perform sums using 2's compliment subtraction
