@@ -255,6 +255,7 @@ void cpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state)
  * RETURN FROM SUBROUTINE INSTRUCTIONS
  */
 
+void ret(ProcState *state);
 
 /*
  * RST INSTRUCTION

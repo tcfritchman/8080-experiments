@@ -358,3 +358,11 @@ void cpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state)
     call(mem_addr_hi, mem_addr_lo, state);
   }
 }
+
+void ret(ProcState *state) {
+  unsigned char return_addr_hi;
+  unsigned char return_addr_lo;
+  pop(&return_addr_hi, &return_addr_lo, state);
+  unsigned short return_addr = (return_addr_hi << BYTE_SIZE) ^ return_addr_lo;
+  state->pc = return_addr;
+}

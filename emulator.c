@@ -183,9 +183,9 @@ int main(int argc, char const *argv[]) {
   state.zero=0;
   state.parity=0;
   state.sign=0;
-  state.mem[0x3040] = 0x88;
-  state.mem[0x3041] = 0x99;
-  jnc(x, y, &state);
+  state.mem[0x100] = 0x88;
+  state.mem[0x101] = 0x99;
+  ret(&state);
   print_registers(state);
-  print_mem(0x3040, &state);
+  print_mem(0xfc, &state);
 }
