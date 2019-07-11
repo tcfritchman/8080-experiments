@@ -129,38 +129,36 @@ void update_state(ProcState *state) {
   state->pc += op_code.size;
 }
 
+void init_state(ProcState *state) {
+  state->reg_a=0x52;
+  state->reg_b=0b11111111;
+  state->reg_c=0b10101010;
+  state->reg_d=0x10;
+  state->reg_e=0x20;
+  state->reg_h=0x30;
+  state->reg_l=0x40;
+  state->pc=0x777;
+  state->sp=0x100;
+  state->carry=0;
+  state->aux_carry=0;
+  state->zero=0;
+  state->parity=0;
+  state->sign=0;
+  state->mem[0x100] = 0x88;
+  state->mem[0x101] = 0x99;
+}
+
 int main(int argc, char const *argv[]) {
   ProcState state;
+  init_state(&state);
 
-  // // Load Memory
-  // copy_to_mem(state, 0, sizeof(TEST_BYTES), TEST_BYTES);
+  // Load Memory
+  copy_to_mem(state, 0, sizeof(TEST_BYTES), TEST_BYTES);
 
-  // // Program Loop
-  // while (1) {
-  //   update_state(state);
-  // }
+  // Program Loop
+  while (1) {
+    update_state(&state);
+  }
 
-  // return 0;
-  unsigned char x = 0x01;
-  unsigned char y = 0x00;
-
-  state.reg_a=0x52;
-  state.reg_b=0b11111111;
-  state.reg_c=0b10101010;
-  state.reg_d=0x10;
-  state.reg_e=0x20;
-  state.reg_h=0x30;
-  state.reg_l=0x40;
-  state.pc=0x777;
-  state.sp=0x100;
-  state.carry=0;
-  state.aux_carry=0;
-  state.zero=0;
-  state.parity=0;
-  state.sign=0;
-  state.mem[0x100] = 0x88;
-  state.mem[0x101] = 0x99;
-  stax(0x01, 0x00, &state);
-  print_registers(state);
-  print_mem(0xfc, &state);
+  return 0;
 }
