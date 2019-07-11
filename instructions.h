@@ -257,6 +257,22 @@ void cpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state)
 
 void ret(ProcState *state);
 
+void rc(ProcState *state);
+
+void rnc(ProcState *state);
+
+void rz(ProcState *state);
+
+void rnz(ProcState *state);
+
+void rm(ProcState *state);
+
+void rp(ProcState *state);
+
+void rpe(ProcState *state);
+
+void rpo(ProcState *state);
+
 /*
  * RST INSTRUCTION
  */

@@ -366,3 +366,51 @@ void ret(ProcState *state) {
   unsigned short return_addr = (return_addr_hi << BYTE_SIZE) ^ return_addr_lo;
   state->pc = return_addr;
 }
+
+void rc(ProcState *state) {
+  if (state->carry) {
+    ret(state);
+  }
+}
+
+void rnc(ProcState *state) {
+  if (!state->carry) {
+    ret(state);
+  }
+}
+
+void rz(ProcState *state) {
+  if (state->zero) {
+    ret(state);
+  }
+}
+
+void rnz(ProcState *state) {
+  if (!state->zero) {
+    ret(state);
+  }
+}
+
+void rm(ProcState *state) {
+  if (state->sign) {
+    ret(state);
+  }
+}
+
+void rp(ProcState *state) {
+  if (!state->sign) {
+    ret(state);
+  }
+}
+
+void rpe(ProcState *state) {
+  if (state->parity) {
+    ret(state);
+  }
+}
+
+void rpo(ProcState *state) {
+  if (!state->parity) {
+    ret(state);
+  }
+}
