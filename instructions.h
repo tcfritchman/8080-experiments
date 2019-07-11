@@ -277,6 +277,7 @@ void rpo(ProcState *state);
  * RST INSTRUCTION
  */
 
+void rst(unsigned char exp, ProcState *state);
 
 /*
  * INTERRUPT FLIP-FLOP INSTRUCTIONS

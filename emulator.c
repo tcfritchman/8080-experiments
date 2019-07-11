@@ -185,7 +185,7 @@ int main(int argc, char const *argv[]) {
   state.sign=0;
   state.mem[0x100] = 0x88;
   state.mem[0x101] = 0x99;
-  ret(&state);
+  rst(0x7, &state);
   print_registers(state);
   print_mem(0xfc, &state);
 }

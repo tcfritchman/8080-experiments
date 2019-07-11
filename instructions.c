@@ -414,3 +414,8 @@ void rpo(ProcState *state) {
     ret(state);
   }
 }
+
+void rst(unsigned char exp, ProcState *state) {
+  unsigned short jump_addr = (exp << 3) & 0x0038; // L.S. 3 bits of exp shifted 3 bits right
+  call(jump_addr >> BYTE_SIZE, jump_addr, state);
+}
