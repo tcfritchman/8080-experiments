@@ -283,6 +283,9 @@ void rst(unsigned char exp, ProcState *state);
  * INTERRUPT FLIP-FLOP INSTRUCTIONS
  */
 
+void ei(ProcState *state);
+
+void di(ProcState *state);
 
 /*
  * INPUT/OUTPUT INSTRUCTIONS

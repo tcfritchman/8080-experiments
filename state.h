@@ -19,6 +19,7 @@ typedef struct ProcState {
   int aux_carry;
   unsigned short pc;
   unsigned short sp;
+  int inte; // Interrupts Enabled
 } ProcState;
 
 #endif
