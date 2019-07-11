@@ -4,7 +4,9 @@
  * CARRY BIT INSTRUCTIONS
  */
 
-// TODO: Move into this module
+void cmc(ProcState *state);
+
+void stc(ProcState *state);
 
 /*
  * SINGLE REGISTER INSTRUCTIONS

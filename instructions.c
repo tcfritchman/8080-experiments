@@ -5,6 +5,14 @@ const int BYTE_SIZE = 8;
 const int DOUBLE_BYTE_SIZE = 16;
 const int NIBBLE_SIZE = 4;
 
+void cmc(ProcState *state) {
+  state->carry = !state->carry;
+}
+
+void stc(ProcState *state) {
+  state->carry = 1;
+}
+
 void addx(unsigned char data, ProcState *state) {
   unsigned int sum = data + state->reg_a;
   int carry_bit = (0x100 & sum) >> BYTE_SIZE;
