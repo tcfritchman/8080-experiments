@@ -14,11 +14,11 @@ void stc(ProcState *state) {
 }
 
 void inr(unsigned char *data) {
-  *data++;
+  (*data)++;
 }
 
 void dcr(unsigned char *data) {
-  *data--;
+  (*data)--;
 }
 
 void cma(ProcState *state) {
