@@ -14,322 +14,314 @@ void update_state(ProcState *state) {
 
     case 0x00:
       // NOP
-
       break;
 
     case 0x01:
       // LXI B
-
+      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_b, &state->reg_c);
       break;
 
     case 0x02:
       // STAX B
-
+      stax(state->reg_b, state->reg_c, state);
       break;
 
     case 0x03:
       // INX B
-
+      inx(&state->reg_b, &state->reg_c);
       break;
 
     case 0x04:
       // INR B
-
+      inr(&state->reg_b);
       break;
 
     case 0x05:
       // DCR B
-
+      dcr(&state->reg_b);
       break;
 
     case 0x06:
       // MVI B
-
+      mvi(state->mem[pc+1], &state->reg_b);
       break;
 
     case 0x07:
       // RLC
-
+      rlc(state);
       break;
 
     case 0x08:
       // NONE
-
       break;
 
     case 0x09:
       // DAD B
-
+      dad(state->reg_b, state->reg_c, state);
       break;
 
     case 0x0a:
       // LDAX B
-
+      ldax(state->reg_b, state->reg_c, state);
       break;
 
     case 0x0b:
       // DCX B
-
+      dcx(&state->reg_b, &state->reg_c);
       break;
 
     case 0x0c:
       // INR C
-
+      inr(&state->reg_c);
       break;
 
     case 0x0d:
       // DCR C
-
+      dcr(&state->reg_c);
       break;
 
     case 0x0e:
       // MVI C
-
+      mvi(state->mem[pc+1], &state->reg_c);
       break;
 
     case 0x0f:
       // RRC
-
+      rrc(state);
       break;
 
     case 0x10:
       // NONE
-
       break;
 
     case 0x11:
       // LXI D
-
+      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_d, &state->reg_e);
       break;
 
     case 0x12:
       // STAX D
-
+      stax(state->reg_d, state->reg_e, state);
       break;
 
     case 0x13:
       // INX D
-
+      inx(&state->reg_d, &state->reg_e);
       break;
 
     case 0x14:
       // INR D
-
+      inr(&state->reg_d);
       break;
 
     case 0x15:
       // DCR D
-
+      dcr(&state->reg_d);
       break;
 
     case 0x16:
       // MVI D
-
+      mvi(state->mem[pc+1], &state->reg_d);
       break;
 
     case 0x17:
       // RAL
-
+      ral(state);
       break;
 
     case 0x18:
       // NONE
-
       break;
 
     case 0x19:
       // DAD D
-
+      dad(state->reg_d, state->reg_e, state);
       break;
 
     case 0x1a:
       // LDAX D
-
+      ldax(state->reg_d, state->reg_e, state);
       break;
 
     case 0x1b:
       // DCX D
-
+      dcx(&state->reg_d, &state->reg_e);
       break;
 
     case 0x1c:
       // INR E
-
+      inr(&state->reg_e);
       break;
 
     case 0x1d:
       // DCR E
-
+      dcr(&state->reg_e);
       break;
 
     case 0x1e:
       // MVI E
-
+      mvi(state->mem[pc+1], &state->reg_e);
       break;
 
     case 0x1f:
       // RAR
-
+      rar(state);
       break;
 
     case 0x20:
       // NONE
-
       break;
 
     case 0x21:
       // LXI H
-
+      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_h, &state->reg_l);
       break;
 
     case 0x22:
       // SHLD
-
+      shld(state->mem[pc+2], state->mem[pc+1], state);
       break;
 
     case 0x23:
       // INX H
-
+      inx(&state->reg_h, &state->reg_l);
       break;
 
     case 0x24:
       // INR H
-
+      inr(&state->reg_h);
       break;
 
     case 0x25:
       // DCR H
-
+      dcr(&state->reg_h);
       break;
 
     case 0x26:
       // MVI H
-
+      mvi(state->mem[pc+1], &state->reg_h);
       break;
 
     case 0x27:
       // DAA
-
+      daa(state);
       break;
 
     case 0x28:
       // NONE
-
       break;
 
     case 0x29:
       // DAD H
-
+      dad(state->reg_h, state->reg_l, state);
       break;
 
     case 0x2a:
       // LHLD
-
+      lhld(state->mem[pc+2], state->mem[pc+1], state);
       break;
 
     case 0x2b:
       // DCX H
-
+      dcx(&state->reg_h, &state->reg_l);
       break;
 
     case 0x2c:
       // INR L
-
+      inr(&state->reg_l);
       break;
 
     case 0x2d:
       // DCR L
-
+      dcr(&state->reg_l);
       break;
 
     case 0x2e:
       // MVI L
-
+      mvi(state->mem[pc+1], &state->reg_l);
       break;
 
     case 0x2f:
       // CMA
-
+      cma(state);
       break;
 
     case 0x30:
       // NONE
-
       break;
 
     case 0x31:
       // LXI SP
-
+      // TODO: Make helper functions for getting SP as bytes
       break;
 
     case 0x32:
       // STA
-
+      sta(state->mem[pc+2], state->mem[pc+1], state);
       break;
 
     case 0x33:
       // INX SP
-
+      // TODO
       break;
 
     case 0x34:
       // INR M
-
+      // TODO: Special function?
       break;
 
     case 0x35:
       // DCR M
-
+      // TODO
       break;
 
     case 0x36:
       // MVI M
-
+      // TODO
       break;
 
     case 0x37:
       // STC
-
+      stc(state);
       break;
 
     case 0x38:
       // NONE
-
       break;
 
     case 0x39:
       // DAD SP
-
+      // TODO
       break;
 
     case 0x3a:
       // LDA
-
+      lda(state->mem[pc+2], state->mem[pc+1], state);
       break;
 
     case 0x3b:
       // DCX SP
-
+      // TODO
       break;
 
     case 0x3c:
       // INR A
-
+      inr(&state->reg_a);
       break;
 
     case 0x3d:
       // DCR A
-
+      dcr(&state->reg_a);
       break;
 
     case 0x3e:
       // MVI A
-
+      mvi(state->mem[pc+1], &state->reg_a);
       break;
 
     case 0x3f:
       // CMC
-
+      cmc(state);
       break;
 
     case 0x40:

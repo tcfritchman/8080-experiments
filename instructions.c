@@ -278,11 +278,13 @@ void sphl(ProcState *state) {
   state->sp = hl_bits;
 }
 
+// TODO: First two params can be removed
 void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
   *mem_addr_hi = data_hi;
   *mem_addr_lo = data_lo;
 }
 
+// TODO First param can be removed
 void mvi(unsigned char data, unsigned char *mem_addr) {
   *mem_addr = data;
 }
