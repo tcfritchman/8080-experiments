@@ -202,8 +202,25 @@ void sphl(ProcState *state);
  * IMMEDIATE INSTRUCTIONS
  */
 
-// TODO: Note - I believe these instructions share the same functionality
-// as the REGISTER OR MEMORY TO ACCUMULATOR instructions.
+void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
+
+void mvi(unsigned char data, unsigned char *mem_addr);
+
+void adi(unsigned char data, ProcState *state);
+
+void aci(unsigned char data, ProcState *state);
+
+void sui(unsigned char data, ProcState *state);
+
+void sbi(unsigned char data, ProcState *state);
+
+void ani(unsigned char data, ProcState *state);
+
+void xri(unsigned char data, ProcState *state);
+
+void ori(unsigned char data, ProcState *state);
+
+void cpi(unsigned char data, ProcState *state);
 
 /*
  * DIRECT ADDRESSING INSTRUCTIONS

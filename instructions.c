@@ -278,6 +278,47 @@ void sphl(ProcState *state) {
   state->sp = hl_bits;
 }
 
+void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
+  *mem_addr_hi = data_hi;
+  *mem_addr_lo = data_lo;
+}
+
+void mvi(unsigned char data, unsigned char *mem_addr) {
+  *mem_addr = data;
+}
+
+void adi(unsigned char data, ProcState *state) {
+  add(data, state);
+}
+
+void aci(unsigned char data, ProcState *state) {
+  adc(data, state);
+}
+
+void sui(unsigned char data, ProcState *state) {
+  sub(data, state);
+}
+
+void sbi(unsigned char data, ProcState *state) {
+  sbb(data, state);
+}
+
+void ani(unsigned char data, ProcState *state) {
+  ana(data, state);
+}
+
+void xri(unsigned char data, ProcState *state) {
+  xra(data, state);
+}
+
+void ori(unsigned char data, ProcState *state) {
+  ora(data, state);
+}
+
+void cpi(unsigned char data, ProcState *state) {
+  cmp(data, state);
+}
+
 void sta(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->mem[mem_addr] = state->reg_a;
