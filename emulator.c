@@ -267,17 +267,17 @@ void update_state(ProcState *state) {
 
     case 0x34:
       // INR M
-      // TODO: Special function?
+      inr(get_mem_byte(state));
       break;
 
     case 0x35:
       // DCR M
-      // TODO
+      dcr(get_mem_byte(state));
       break;
 
     case 0x36:
       // MVI M
-      // TODO
+      mvi(state->mem[pc+1], get_mem_byte(state));
       break;
 
     case 0x37:
@@ -356,7 +356,7 @@ void update_state(ProcState *state) {
 
     case 0x46:
       // MOV B,M
-      // TODO mov(state->reg_, &state->reg_b);
+      mov(*get_mem_byte(state), &state->reg_b);
       break;
 
     case 0x47:
@@ -396,7 +396,7 @@ void update_state(ProcState *state) {
 
     case 0x4e:
       // MOV C,M
-      // TODO mov(state->reg_, &state->reg_c);
+      mov(*get_mem_byte(state), &state->reg_c);
       break;
 
     case 0x4f:
@@ -436,7 +436,7 @@ void update_state(ProcState *state) {
 
     case 0x56:
       // MOV D,M
-     // TODO mov(state->reg_, &state->reg_d);
+      mov(*get_mem_byte(state), &state->reg_d);
       break;
 
     case 0x57:
@@ -476,7 +476,7 @@ void update_state(ProcState *state) {
 
     case 0x5e:
       // MOV E,M
-      // TODO mov(state->reg_, &state->reg_e);
+      mov(*get_mem_byte(state), &state->reg_e);
       break;
 
     case 0x5f:
@@ -516,7 +516,7 @@ void update_state(ProcState *state) {
 
     case 0x66:
       // MOV H,M
-      // TODO mov(state->reg_, &state->reg_h);
+      mov(*get_mem_byte(state), &state->reg_h);
       break;
 
     case 0x67:
@@ -556,7 +556,7 @@ void update_state(ProcState *state) {
 
     case 0x6e:
       // MOV L,M
-      // TODO mov(state->reg_, &state->reg_l);
+      mov(*get_mem_byte(state), &state->reg_l);
       break;
 
     case 0x6f:
@@ -566,32 +566,32 @@ void update_state(ProcState *state) {
 
     case 0x70:
       // MOV M,B
-      // TODO mov(state->reg_, &state->reg_);
+      mov(state->reg_b, get_mem_byte(state));
       break;
 
     case 0x71:
       // MOV M,C
-      // TODO mov(state->reg_, &state->reg_);
+      mov(state->reg_c, get_mem_byte(state));
       break;
 
     case 0x72:
       // MOV M,D
-      // TODO mov(state->reg_, &state->reg_);
+      mov(state->reg_d, get_mem_byte(state));
       break;
 
     case 0x73:
       // MOV M,E
-      // TODO mov(state->reg_, &state->reg_);
+      mov(state->reg_e, get_mem_byte(state));
       break;
 
     case 0x74:
       // MOV M,H
-      // TODO mov(state->reg_, &state->reg_);
+      mov(state->reg_h, get_mem_byte(state));
       break;
 
     case 0x75:
       // MOV M,L
-      // TODO mov(state->reg_, &state->reg_);
+      mov(state->reg_l, get_mem_byte(state));
       break;
 
     case 0x76:
@@ -601,7 +601,7 @@ void update_state(ProcState *state) {
 
     case 0x77:
       // MOV M,A
-      // TODO mov(state->reg_, &state->reg_);
+      mov(state->reg_a, get_mem_byte(state));
       break;
 
     case 0x78:
