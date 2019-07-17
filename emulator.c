@@ -326,322 +326,322 @@ void update_state(ProcState *state) {
 
     case 0x40:
       // MOV B,B
-
+      mov(state->reg_b, &state->reg_b);
       break;
 
     case 0x41:
       // MOV B,C
-
+      mov(state->reg_c, &state->reg_b);
       break;
 
     case 0x42:
       // MOV B,D
-
+      mov(state->reg_d, &state->reg_b);
       break;
 
     case 0x43:
       // MOV B,E
-
+      mov(state->reg_e, &state->reg_b);
       break;
 
     case 0x44:
       // MOV B,H
-
+      mov(state->reg_h, &state->reg_b);
       break;
 
     case 0x45:
       // MOV B,L
-
+      mov(state->reg_l, &state->reg_b);
       break;
 
     case 0x46:
       // MOV B,M
-
+      // TODO mov(state->reg_, &state->reg_b);
       break;
 
     case 0x47:
       // MOV B,A
-
+      mov(state->reg_a, &state->reg_b);
       break;
 
     case 0x48:
       // MOV C,B
-
+      mov(state->reg_b, &state->reg_c);
       break;
 
     case 0x49:
       // MOV C,C
-
+      mov(state->reg_c, &state->reg_c);
       break;
 
     case 0x4a:
       // MOV C,D
-
+      mov(state->reg_d, &state->reg_c);
       break;
 
     case 0x4b:
       // MOV C,E
-
+      mov(state->reg_e, &state->reg_c);
       break;
 
     case 0x4c:
       // MOV C,H
-
+      mov(state->reg_h, &state->reg_c);
       break;
 
     case 0x4d:
       // MOV C,L
-
+      mov(state->reg_l, &state->reg_c);
       break;
 
     case 0x4e:
       // MOV C,M
-
+      // TODO mov(state->reg_, &state->reg_c);
       break;
 
     case 0x4f:
       // MOV C,A
-
+      mov(state->reg_a, &state->reg_c);
       break;
 
     case 0x50:
       // MOV D,B
-
+      mov(state->reg_b, &state->reg_d);
       break;
 
     case 0x51:
       // MOV D,C
-
+      mov(state->reg_c, &state->reg_d);
       break;
 
     case 0x52:
       // MOV D,D
-
+      mov(state->reg_d, &state->reg_d);
       break;
 
     case 0x53:
       // MOV D,E
-
+      mov(state->reg_e, &state->reg_d);
       break;
 
     case 0x54:
       // MOV D,H
-
+      mov(state->reg_h, &state->reg_d);
       break;
 
     case 0x55:
       // MOV D,L
-
+      mov(state->reg_l, &state->reg_d);
       break;
 
     case 0x56:
       // MOV D,M
-
+     // TODO mov(state->reg_, &state->reg_d);
       break;
 
     case 0x57:
       // MOV D,A
-
+      mov(state->reg_a, &state->reg_d);
       break;
 
     case 0x58:
       // MOV E,B
-
+      mov(state->reg_b, &state->reg_e);
       break;
 
     case 0x59:
       // MOV E,C
-
+      mov(state->reg_c, &state->reg_e);
       break;
 
     case 0x5a:
       // MOV E,D
-
+      mov(state->reg_d, &state->reg_e);
       break;
 
     case 0x5b:
       // MOV E,E
-
+      mov(state->reg_e, &state->reg_e);
       break;
 
     case 0x5c:
       // MOV E,H
-
+      mov(state->reg_h, &state->reg_e);
       break;
 
     case 0x5d:
       // MOV E,L
-
+      mov(state->reg_l, &state->reg_e);
       break;
 
     case 0x5e:
       // MOV E,M
-
+      // TODO mov(state->reg_, &state->reg_e);
       break;
 
     case 0x5f:
       // MOV E,A
-
+      mov(state->reg_a, &state->reg_e);
       break;
 
     case 0x60:
       // MOV H,B
-
+      mov(state->reg_b, &state->reg_h);
       break;
 
     case 0x61:
       // MOV H,C
-
+      mov(state->reg_c, &state->reg_h);
       break;
 
     case 0x62:
       // MOV H,D
-
+      mov(state->reg_d, &state->reg_h);
       break;
 
     case 0x63:
       // MOV H,E
-
+      mov(state->reg_e, &state->reg_h);
       break;
 
     case 0x64:
       // MOV H,H
-
+      mov(state->reg_h, &state->reg_h);
       break;
 
     case 0x65:
       // MOV H,L
-
+      mov(state->reg_l, &state->reg_h);
       break;
 
     case 0x66:
       // MOV H,M
-
+      // TODO mov(state->reg_, &state->reg_h);
       break;
 
     case 0x67:
       // MOV H,A
-
+      mov(state->reg_a, &state->reg_h);
       break;
 
     case 0x68:
       // MOV L,B
-
+      mov(state->reg_b, &state->reg_l);
       break;
 
     case 0x69:
       // MOV L,C
-
+      mov(state->reg_c, &state->reg_l);
       break;
 
     case 0x6a:
       // MOV L,D
-
+      mov(state->reg_d, &state->reg_l);
       break;
 
     case 0x6b:
       // MOV L,E
-
+      mov(state->reg_e, &state->reg_l);
       break;
 
     case 0x6c:
       // MOV L,H
-
+      mov(state->reg_h, &state->reg_l);
       break;
 
     case 0x6d:
       // MOV L,L
-
+      mov(state->reg_l, &state->reg_l);
       break;
 
     case 0x6e:
       // MOV L,M
-
+      // TODO mov(state->reg_, &state->reg_l);
       break;
 
     case 0x6f:
       // MOV L,A
-
+      mov(state->reg_a, &state->reg_l);
       break;
 
     case 0x70:
       // MOV M,B
-
+      // TODO mov(state->reg_, &state->reg_);
       break;
 
     case 0x71:
       // MOV M,C
-
+      // TODO mov(state->reg_, &state->reg_);
       break;
 
     case 0x72:
       // MOV M,D
-
+      // TODO mov(state->reg_, &state->reg_);
       break;
 
     case 0x73:
       // MOV M,E
-
+      // TODO mov(state->reg_, &state->reg_);
       break;
 
     case 0x74:
       // MOV M,H
-
+      // TODO mov(state->reg_, &state->reg_);
       break;
 
     case 0x75:
       // MOV M,L
-
+      // TODO mov(state->reg_, &state->reg_);
       break;
 
     case 0x76:
       // HLT
-
+      //TODO
       break;
 
     case 0x77:
       // MOV M,A
-
+      // TODO mov(state->reg_, &state->reg_);
       break;
 
     case 0x78:
       // MOV A,B
-
+      mov(state->reg_b, &state->reg_a);
       break;
 
     case 0x79:
       // MOV A,C
-
+      mov(state->reg_c, &state->reg_a);
       break;
 
     case 0x7a:
       // MOV A,D
-
+      mov(state->reg_d, &state->reg_a);
       break;
 
     case 0x7b:
       // MOV A,E
-
+      mov(state->reg_e, &state->reg_a);
       break;
 
     case 0x7c:
       // MOV A,H
-
+      mov(state->reg_h, &state->reg_a);
       break;
 
     case 0x7d:
       // MOV A,L
-
+      mov(state->reg_l, &state->reg_a);
       break;
 
     case 0x7e:
       // MOV A,M
-
+      // TODO mov(state->reg_, &state->reg_a);
       break;
 
     case 0x7f:
       // MOV A,A
-
+      mov(state->reg_a, &state->reg_a);
       break;
 
     case 0x80:
