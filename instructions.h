@@ -320,10 +320,12 @@ void di(ProcState *state);
  * INPUT/OUTPUT INSTRUCTIONS
  */
 
-// TODO
+void in(ProcState *state);
+
+void out(ProcState *state);
 
 /*
  * HALT INSTRUCTION
  */
 
-// TODO
+void hlt(ProcState *state);

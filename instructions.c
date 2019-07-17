@@ -524,3 +524,15 @@ void ei(ProcState *state) {
 void di(ProcState *state) {
   state->inte = 0;
 }
+
+void in(ProcState *state) {
+  // TODO
+}
+
+void out(ProcState *state) {
+  // TODO
+}
+
+void hlt(ProcState *state) {
+  // TODO
+}
