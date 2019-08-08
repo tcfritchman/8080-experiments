@@ -4,8 +4,6 @@
 #include "instructions.h"
 #include "state.h"
 
-unsigned char TEST_BYTES[] = {0x78, 0xB1, 0xC8, 0x1A, 0x77, 0x13, 0x23, 0x0B, 0x78, 0xB1, 0xC2, 0x03, 0x10, 0xC9};
-
 void update_state(ProcState *state) {
   unsigned short pc = state->pc;
   OpCode op_code = OP_CODES[state->mem[pc]];
@@ -1302,30 +1300,66 @@ void update_state(ProcState *state) {
 }
 
 void init_state(ProcState *state) {
-  state->reg_a=0x52;
-  state->reg_b=0b11111111;
-  state->reg_c=0b10101010;
-  state->reg_d=0x10;
-  state->reg_e=0x20;
-  state->reg_h=0x30;
-  state->reg_l=0x40;
-  state->pc=0x777;
-  state->sp=0x100;
+  state->reg_a=0x00;
+  state->reg_b=0x00;
+  state->reg_c=0x00;
+  state->reg_d=0x00;
+  state->reg_e=0x00;
+  state->reg_h=0x00;
+  state->reg_l=0x00;
+  state->pc=0x0000;
+  state->sp=0x0000;
   state->carry=0;
   state->aux_carry=0;
   state->zero=0;
   state->parity=0;
   state->sign=0;
-  state->mem[0x100] = 0x88;
-  state->mem[0x101] = 0x99;
+}
+
+int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
+  FILE *file;
+  unsigned long filesize;
+
+  file = fopen(filename, "rb");
+
+  if (file == NULL) {
+    printf("Failed to open file\n");
+    return 0;
+  }
+
+  fseek(file, 0, SEEK_END);
+	filesize=ftell(file);
+	fseek(file, 0, SEEK_SET);
+
+  if (filesize + offset <= sizeof state->mem) {
+    printf("Loading %ld bytes starting at memory address 0x%x -\n\n", filesize, offset);
+  } else {
+    printf("Failed to open file - file too large");
+    return 0;
+  }
+
+  unsigned char *buf = &state->mem[offset];
+
+  fread(buf, filesize, 1, file);
+	fclose(file);
+  return 1;
 }
 
 int main(int argc, char const *argv[]) {
   ProcState state;
   init_state(&state);
+  const int offset = 0;
 
-  // Load Memory
-  copy_to_mem(state, 0, sizeof(TEST_BYTES), TEST_BYTES);
+  // Read the input file into memory address `offset`
+  if (argc == 2) {
+    int success = read_file_to_mem(argv[1], offset, &state);
+    if (!success) {
+      return 1;
+    }
+  } else {
+    printf("Invalid argument count\n");
+    return 1;
+  }
 
   // Program Loop
   while (1) {
