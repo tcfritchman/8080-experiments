@@ -1,12 +1,35 @@
 #include <stdio.h>
+#include <unistd.h>
 #include "op_codes.h"
 #include "state_util.h"
 #include "instructions.h"
 #include "state.h"
 
+#define LOG_CPU
+
 void update_state(ProcState *state) {
   unsigned short pc = state->pc;
   OpCode op_code = OP_CODES[state->mem[pc]];
+
+#ifdef LOG_CPU
+
+  printf("%4x: ", state->pc);
+
+  switch (op_code.size) {
+    case 1:
+      printf("%s", op_code.name);
+      break;
+    case 2:
+      printf("%s,0x%x", op_code.name, state->mem[state->pc+1]);
+      break;
+    case 3:
+      printf("%s 0x%x,0x%x", op_code.name, state->mem[state->pc+2], state->mem[state->pc+1]);
+      break;
+  }
+
+  printf("\n");
+
+#endif
 
   switch (op_code.code) {
 
@@ -1348,7 +1371,7 @@ int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
 int main(int argc, char const *argv[]) {
   ProcState state;
   init_state(&state);
-  const int offset = 0;
+  const int offset = 0x100;
 
   // Read the input file into memory address `offset`
   if (argc == 2) {
@@ -1364,6 +1387,7 @@ int main(int argc, char const *argv[]) {
   // Program Loop
   while (1) {
     update_state(&state);
+    usleep(5000);
   }
 
   return 0;
