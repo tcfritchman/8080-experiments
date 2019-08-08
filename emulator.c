@@ -252,7 +252,7 @@ void update_state(ProcState *state) {
 
     case 0x31:
       // LXI SP
-      // TODO: Make helper functions for getting SP as bytes
+      lxi_16(&state->sp, state);
       break;
 
     case 0x32:
@@ -262,7 +262,7 @@ void update_state(ProcState *state) {
 
     case 0x33:
       // INX SP
-      // TODO
+      inx_16(&state->sp);
       break;
 
     case 0x34:
@@ -291,7 +291,7 @@ void update_state(ProcState *state) {
 
     case 0x39:
       // DAD SP
-      // TODO
+      dad_16(&state->sp, state);
       break;
 
     case 0x3a:
@@ -301,7 +301,7 @@ void update_state(ProcState *state) {
 
     case 0x3b:
       // DCX SP
-      // TODO
+      dcx_16(&state->sp);
       break;
 
     case 0x3c:

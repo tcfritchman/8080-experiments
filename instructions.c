@@ -231,14 +231,18 @@ void pop_psw(ProcState *state) {
   state->carry = (0x01 & psw_bits);
 }
 
-void dad(unsigned char data_hi, unsigned char data_lo, ProcState *state) {
+void dad_16(unsigned short *data, ProcState *state) {
   unsigned short hl_bits = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
-  unsigned short in_bits = (data_hi << BYTE_SIZE) ^ data_lo;
-  unsigned int sum = hl_bits + in_bits;
+  unsigned int sum = hl_bits + (*data);
   int carry_bit = (0x10000 & sum) >> DOUBLE_BYTE_SIZE;
   state->reg_h = sum >> BYTE_SIZE;
   state->reg_l = sum;
   state->carry = carry_bit;
+}
+
+void dad(unsigned char data_hi, unsigned char data_lo, ProcState *state) {
+  unsigned short in_bits = (data_hi << BYTE_SIZE) ^ data_lo;
+  dad_16(&in_bits, state);
 }
 
 void inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
@@ -248,11 +252,19 @@ void inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
   *mem_addr_lo = in_bits;
 }
 
+void inx_16(unsigned short *data) {
+  (*data)++;
+}
+
 void dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
   unsigned short in_bits = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
   in_bits--;
   *mem_addr_hi = in_bits >> BYTE_SIZE;
   *mem_addr_lo = in_bits;
+}
+
+void dcx_16(unsigned short *data) {
+  (*data)--;
 }
 
 void xchg(ProcState *state) {
@@ -282,6 +294,10 @@ void sphl(ProcState *state) {
 void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
   *mem_addr_hi = data_hi;
   *mem_addr_lo = data_lo;
+}
+
+void lxi_16(unsigned short *dest, ProcState *state) {
+  *dest = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+2];
 }
 
 // TODO First param can be removed

@@ -91,8 +91,4 @@ void print_mem_c(unsigned short mem_addr, unsigned short post_bytes, ProcState *
 
 void print_mem(unsigned short mem_addr, ProcState *state);
 
-unsigned char get_sp_lo(ProcState *state);
-
-unsigned char get_sp_hi(ProcState *state);
-
 unsigned char *get_mem_byte(ProcState *state);

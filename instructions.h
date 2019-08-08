@@ -188,9 +188,15 @@ void pop_psw(ProcState *state);
 
 void dad(unsigned char data_hi, unsigned char data_lo, ProcState *state);
 
+void dad_16(unsigned short *data, ProcState *state);
+
 void inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
 
+void inx_16(unsigned short *data);
+
 void dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
+
+void dcx_16(unsigned short *data);
 
 void xchg(ProcState *state);
 
@@ -203,6 +209,8 @@ void sphl(ProcState *state);
  */
 
 void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
+
+void lxi_16(unsigned short *dest, ProcState *state);
 
 void mvi(unsigned char data, unsigned char *mem_addr);
 

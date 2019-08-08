@@ -231,14 +231,6 @@ void print_mem(unsigned short mem_addr, ProcState *state) {
   print_mem_r(mem_addr, 0, 8, state);
 }
 
-unsigned char get_sp_lo(ProcState *state) {
-  return state->sp;
-}
-
-unsigned char get_sp_hi(ProcState *state) {
-  return state->sp >> 8;
-}
-
 unsigned char *get_mem_byte(ProcState *state) {
   unsigned short mem_addr = (state->reg_h << 8) ^ state->reg_l;
   return &state->mem[mem_addr];
