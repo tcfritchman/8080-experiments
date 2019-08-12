@@ -1,6 +1,14 @@
 #include "state.h"
 
 /*
+ * NOP AND UNUSED INSTRUCTIONS
+ */
+
+void nop(ProcState *state);
+
+void unused();
+
+/*
  * CARRY BIT INSTRUCTIONS
  */
 
@@ -12,9 +20,9 @@ void stc(ProcState *state);
  * SINGLE REGISTER INSTRUCTIONS
  */
 
-void inr(unsigned char *data);
+void inr(unsigned char *data, ProcState *state);
 
-void dcr(unsigned char *data);
+void dcr(unsigned char *data, ProcState *state);
 
 void cma(ProcState *state);
 
@@ -24,7 +32,7 @@ void daa(ProcState *state);
  * DATA TRANSFER INSTRUCTIONS
  */
 
-void mov(unsigned char data_src, unsigned char *mem_addr_dst);
+void mov(unsigned char data_src, unsigned char *mem_addr_dst, ProcState *state);
 
 void stax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
 
@@ -190,13 +198,13 @@ void dad(unsigned char data_hi, unsigned char data_lo, ProcState *state);
 
 void dad_16(unsigned short *data, ProcState *state);
 
-void inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
+void inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
 
-void inx_16(unsigned short *data);
+void inx_16(unsigned short *data, ProcState *state);
 
-void dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
+void dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
 
-void dcx_16(unsigned short *data);
+void dcx_16(unsigned short *data, ProcState *state);
 
 void xchg(ProcState *state);
 
@@ -208,11 +216,11 @@ void sphl(ProcState *state);
  * IMMEDIATE INSTRUCTIONS
  */
 
-void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo);
+void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
 
 void lxi_16(unsigned short *dest, ProcState *state);
 
-void mvi(unsigned char data, unsigned char *mem_addr);
+void mvi(unsigned char data, unsigned char *mem_addr, ProcState *state);
 
 void adi(unsigned char data, ProcState *state);
 

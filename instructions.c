@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "state.h"
 #include "state_util.h"
 
@@ -5,24 +6,37 @@ const int BYTE_SIZE = 8;
 const int DOUBLE_BYTE_SIZE = 16;
 const int NIBBLE_SIZE = 4;
 
+void nop(ProcState *state) {
+  state->pc += 1;
+}
+
+void unused(ProcState *state) {
+  printf("Encountered illegal instruction: addr 0x%x", state->pc);
+}
+
 void cmc(ProcState *state) {
   state->carry = !state->carry;
+  state->pc += 1;
 }
 
 void stc(ProcState *state) {
   state->carry = 1;
+  state->pc += 1; 
 }
 
-void inr(unsigned char *data) {
+void inr(unsigned char *data, ProcState *state) {
   (*data)++;
+  state->pc += 1;
 }
 
-void dcr(unsigned char *data) {
+void dcr(unsigned char *data, ProcState *state) {
   (*data)--;
+  state->pc += 1;
 }
 
 void cma(ProcState *state) {
   state->reg_a = ~state->reg_a;
+  state->pc += 1;
 }
 
 void daa(ProcState *state) {
@@ -43,20 +57,24 @@ void daa(ProcState *state) {
   state->parity = parity(state->reg_a);
   state->zero = zero(state->reg_a);
   state->sign = sign(state->reg_a);
+  state->pc += 1;
 }
 
-void mov(unsigned char data_src, unsigned char *mem_addr_dst) {
+void mov(unsigned char data_src, unsigned char *mem_addr_dst, ProcState *state) {
   *mem_addr_dst = data_src;
+  state->pc += 1;
 }
 
 void stax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->mem[mem_addr] = state->reg_a;
+  state->pc += 1;
 }
 
 void ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->reg_a = state->mem[mem_addr];
+  state->pc += 1;
 }
 
 void add(unsigned char data, ProcState *state) {
@@ -70,6 +88,7 @@ void add(unsigned char data, ProcState *state) {
   state->sign = sign(sum);
   state->carry = carry_bit;
   state->aux_carry = aux_carry_bit;
+  state->pc += 1;
 }
 
 void adc(unsigned char data, ProcState *state) {
@@ -83,6 +102,7 @@ void adc(unsigned char data, ProcState *state) {
   state->sign = sign(sum);
   state->carry = carry_bit;
   state->aux_carry = aux_carry_bit;
+  state->pc += 1;
 }
 
 void sub(unsigned char data, ProcState *state) {
@@ -99,6 +119,7 @@ void sub(unsigned char data, ProcState *state) {
   state->sign = sign(sum);
   state->carry = !carry_bit;
   state->aux_carry = aux_carry_bit;
+  state->pc += 1;
 }
 
 void sbb(unsigned char data, ProcState *state) {
@@ -115,6 +136,7 @@ void sbb(unsigned char data, ProcState *state) {
   state->sign = sign(sum);
   state->carry = !carry_bit;
   state->aux_carry = aux_carry_bit;
+  state->pc += 1;
 }
 
 void ana(unsigned char data, ProcState *state) {
@@ -125,6 +147,7 @@ void ana(unsigned char data, ProcState *state) {
   state->parity = parity(result);
   state->zero = zero(result);
   state->sign = sign(result);
+  state->pc += 1;
 }
 
 void xra(unsigned char data, ProcState *state) {
@@ -135,6 +158,7 @@ void xra(unsigned char data, ProcState *state) {
   state->parity = parity(result);
   state->zero = zero(result);
   state->sign = sign(result);
+  state->pc += 1;
 }
 
 void ora(unsigned char data, ProcState *state) {
@@ -145,6 +169,7 @@ void ora(unsigned char data, ProcState *state) {
   state->parity = parity(result);
   state->zero = zero(result);
   state->sign = sign(result);
+  state->pc += 1;
 }
 
 void cmp(unsigned char data, ProcState *state) {
@@ -160,6 +185,7 @@ void cmp(unsigned char data, ProcState *state) {
   state->sign = sign(sum);
   state->carry = !carry_bit;
   state->aux_carry = aux_carry_bit;
+  state->pc += 1;
 }
 
 void rlc(ProcState *state) {
@@ -168,6 +194,7 @@ void rlc(ProcState *state) {
   result |= carry_bit;
   state->reg_a = result;
   state->carry = carry_bit;
+  state->pc += 1;
 }
 
 void rrc(ProcState *state) {
@@ -176,6 +203,7 @@ void rrc(ProcState *state) {
   result |= carry_bit << (BYTE_SIZE - 1);
   state->reg_a = result;
   state->carry = carry_bit;
+  state->pc += 1;
 }
 
 void ral(ProcState *state) {
@@ -185,6 +213,7 @@ void ral(ProcState *state) {
   result |= old_carry_bit;
   state->reg_a = result;
   state->carry = new_carry_bit;
+  state->pc += 1;
 }
 
 void rar(ProcState *state) {
@@ -194,6 +223,7 @@ void rar(ProcState *state) {
   result |= old_carry_bit << (BYTE_SIZE - 1);
   state->reg_a = result;
   state->carry = new_carry_bit;
+  state->pc += 1;
 }
 
 void push(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
@@ -201,6 +231,7 @@ void push(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state
   state->mem[sp-1] = mem_addr_hi;
   state->mem[sp-2] = mem_addr_lo;
   state->sp -= 2;
+  state->pc += 1;
 }
 
 void push_psw(ProcState *state) {
@@ -219,6 +250,7 @@ void pop(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *stat
   *mem_addr_lo = state->mem[sp];
   *mem_addr_hi = state->mem[sp+1];
   state->sp += 2;
+  state->pc += 1;
 }
 
 void pop_psw(ProcState *state) {
@@ -229,6 +261,7 @@ void pop_psw(ProcState *state) {
   state->aux_carry = (0x10 & psw_bits >> 4);
   state->parity = (0x04 & psw_bits) >> 2;
   state->carry = (0x01 & psw_bits);
+  state->pc += 1;
 }
 
 void dad_16(unsigned short *data, ProcState *state) {
@@ -238,6 +271,7 @@ void dad_16(unsigned short *data, ProcState *state) {
   state->reg_h = sum >> BYTE_SIZE;
   state->reg_l = sum;
   state->carry = carry_bit;
+  state->pc += 1;
 }
 
 void dad(unsigned char data_hi, unsigned char data_lo, ProcState *state) {
@@ -245,26 +279,30 @@ void dad(unsigned char data_hi, unsigned char data_lo, ProcState *state) {
   dad_16(&in_bits, state);
 }
 
-void inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
+void inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
   unsigned short in_bits = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
   in_bits++;
   *mem_addr_hi = in_bits >> BYTE_SIZE;
   *mem_addr_lo = in_bits;
+  state->pc += 1;
 }
 
-void inx_16(unsigned short *data) {
+void inx_16(unsigned short *data, ProcState *state) {
   (*data)++;
+  state->pc += 1;
 }
 
-void dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
+void dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
   unsigned short in_bits = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
   in_bits--;
   *mem_addr_hi = in_bits >> BYTE_SIZE;
   *mem_addr_lo = in_bits;
+  state->pc += 1;
 }
 
-void dcx_16(unsigned short *data) {
+void dcx_16(unsigned short *data, ProcState *state) {
   (*data)--;
+  state->pc += 1;
 }
 
 void xchg(ProcState *state) {
@@ -274,6 +312,7 @@ void xchg(ProcState *state) {
   state->reg_l = state->reg_e;
   state->reg_d = temp_a;
   state->reg_e = temp_b;
+  state->pc += 1;
 }
 
 void xthl(ProcState *state) {
@@ -283,85 +322,103 @@ void xthl(ProcState *state) {
   state->reg_l = state->mem[state->sp];
   state->mem[state->sp + 1] = temp_a;
   state->mem[state->sp] = temp_b;
+  state->pc += 1;
 }
 
 void sphl(ProcState *state) {
   unsigned short hl_bits = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
   state->sp = hl_bits;
+  state->pc += 1;
 }
 
 // TODO: First two params can be removed
-void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo) {
+void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
   *mem_addr_hi = data_hi;
   *mem_addr_lo = data_lo;
+  state->pc += 3;
 }
 
 void lxi_16(unsigned short *dest, ProcState *state) {
   *dest = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+2];
+  state->pc += 3;
 }
 
 // TODO First param can be removed
-void mvi(unsigned char data, unsigned char *mem_addr) {
+void mvi(unsigned char data, unsigned char *mem_addr, ProcState *state) {
   *mem_addr = data;
+  state->pc += 2;
 }
 
 void adi(unsigned char data, ProcState *state) {
   add(data, state);
+  state->pc += 2;
 }
 
 void aci(unsigned char data, ProcState *state) {
   adc(data, state);
+  state->pc += 2;
 }
 
 void sui(unsigned char data, ProcState *state) {
   sub(data, state);
+  state->pc += 2;
 }
 
 void sbi(unsigned char data, ProcState *state) {
   sbb(data, state);
+  state->pc += 2;
 }
 
 void ani(unsigned char data, ProcState *state) {
   ana(data, state);
+  state->pc += 2;
 }
 
 void xri(unsigned char data, ProcState *state) {
   xra(data, state);
+  state->pc += 2;
 }
 
 void ori(unsigned char data, ProcState *state) {
   ora(data, state);
+  state->pc += 2;
 }
 
 void cpi(unsigned char data, ProcState *state) {
   cmp(data, state);
+  state->pc += 1;
 }
 
 void sta(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->mem[mem_addr] = state->reg_a;
+  state->pc += 3;
 }
 
 void lda(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->reg_a = state->mem[mem_addr];
+  state->pc += 3;
 }
 
 void shld(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->mem[mem_addr] = state->reg_l;
   state->mem[mem_addr + 1] = state->reg_h;
+  state->pc += 3;
 }
 
 void lhld(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->reg_l = state->mem[mem_addr];
   state->reg_h = state->mem[mem_addr + 1];
+  state->pc += 3;
 }
 
 void pchl(ProcState *state) {
   unsigned short mem_addr = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
   state->pc = mem_addr;
+  state->pc += 1;
 }
 
 void jmp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
@@ -372,48 +429,64 @@ void jmp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state)
 void jc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (state->carry) {
     jmp(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void jnc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (!state->carry) {
     jmp(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void jz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (state->zero) {
     jmp(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void jnz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (!state->zero) {
     jmp(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void jm(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (state->sign) {
     jmp(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void jp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (!state->sign) {
     jmp(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void jpe(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (state->parity) {
     jmp(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void jpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (!state->parity) {
     jmp(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
@@ -427,48 +500,64 @@ void call(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state
 void cc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (state->carry) {
     call(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void cnc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (!state->carry) {
     call(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void cz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (state->zero) {
     call(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void cnz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (!state->zero) {
     call(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void cm(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (state->sign) {
     call(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void cp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (!state->sign) {
     call(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void cpe(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (state->parity) {
     call(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
 void cpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
   if (!state->parity) {
     call(mem_addr_hi, mem_addr_lo, state);
+  } else {
+    state->pc += 3;
   }
 }
 
@@ -483,48 +572,64 @@ void ret(ProcState *state) {
 void rc(ProcState *state) {
   if (state->carry) {
     ret(state);
+  } else {
+    state->pc += 1;
   }
 }
 
 void rnc(ProcState *state) {
   if (!state->carry) {
     ret(state);
+  } else {
+    state->pc += 1;
   }
 }
 
 void rz(ProcState *state) {
   if (state->zero) {
     ret(state);
+  } else {
+    state->pc += 1;
   }
 }
 
 void rnz(ProcState *state) {
   if (!state->zero) {
     ret(state);
+  } else {
+    state->pc += 1;
   }
 }
 
 void rm(ProcState *state) {
   if (state->sign) {
     ret(state);
+  } else {
+    state->pc += 1;
   }
 }
 
 void rp(ProcState *state) {
   if (!state->sign) {
     ret(state);
+  } else {
+    state->pc += 1;
   }
 }
 
 void rpe(ProcState *state) {
   if (state->parity) {
     ret(state);
+  } else {
+    state->pc += 1;
   }
 }
 
 void rpo(ProcState *state) {
   if (!state->parity) {
     ret(state);
+  } else {
+    state->pc += 1;
   }
 }
 
@@ -535,18 +640,22 @@ void rst(unsigned char exp, ProcState *state) {
 
 void ei(ProcState *state) {
   state->inte = 1;
+  state->pc += 1;
 }
 
 void di(ProcState *state) {
   state->inte = 0;
+  state->pc += 1;
 }
 
 void in(ProcState *state) {
   // TODO
+  state->pc += 2;
 }
 
 void out(ProcState *state) {
   // TODO
+  state->pc += 2;
 }
 
 void hlt(ProcState *state) {

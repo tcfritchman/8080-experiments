@@ -36,11 +36,12 @@ void update_state(ProcState *state) {
 
     case 0x00:
       // NOP
+      nop(state);
       break;
 
     case 0x01:
       // LXI B
-      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_b, &state->reg_c);
+      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_b, &state->reg_c, state);
       break;
 
     case 0x02:
@@ -50,22 +51,22 @@ void update_state(ProcState *state) {
 
     case 0x03:
       // INX B
-      inx(&state->reg_b, &state->reg_c);
+      inx(&state->reg_b, &state->reg_c, state);
       break;
 
     case 0x04:
       // INR B
-      inr(&state->reg_b);
+      inr(&state->reg_b, state);
       break;
 
     case 0x05:
       // DCR B
-      dcr(&state->reg_b);
+      dcr(&state->reg_b, state);
       break;
 
     case 0x06:
       // MVI B
-      mvi(state->mem[pc+1], &state->reg_b);
+      mvi(state->mem[pc+1], &state->reg_b, state);
       break;
 
     case 0x07:
@@ -75,7 +76,8 @@ void update_state(ProcState *state) {
 
     case 0x08:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0x09:
       // DAD B
@@ -89,22 +91,22 @@ void update_state(ProcState *state) {
 
     case 0x0b:
       // DCX B
-      dcx(&state->reg_b, &state->reg_c);
+      dcx(&state->reg_b, &state->reg_c, state);
       break;
 
     case 0x0c:
       // INR C
-      inr(&state->reg_c);
+      inr(&state->reg_c, state);
       break;
 
     case 0x0d:
       // DCR C
-      dcr(&state->reg_c);
+      dcr(&state->reg_c, state);
       break;
 
     case 0x0e:
       // MVI C
-      mvi(state->mem[pc+1], &state->reg_c);
+      mvi(state->mem[pc+1], &state->reg_c, state);
       break;
 
     case 0x0f:
@@ -114,11 +116,12 @@ void update_state(ProcState *state) {
 
     case 0x10:
       // NONE
-      break;
-
+      unused(state);
+      return;
+      
     case 0x11:
       // LXI D
-      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_d, &state->reg_e);
+      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_d, &state->reg_e, state);
       break;
 
     case 0x12:
@@ -128,22 +131,22 @@ void update_state(ProcState *state) {
 
     case 0x13:
       // INX D
-      inx(&state->reg_d, &state->reg_e);
+      inx(&state->reg_d, &state->reg_e, state);
       break;
 
     case 0x14:
       // INR D
-      inr(&state->reg_d);
+      inr(&state->reg_d, state);
       break;
 
     case 0x15:
       // DCR D
-      dcr(&state->reg_d);
+      dcr(&state->reg_d, state);
       break;
 
     case 0x16:
       // MVI D
-      mvi(state->mem[pc+1], &state->reg_d);
+      mvi(state->mem[pc+1], &state->reg_d, state);
       break;
 
     case 0x17:
@@ -153,7 +156,8 @@ void update_state(ProcState *state) {
 
     case 0x18:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0x19:
       // DAD D
@@ -167,22 +171,22 @@ void update_state(ProcState *state) {
 
     case 0x1b:
       // DCX D
-      dcx(&state->reg_d, &state->reg_e);
+      dcx(&state->reg_d, &state->reg_e, state);
       break;
 
     case 0x1c:
       // INR E
-      inr(&state->reg_e);
+      inr(&state->reg_e, state);
       break;
 
     case 0x1d:
       // DCR E
-      dcr(&state->reg_e);
+      dcr(&state->reg_e, state);
       break;
 
     case 0x1e:
       // MVI E
-      mvi(state->mem[pc+1], &state->reg_e);
+      mvi(state->mem[pc+1], &state->reg_e, state);
       break;
 
     case 0x1f:
@@ -192,11 +196,12 @@ void update_state(ProcState *state) {
 
     case 0x20:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0x21:
       // LXI H
-      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_h, &state->reg_l);
+      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_h, &state->reg_l, state);
       break;
 
     case 0x22:
@@ -206,22 +211,22 @@ void update_state(ProcState *state) {
 
     case 0x23:
       // INX H
-      inx(&state->reg_h, &state->reg_l);
+      inx(&state->reg_h, &state->reg_l, state);
       break;
 
     case 0x24:
       // INR H
-      inr(&state->reg_h);
+      inr(&state->reg_h, state);
       break;
 
     case 0x25:
       // DCR H
-      dcr(&state->reg_h);
+      dcr(&state->reg_h, state);
       break;
 
     case 0x26:
       // MVI H
-      mvi(state->mem[pc+1], &state->reg_h);
+      mvi(state->mem[pc+1], &state->reg_h, state);
       break;
 
     case 0x27:
@@ -231,7 +236,8 @@ void update_state(ProcState *state) {
 
     case 0x28:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0x29:
       // DAD H
@@ -245,22 +251,22 @@ void update_state(ProcState *state) {
 
     case 0x2b:
       // DCX H
-      dcx(&state->reg_h, &state->reg_l);
+      dcx(&state->reg_h, &state->reg_l, state);
       break;
 
     case 0x2c:
       // INR L
-      inr(&state->reg_l);
+      inr(&state->reg_l, state);
       break;
 
     case 0x2d:
       // DCR L
-      dcr(&state->reg_l);
+      dcr(&state->reg_l, state);
       break;
 
     case 0x2e:
       // MVI L
-      mvi(state->mem[pc+1], &state->reg_l);
+      mvi(state->mem[pc+1], &state->reg_l, state);
       break;
 
     case 0x2f:
@@ -270,7 +276,8 @@ void update_state(ProcState *state) {
 
     case 0x30:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0x31:
       // LXI SP
@@ -284,22 +291,22 @@ void update_state(ProcState *state) {
 
     case 0x33:
       // INX SP
-      inx_16(&state->sp);
+      inx_16(&state->sp, state);
       break;
 
     case 0x34:
       // INR M
-      inr(get_mem_byte(state));
+      inr(get_mem_byte(state), state);
       break;
 
     case 0x35:
       // DCR M
-      dcr(get_mem_byte(state));
+      dcr(get_mem_byte(state), state);
       break;
 
     case 0x36:
       // MVI M
-      mvi(state->mem[pc+1], get_mem_byte(state));
+      mvi(state->mem[pc+1], get_mem_byte(state), state);
       break;
 
     case 0x37:
@@ -309,7 +316,8 @@ void update_state(ProcState *state) {
 
     case 0x38:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0x39:
       // DAD SP
@@ -323,22 +331,22 @@ void update_state(ProcState *state) {
 
     case 0x3b:
       // DCX SP
-      dcx_16(&state->sp);
+      dcx_16(&state->sp, state);
       break;
 
     case 0x3c:
       // INR A
-      inr(&state->reg_a);
+      inr(&state->reg_a, state);
       break;
 
     case 0x3d:
       // DCR A
-      dcr(&state->reg_a);
+      dcr(&state->reg_a, state);
       break;
 
     case 0x3e:
       // MVI A
-      mvi(state->mem[pc+1], &state->reg_a);
+      mvi(state->mem[pc+1], &state->reg_a, state);
       break;
 
     case 0x3f:
@@ -348,272 +356,272 @@ void update_state(ProcState *state) {
 
     case 0x40:
       // MOV B,B
-      mov(state->reg_b, &state->reg_b);
+      mov(state->reg_b, &state->reg_b, state);
       break;
 
     case 0x41:
       // MOV B,C
-      mov(state->reg_c, &state->reg_b);
+      mov(state->reg_c, &state->reg_b, state);
       break;
 
     case 0x42:
       // MOV B,D
-      mov(state->reg_d, &state->reg_b);
+      mov(state->reg_d, &state->reg_b, state);
       break;
 
     case 0x43:
       // MOV B,E
-      mov(state->reg_e, &state->reg_b);
+      mov(state->reg_e, &state->reg_b, state);
       break;
 
     case 0x44:
       // MOV B,H
-      mov(state->reg_h, &state->reg_b);
+      mov(state->reg_h, &state->reg_b, state);
       break;
 
     case 0x45:
       // MOV B,L
-      mov(state->reg_l, &state->reg_b);
+      mov(state->reg_l, &state->reg_b, state);
       break;
 
     case 0x46:
       // MOV B,M
-      mov(*get_mem_byte(state), &state->reg_b);
+      mov(*get_mem_byte(state), &state->reg_b, state);
       break;
 
     case 0x47:
       // MOV B,A
-      mov(state->reg_a, &state->reg_b);
+      mov(state->reg_a, &state->reg_b, state);
       break;
 
     case 0x48:
       // MOV C,B
-      mov(state->reg_b, &state->reg_c);
+      mov(state->reg_b, &state->reg_c, state);
       break;
 
     case 0x49:
       // MOV C,C
-      mov(state->reg_c, &state->reg_c);
+      mov(state->reg_c, &state->reg_c, state);
       break;
 
     case 0x4a:
       // MOV C,D
-      mov(state->reg_d, &state->reg_c);
+      mov(state->reg_d, &state->reg_c, state);
       break;
 
     case 0x4b:
       // MOV C,E
-      mov(state->reg_e, &state->reg_c);
+      mov(state->reg_e, &state->reg_c, state);
       break;
 
     case 0x4c:
       // MOV C,H
-      mov(state->reg_h, &state->reg_c);
+      mov(state->reg_h, &state->reg_c, state);
       break;
 
     case 0x4d:
       // MOV C,L
-      mov(state->reg_l, &state->reg_c);
+      mov(state->reg_l, &state->reg_c, state);
       break;
 
     case 0x4e:
       // MOV C,M
-      mov(*get_mem_byte(state), &state->reg_c);
+      mov(*get_mem_byte(state), &state->reg_c, state);
       break;
 
     case 0x4f:
       // MOV C,A
-      mov(state->reg_a, &state->reg_c);
+      mov(state->reg_a, &state->reg_c, state);
       break;
 
     case 0x50:
       // MOV D,B
-      mov(state->reg_b, &state->reg_d);
+      mov(state->reg_b, &state->reg_d, state);
       break;
 
     case 0x51:
       // MOV D,C
-      mov(state->reg_c, &state->reg_d);
+      mov(state->reg_c, &state->reg_d, state);
       break;
 
     case 0x52:
       // MOV D,D
-      mov(state->reg_d, &state->reg_d);
+      mov(state->reg_d, &state->reg_d, state);
       break;
 
     case 0x53:
       // MOV D,E
-      mov(state->reg_e, &state->reg_d);
+      mov(state->reg_e, &state->reg_d, state);
       break;
 
     case 0x54:
       // MOV D,H
-      mov(state->reg_h, &state->reg_d);
+      mov(state->reg_h, &state->reg_d, state);
       break;
 
     case 0x55:
       // MOV D,L
-      mov(state->reg_l, &state->reg_d);
+      mov(state->reg_l, &state->reg_d, state);
       break;
 
     case 0x56:
       // MOV D,M
-      mov(*get_mem_byte(state), &state->reg_d);
+      mov(*get_mem_byte(state), &state->reg_d, state);
       break;
 
     case 0x57:
       // MOV D,A
-      mov(state->reg_a, &state->reg_d);
+      mov(state->reg_a, &state->reg_d, state);
       break;
 
     case 0x58:
       // MOV E,B
-      mov(state->reg_b, &state->reg_e);
+      mov(state->reg_b, &state->reg_e, state);
       break;
 
     case 0x59:
       // MOV E,C
-      mov(state->reg_c, &state->reg_e);
+      mov(state->reg_c, &state->reg_e, state);
       break;
 
     case 0x5a:
       // MOV E,D
-      mov(state->reg_d, &state->reg_e);
+      mov(state->reg_d, &state->reg_e, state);
       break;
 
     case 0x5b:
       // MOV E,E
-      mov(state->reg_e, &state->reg_e);
+      mov(state->reg_e, &state->reg_e, state);
       break;
 
     case 0x5c:
       // MOV E,H
-      mov(state->reg_h, &state->reg_e);
+      mov(state->reg_h, &state->reg_e, state);
       break;
 
     case 0x5d:
       // MOV E,L
-      mov(state->reg_l, &state->reg_e);
+      mov(state->reg_l, &state->reg_e, state);
       break;
 
     case 0x5e:
       // MOV E,M
-      mov(*get_mem_byte(state), &state->reg_e);
+      mov(*get_mem_byte(state), &state->reg_e, state);
       break;
 
     case 0x5f:
       // MOV E,A
-      mov(state->reg_a, &state->reg_e);
+      mov(state->reg_a, &state->reg_e, state);
       break;
 
     case 0x60:
       // MOV H,B
-      mov(state->reg_b, &state->reg_h);
+      mov(state->reg_b, &state->reg_h, state);
       break;
 
     case 0x61:
       // MOV H,C
-      mov(state->reg_c, &state->reg_h);
+      mov(state->reg_c, &state->reg_h, state);
       break;
 
     case 0x62:
       // MOV H,D
-      mov(state->reg_d, &state->reg_h);
+      mov(state->reg_d, &state->reg_h, state);
       break;
 
     case 0x63:
       // MOV H,E
-      mov(state->reg_e, &state->reg_h);
+      mov(state->reg_e, &state->reg_h, state);
       break;
 
     case 0x64:
       // MOV H,H
-      mov(state->reg_h, &state->reg_h);
+      mov(state->reg_h, &state->reg_h, state);
       break;
 
     case 0x65:
       // MOV H,L
-      mov(state->reg_l, &state->reg_h);
+      mov(state->reg_l, &state->reg_h, state);
       break;
 
     case 0x66:
       // MOV H,M
-      mov(*get_mem_byte(state), &state->reg_h);
+      mov(*get_mem_byte(state), &state->reg_h, state);
       break;
 
     case 0x67:
       // MOV H,A
-      mov(state->reg_a, &state->reg_h);
+      mov(state->reg_a, &state->reg_h, state);
       break;
 
     case 0x68:
       // MOV L,B
-      mov(state->reg_b, &state->reg_l);
+      mov(state->reg_b, &state->reg_l, state);
       break;
 
     case 0x69:
       // MOV L,C
-      mov(state->reg_c, &state->reg_l);
+      mov(state->reg_c, &state->reg_l, state);
       break;
 
     case 0x6a:
       // MOV L,D
-      mov(state->reg_d, &state->reg_l);
+      mov(state->reg_d, &state->reg_l, state);
       break;
 
     case 0x6b:
       // MOV L,E
-      mov(state->reg_e, &state->reg_l);
+      mov(state->reg_e, &state->reg_l, state);
       break;
 
     case 0x6c:
       // MOV L,H
-      mov(state->reg_h, &state->reg_l);
+      mov(state->reg_h, &state->reg_l, state);
       break;
 
     case 0x6d:
       // MOV L,L
-      mov(state->reg_l, &state->reg_l);
+      mov(state->reg_l, &state->reg_l, state);
       break;
 
     case 0x6e:
       // MOV L,M
-      mov(*get_mem_byte(state), &state->reg_l);
+      mov(*get_mem_byte(state), &state->reg_l, state);
       break;
 
     case 0x6f:
       // MOV L,A
-      mov(state->reg_a, &state->reg_l);
+      mov(state->reg_a, &state->reg_l, state);
       break;
 
     case 0x70:
       // MOV M,B
-      mov(state->reg_b, get_mem_byte(state));
+      mov(state->reg_b, get_mem_byte(state), state);
       break;
 
     case 0x71:
       // MOV M,C
-      mov(state->reg_c, get_mem_byte(state));
+      mov(state->reg_c, get_mem_byte(state), state);
       break;
 
     case 0x72:
       // MOV M,D
-      mov(state->reg_d, get_mem_byte(state));
+      mov(state->reg_d, get_mem_byte(state), state);
       break;
 
     case 0x73:
       // MOV M,E
-      mov(state->reg_e, get_mem_byte(state));
+      mov(state->reg_e, get_mem_byte(state), state);
       break;
 
     case 0x74:
       // MOV M,H
-      mov(state->reg_h, get_mem_byte(state));
+      mov(state->reg_h, get_mem_byte(state), state);
       break;
 
     case 0x75:
       // MOV M,L
-      mov(state->reg_l, get_mem_byte(state));
+      mov(state->reg_l, get_mem_byte(state), state);
       break;
 
     case 0x76:
@@ -623,37 +631,37 @@ void update_state(ProcState *state) {
 
     case 0x77:
       // MOV M,A
-      mov(state->reg_a, get_mem_byte(state));
+      mov(state->reg_a, get_mem_byte(state), state);
       break;
 
     case 0x78:
       // MOV A,B
-      mov(state->reg_b, &state->reg_a);
+      mov(state->reg_b, &state->reg_a, state);
       break;
 
     case 0x79:
       // MOV A,C
-      mov(state->reg_c, &state->reg_a);
+      mov(state->reg_c, &state->reg_a, state);
       break;
 
     case 0x7a:
       // MOV A,D
-      mov(state->reg_d, &state->reg_a);
+      mov(state->reg_d, &state->reg_a, state);
       break;
 
     case 0x7b:
       // MOV A,E
-      mov(state->reg_e, &state->reg_a);
+      mov(state->reg_e, &state->reg_a, state);
       break;
 
     case 0x7c:
       // MOV A,H
-      mov(state->reg_h, &state->reg_a);
+      mov(state->reg_h, &state->reg_a, state);
       break;
 
     case 0x7d:
       // MOV A,L
-      mov(state->reg_l, &state->reg_a);
+      mov(state->reg_l, &state->reg_a, state);
       break;
 
     case 0x7e:
@@ -663,7 +671,7 @@ void update_state(ProcState *state) {
 
     case 0x7f:
       // MOV A,A
-      mov(state->reg_a, &state->reg_a);
+      mov(state->reg_a, &state->reg_a, state);
       break;
 
     case 0x80:
@@ -1048,7 +1056,8 @@ void update_state(ProcState *state) {
 
     case 0xcb:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0xcc:
       // CZ
@@ -1127,7 +1136,8 @@ void update_state(ProcState *state) {
 
     case 0xd9:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0xda:
       // JC
@@ -1148,7 +1158,8 @@ void update_state(ProcState *state) {
 
     case 0xdd:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0xde:
       // SBI
@@ -1232,7 +1243,8 @@ void update_state(ProcState *state) {
 
     case 0xed:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0xee:
       // XRI
@@ -1313,7 +1325,8 @@ void update_state(ProcState *state) {
 
     case 0xfd:
       // NONE
-      break;
+      unused(state);
+      return;
 
     case 0xfe:
       // CPI
@@ -1325,8 +1338,6 @@ void update_state(ProcState *state) {
       rst(7, state);
       break;
   }
-
-  state->pc += op_code.size;
 }
 
 void init_state(ProcState *state) {
