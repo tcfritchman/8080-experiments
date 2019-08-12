@@ -6,7 +6,7 @@
 #include "state.h"
 
 #define LOG_CPU
-#define LOG_DIAGNOSTIC
+#define DIAGNOSTIC
 
 void update_state(ProcState *state) {
   unsigned short pc = state->pc;
@@ -118,7 +118,7 @@ void update_state(ProcState *state) {
       // NONE
       unused(state);
       return;
-      
+
     case 0x11:
       // LXI D
       lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_d, &state->reg_e, state);
@@ -666,7 +666,7 @@ void update_state(ProcState *state) {
 
     case 0x7e:
       // MOV A,M
-      // TODO mov(state->reg_, &state->reg_a);
+      mov(*get_mem_byte(state), &state->reg_a, state);
       break;
 
     case 0x7f:
@@ -1068,7 +1068,7 @@ void update_state(ProcState *state) {
     case 0xcd:
       // CALL
       // TODO ...
-#ifdef LOG_DIAGNOSTIC
+#ifdef DIAGNOSTIC
       if (state->mem[pc+2] == 0x00 &&  state->mem[pc+1] == 0x05) {
         printf("Entering BDOS\n");
       } 
@@ -1401,6 +1401,13 @@ int main(int argc, char const *argv[]) {
     printf("Invalid argument count\n");
     return 1;
   }
+
+#ifdef DIAGNOSTIC
+  // Skip DAA tests in diagnostic binary
+  state.mem[0x59c] = 0xc3; // JMP    
+  state.mem[0x59d] = 0xc2;    
+  state.mem[0x59e] = 0x05;
+#endif
 
   // Program Loop
   while (1) {

@@ -40,6 +40,12 @@ void cma(ProcState *state) {
 }
 
 void daa(ProcState *state) {
+
+  // Note: this implementation does not pass the tests in the 
+  // diagnostic script. Not sure why, seems like maybe the
+  // specification for this instruction in the handbook might 
+  // not be accurate.
+
   unsigned char lo_four = (state->reg_a & 0x0f);
   if (lo_four > 9 || state->aux_carry) {
     lo_four += 6;
@@ -261,7 +267,6 @@ void pop_psw(ProcState *state) {
   state->aux_carry = (0x10 & psw_bits >> 4);
   state->parity = (0x04 & psw_bits) >> 2;
   state->carry = (0x01 & psw_bits);
-  state->pc += 1;
 }
 
 void dad_16(unsigned short *data, ProcState *state) {
@@ -339,7 +344,7 @@ void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_h
 }
 
 void lxi_16(unsigned short *dest, ProcState *state) {
-  *dest = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+2];
+  *dest = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->pc += 3;
 }
 
@@ -418,7 +423,6 @@ void lhld(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state
 void pchl(ProcState *state) {
   unsigned short mem_addr = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
   state->pc = mem_addr;
-  state->pc += 1;
 }
 
 void jmp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
