@@ -6,7 +6,7 @@
 
 void nop(ProcState *state);
 
-void unused();
+void unused(ProcState *state);
 
 /*
  * CARRY BIT INSTRUCTIONS

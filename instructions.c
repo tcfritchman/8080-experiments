@@ -351,42 +351,42 @@ void mvi(unsigned char data, unsigned char *mem_addr, ProcState *state) {
 
 void adi(unsigned char data, ProcState *state) {
   add(data, state);
-  state->pc += 2;
+  state->pc += 1; // Progress PC 1 additional byte
 }
 
 void aci(unsigned char data, ProcState *state) {
   adc(data, state);
-  state->pc += 2;
+  state->pc += 1; // Progress PC 1 additional byte
 }
 
 void sui(unsigned char data, ProcState *state) {
   sub(data, state);
-  state->pc += 2;
+  state->pc += 1; // Progress PC 1 additional byte
 }
 
 void sbi(unsigned char data, ProcState *state) {
   sbb(data, state);
-  state->pc += 2;
+  state->pc += 1; // Progress PC 1 additional byte
 }
 
 void ani(unsigned char data, ProcState *state) {
   ana(data, state);
-  state->pc += 2;
+  state->pc += 1; // Progress PC 1 additional byte
 }
 
 void xri(unsigned char data, ProcState *state) {
   xra(data, state);
-  state->pc += 2;
+  state->pc += 1; // Progress PC 1 additional byte
 }
 
 void ori(unsigned char data, ProcState *state) {
   ora(data, state);
-  state->pc += 2;
+  state->pc += 1; // Progress PC 1 additional byte
 }
 
 void cpi(unsigned char data, ProcState *state) {
   cmp(data, state);
-  state->pc += 1;
+  state->pc += 1; // Progress PC 1 additional byte
 }
 
 void sta(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
