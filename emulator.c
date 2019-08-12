@@ -41,7 +41,7 @@ void update_state(ProcState *state) {
 
     case 0x01:
       // LXI B
-      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_b, &state->reg_c, state);
+      lxi(&state->reg_b, &state->reg_c, state);
       break;
 
     case 0x02:
@@ -66,7 +66,7 @@ void update_state(ProcState *state) {
 
     case 0x06:
       // MVI B
-      mvi(state->mem[pc+1], &state->reg_b, state);
+      mvi(&state->reg_b, state);
       break;
 
     case 0x07:
@@ -106,7 +106,7 @@ void update_state(ProcState *state) {
 
     case 0x0e:
       // MVI C
-      mvi(state->mem[pc+1], &state->reg_c, state);
+      mvi(&state->reg_c, state);
       break;
 
     case 0x0f:
@@ -121,7 +121,7 @@ void update_state(ProcState *state) {
 
     case 0x11:
       // LXI D
-      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_d, &state->reg_e, state);
+      lxi(&state->reg_d, &state->reg_e, state);
       break;
 
     case 0x12:
@@ -146,7 +146,7 @@ void update_state(ProcState *state) {
 
     case 0x16:
       // MVI D
-      mvi(state->mem[pc+1], &state->reg_d, state);
+      mvi(&state->reg_d, state);
       break;
 
     case 0x17:
@@ -186,7 +186,7 @@ void update_state(ProcState *state) {
 
     case 0x1e:
       // MVI E
-      mvi(state->mem[pc+1], &state->reg_e, state);
+      mvi(&state->reg_e, state);
       break;
 
     case 0x1f:
@@ -201,12 +201,12 @@ void update_state(ProcState *state) {
 
     case 0x21:
       // LXI H
-      lxi(state->mem[pc+2], state->mem[pc+1], &state->reg_h, &state->reg_l, state);
+      lxi(&state->reg_h, &state->reg_l, state);
       break;
 
     case 0x22:
       // SHLD
-      shld(state->mem[pc+2], state->mem[pc+1], state);
+      shld(state);
       break;
 
     case 0x23:
@@ -226,7 +226,7 @@ void update_state(ProcState *state) {
 
     case 0x26:
       // MVI H
-      mvi(state->mem[pc+1], &state->reg_h, state);
+      mvi(&state->reg_h, state);
       break;
 
     case 0x27:
@@ -246,7 +246,7 @@ void update_state(ProcState *state) {
 
     case 0x2a:
       // LHLD
-      lhld(state->mem[pc+2], state->mem[pc+1], state);
+      lhld(state);
       break;
 
     case 0x2b:
@@ -266,7 +266,7 @@ void update_state(ProcState *state) {
 
     case 0x2e:
       // MVI L
-      mvi(state->mem[pc+1], &state->reg_l, state);
+      mvi(&state->reg_l, state);
       break;
 
     case 0x2f:
@@ -286,7 +286,7 @@ void update_state(ProcState *state) {
 
     case 0x32:
       // STA
-      sta(state->mem[pc+2], state->mem[pc+1], state);
+      sta(state);
       break;
 
     case 0x33:
@@ -306,7 +306,7 @@ void update_state(ProcState *state) {
 
     case 0x36:
       // MVI M
-      mvi(state->mem[pc+1], get_mem_byte(state), state);
+      mvi(get_mem_byte(state), state);
       break;
 
     case 0x37:
@@ -326,7 +326,7 @@ void update_state(ProcState *state) {
 
     case 0x3a:
       // LDA
-      lda(state->mem[pc+2], state->mem[pc+1], state);
+      lda(state);
       break;
 
     case 0x3b:
@@ -346,7 +346,7 @@ void update_state(ProcState *state) {
 
     case 0x3e:
       // MVI A
-      mvi(state->mem[pc+1], &state->reg_a, state);
+      mvi(&state->reg_a, state);
       break;
 
     case 0x3f:
@@ -1006,20 +1006,17 @@ void update_state(ProcState *state) {
 
     case 0xc2:
       // JNZ
-      // TODO: don't need first 2 params
-      jnz(state->mem[pc+2], state->mem[pc+1], state);
+      jnz(state);
       break;
 
     case 0xc3:
       // JMP
-      // TODO: don't need first 2 params
-      jmp(state->mem[pc+2], state->mem[pc+1], state);
+      jmp(state);
       break;
 
     case 0xc4:
       // CNZ
-      // TODO ...
-      cnz(state->mem[pc+2], state->mem[pc+1], state);
+      cnz(state);
       break;
 
     case 0xc5:
@@ -1029,8 +1026,7 @@ void update_state(ProcState *state) {
 
     case 0xc6:
       // ADI
-      // TODO ... first param
-      adi(state->mem[pc+1], state);
+      adi(state);
       break;
 
     case 0xc7:
@@ -1050,8 +1046,7 @@ void update_state(ProcState *state) {
 
     case 0xca:
       // JZ
-      // TODO ...
-      jz(state->mem[pc+2], state->mem[pc+1], state);
+      jz(state);
       break;
 
     case 0xcb:
@@ -1061,8 +1056,7 @@ void update_state(ProcState *state) {
 
     case 0xcc:
       // CZ
-      // TODO ...
-      cz(state->mem[pc+2], state->mem[pc+1], state);
+      cz(state);
       break;
 
     case 0xcd:
@@ -1074,12 +1068,12 @@ void update_state(ProcState *state) {
       } 
       else
 #endif
-      call(state->mem[pc+2], state->mem[pc+1], state);
+      call(state);
       break;
 
     case 0xce:
       // ACI
-      aci(state->mem[pc+1], state);
+      aci(state);
       break;
 
     case 0xcf:
@@ -1099,8 +1093,7 @@ void update_state(ProcState *state) {
 
     case 0xd2:
       // JNC
-      // TODO ...
-      jnc(state->mem[pc+2], state->mem[pc+1], state);
+      jnc(state);
       break;
 
     case 0xd3:
@@ -1110,8 +1103,7 @@ void update_state(ProcState *state) {
 
     case 0xd4:
       // CNC
-      // TODO ...
-      cnc(state->mem[pc+2], state->mem[pc+1], state);
+      cnc(state);
       break;
 
     case 0xd5:
@@ -1121,7 +1113,7 @@ void update_state(ProcState *state) {
 
     case 0xd6:
       // SUI
-      sui(state->mem[pc+1], state);
+      sui(state);
       break;
 
     case 0xd7:
@@ -1141,8 +1133,7 @@ void update_state(ProcState *state) {
 
     case 0xda:
       // JC
-      // TODO ...
-      jc(state->mem[pc+2], state->mem[pc+1], state);
+      jc(state);
       break;
 
     case 0xdb:
@@ -1152,8 +1143,7 @@ void update_state(ProcState *state) {
 
     case 0xdc:
       // CC
-      // TODO ...
-      cc(state->mem[pc+2], state->mem[pc+1], state);
+      cc(state);
       break;
 
     case 0xdd:
@@ -1163,8 +1153,7 @@ void update_state(ProcState *state) {
 
     case 0xde:
       // SBI
-      // TODO ...
-      sbi(state->mem[pc+1], state);
+      sbi(state);
       break;
 
     case 0xdf:
@@ -1184,8 +1173,7 @@ void update_state(ProcState *state) {
 
     case 0xe2:
       // JPO
-      // TODO ...
-      jpo(state->mem[pc+2], state->mem[pc+1], state);
+      jpo(state);
       break;
 
     case 0xe3:
@@ -1195,8 +1183,7 @@ void update_state(ProcState *state) {
 
     case 0xe4:
       // CPO
-      // TODO ....
-      cpo(state->mem[pc+2], state->mem[pc+1], state);
+      cpo(state);
       break;
 
     case 0xe5:
@@ -1206,8 +1193,7 @@ void update_state(ProcState *state) {
 
     case 0xe6:
       // ANI
-      // TODO ...
-      ani(state->mem[pc+1], state);
+      ani(state);
       break;
 
     case 0xe7:
@@ -1227,8 +1213,7 @@ void update_state(ProcState *state) {
 
     case 0xea:
       // JPE
-      // TODO ...
-      jpe(state->mem[pc+2], state->mem[pc+1], state);
+      jpe(state);
       break;
 
     case 0xeb:
@@ -1238,7 +1223,7 @@ void update_state(ProcState *state) {
 
     case 0xec:
       // CPE
-      cpe(state->mem[pc+2], state->mem[pc+1], state);
+      cpe(state);
       break;
 
     case 0xed:
@@ -1248,7 +1233,7 @@ void update_state(ProcState *state) {
 
     case 0xee:
       // XRI
-      xri(state->mem[pc+1], state);
+      xri(state);
       break;
 
     case 0xef:
@@ -1268,8 +1253,7 @@ void update_state(ProcState *state) {
 
     case 0xf2:
       // JP
-      // TODO ...
-      jp(state->mem[pc+2], state->mem[pc+1], state);
+      jp(state);
       break;
 
     case 0xf3:
@@ -1279,8 +1263,7 @@ void update_state(ProcState *state) {
 
     case 0xf4:
       // CP
-      // TODO ...
-      cp(state->mem[pc+2], state->mem[pc+1], state);
+      cp(state);
       break;
 
     case 0xf5:
@@ -1290,7 +1273,7 @@ void update_state(ProcState *state) {
 
     case 0xf6:
       // ORI
-      ori(state->mem[pc+1], state);
+      ori(state);
       break;
 
     case 0xf7:
@@ -1310,7 +1293,7 @@ void update_state(ProcState *state) {
 
     case 0xfa:
       // JM
-      jm(state->mem[pc+2], state->mem[pc+1], state);
+      jm(state);
       break;
 
     case 0xfb:
@@ -1320,7 +1303,7 @@ void update_state(ProcState *state) {
 
     case 0xfc:
       // CM
-      cm(state->mem[pc+2], state->mem[pc+1], state);
+      cm(state);
       break;
 
     case 0xfd:
@@ -1330,7 +1313,7 @@ void update_state(ProcState *state) {
 
     case 0xfe:
       // CPI
-      cpi(state->mem[pc+1], state);
+      cpi(state);
       break;
 
     case 0xff:
@@ -1403,7 +1386,7 @@ int main(int argc, char const *argv[]) {
   }
 
 #ifdef DIAGNOSTIC
-  // Skip DAA tests in diagnostic binary
+  // Ignore DAA tests in diagnostic binary
   state.mem[0x59c] = 0xc3; // JMP    
   state.mem[0x59d] = 0xc2;    
   state.mem[0x59e] = 0x05;

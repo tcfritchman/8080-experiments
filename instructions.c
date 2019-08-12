@@ -336,10 +336,9 @@ void sphl(ProcState *state) {
   state->pc += 1;
 }
 
-// TODO: First two params can be removed
-void lxi(unsigned char data_hi, unsigned char data_lo, unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
-  *mem_addr_hi = data_hi;
-  *mem_addr_lo = data_lo;
+void lxi(unsigned char *dest_hi, unsigned char *dest_lo, ProcState *state) {
+  *dest_hi = state->mem[state->pc+2];
+  *dest_lo = state->mem[state->pc+1];
   state->pc += 3;
 }
 
@@ -348,73 +347,72 @@ void lxi_16(unsigned short *dest, ProcState *state) {
   state->pc += 3;
 }
 
-// TODO First param can be removed
-void mvi(unsigned char data, unsigned char *mem_addr, ProcState *state) {
-  *mem_addr = data;
+void mvi(unsigned char *dest, ProcState *state) {
+  *dest = state->mem[state->pc+1];
   state->pc += 2;
 }
 
-void adi(unsigned char data, ProcState *state) {
-  add(data, state);
+void adi(ProcState *state) {
+  add(state->mem[state->pc+1], state);
   state->pc += 1; // Progress PC 1 additional byte
 }
 
-void aci(unsigned char data, ProcState *state) {
-  adc(data, state);
+void aci(ProcState *state) {
+  adc(state->mem[state->pc+1], state);
   state->pc += 1; // Progress PC 1 additional byte
 }
 
-void sui(unsigned char data, ProcState *state) {
-  sub(data, state);
+void sui(ProcState *state) {
+  sub(state->mem[state->pc+1], state);
   state->pc += 1; // Progress PC 1 additional byte
 }
 
-void sbi(unsigned char data, ProcState *state) {
-  sbb(data, state);
+void sbi(ProcState *state) {
+  sbb(state->mem[state->pc+1], state);
   state->pc += 1; // Progress PC 1 additional byte
 }
 
-void ani(unsigned char data, ProcState *state) {
-  ana(data, state);
+void ani(ProcState *state) {
+  ana(state->mem[state->pc+1], state);
   state->pc += 1; // Progress PC 1 additional byte
 }
 
-void xri(unsigned char data, ProcState *state) {
-  xra(data, state);
+void xri(ProcState *state) {
+  xra(state->mem[state->pc+1], state);
   state->pc += 1; // Progress PC 1 additional byte
 }
 
-void ori(unsigned char data, ProcState *state) {
-  ora(data, state);
+void ori(ProcState *state) {
+  ora(state->mem[state->pc+1], state);
   state->pc += 1; // Progress PC 1 additional byte
 }
 
-void cpi(unsigned char data, ProcState *state) {
-  cmp(data, state);
+void cpi(ProcState *state) {
+  cmp(state->mem[state->pc+1], state);
   state->pc += 1; // Progress PC 1 additional byte
 }
 
-void sta(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
-  unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
+void sta(ProcState *state) {
+  unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->mem[mem_addr] = state->reg_a;
   state->pc += 3;
 }
 
-void lda(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
-  unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
+void lda(ProcState *state) {
+  unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->reg_a = state->mem[mem_addr];
   state->pc += 3;
 }
 
-void shld(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
-  unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
+void shld(ProcState *state) {
+  unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->mem[mem_addr] = state->reg_l;
   state->mem[mem_addr + 1] = state->reg_h;
   state->pc += 3;
 }
 
-void lhld(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
-  unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
+void lhld(ProcState *state) {
+  unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->reg_l = state->mem[mem_addr];
   state->reg_h = state->mem[mem_addr + 1];
   state->pc += 3;
@@ -425,141 +423,145 @@ void pchl(ProcState *state) {
   state->pc = mem_addr;
 }
 
-void jmp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
-  unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
+void jmp(ProcState *state) {
+  unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->pc = mem_addr;
 }
 
-void jc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void jc(ProcState *state) {
   if (state->carry) {
-    jmp(mem_addr_hi, mem_addr_lo, state);
+    jmp(state);
   } else {
     state->pc += 3;
   }
 }
 
-void jnc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void jnc(ProcState *state) {
   if (!state->carry) {
-    jmp(mem_addr_hi, mem_addr_lo, state);
+    jmp(state);
   } else {
     state->pc += 3;
   }
 }
 
-void jz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void jz(ProcState *state) {
   if (state->zero) {
-    jmp(mem_addr_hi, mem_addr_lo, state);
+    jmp(state);
   } else {
     state->pc += 3;
   }
 }
 
-void jnz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void jnz(ProcState *state) {
   if (!state->zero) {
-    jmp(mem_addr_hi, mem_addr_lo, state);
+    jmp(state);
   } else {
     state->pc += 3;
   }
 }
 
-void jm(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void jm(ProcState *state) {
   if (state->sign) {
-    jmp(mem_addr_hi, mem_addr_lo, state);
+    jmp(state);
   } else {
     state->pc += 3;
   }
 }
 
-void jp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void jp(ProcState *state) {
   if (!state->sign) {
-    jmp(mem_addr_hi, mem_addr_lo, state);
+    jmp(state);
   } else {
     state->pc += 3;
   }
 }
 
-void jpe(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void jpe(ProcState *state) {
   if (state->parity) {
-    jmp(mem_addr_hi, mem_addr_lo, state);
+    jmp(state);
   } else {
     state->pc += 3;
   }
 }
 
-void jpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void jpo(ProcState *state) {
   if (!state->parity) {
-    jmp(mem_addr_hi, mem_addr_lo, state);
+    jmp(state);
   } else {
     state->pc += 3;
   }
 }
 
-void call(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
-  unsigned short return_addr = state->pc + 3;
+void _call(unsigned char mem_addr_hi, unsigned char mem_addr_lo, unsigned short instr_size, ProcState *state) {
+  unsigned short return_addr = state->pc + instr_size;
   push(return_addr >> BYTE_SIZE, return_addr, state);
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->pc = mem_addr;
 }
 
-void cc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void call(ProcState *state) {
+  _call(state->mem[state->pc+2], state->mem[state->pc+1], 3, state);
+}
+
+void cc(ProcState *state) {
   if (state->carry) {
-    call(mem_addr_hi, mem_addr_lo, state);
+    call(state);
   } else {
     state->pc += 3;
   }
 }
 
-void cnc(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void cnc(ProcState *state) {
   if (!state->carry) {
-    call(mem_addr_hi, mem_addr_lo, state);
+    call(state);
   } else {
     state->pc += 3;
   }
 }
 
-void cz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void cz(ProcState *state) {
   if (state->zero) {
-    call(mem_addr_hi, mem_addr_lo, state);
+    call(state);
   } else {
     state->pc += 3;
   }
 }
 
-void cnz(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void cnz(ProcState *state) {
   if (!state->zero) {
-    call(mem_addr_hi, mem_addr_lo, state);
+    call(state);
   } else {
     state->pc += 3;
   }
 }
 
-void cm(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void cm(ProcState *state) {
   if (state->sign) {
-    call(mem_addr_hi, mem_addr_lo, state);
+    call(state);
   } else {
     state->pc += 3;
   }
 }
 
-void cp(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void cp(ProcState *state) {
   if (!state->sign) {
-    call(mem_addr_hi, mem_addr_lo, state);
+    call(state);
   } else {
     state->pc += 3;
   }
 }
 
-void cpe(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void cpe(ProcState *state) {
   if (state->parity) {
-    call(mem_addr_hi, mem_addr_lo, state);
+    call(state);
   } else {
     state->pc += 3;
   }
 }
 
-void cpo(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+void cpo(ProcState *state) {
   if (!state->parity) {
-    call(mem_addr_hi, mem_addr_lo, state);
+    call(state);
   } else {
     state->pc += 3;
   }
@@ -639,7 +641,7 @@ void rpo(ProcState *state) {
 
 void rst(unsigned char exp, ProcState *state) {
   unsigned short jump_addr = (exp << 3) & 0x0038; // L.S. 3 bits of exp shifted 3 bits right
-  call(jump_addr >> BYTE_SIZE, jump_addr, state);
+  _call(jump_addr >> BYTE_SIZE, jump_addr, 1, state); // Do a "CALL" type function
 }
 
 void ei(ProcState *state) {
