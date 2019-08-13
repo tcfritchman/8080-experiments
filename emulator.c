@@ -8,6 +8,11 @@
 #define LOG_CPU
 #define DIAGNOSTIC
 
+void interrupt(unsigned char op_code, ProcState *state) {
+  state->is_interrupted = 1;
+  state->interrupt_instr = op_code;
+}
+
 void execute_instr(unsigned char op_code, ProcState *state) {
   switch (op_code) {
 
@@ -1294,8 +1299,7 @@ void execute_instr(unsigned char op_code, ProcState *state) {
 }
 
 void update_state(ProcState *state) {
-  unsigned short pc = state->pc;
-  OpCode op_code = OP_CODES[state->mem[pc]];
+  OpCode op_code = OP_CODES[state->mem[state->pc]];
 
 #ifdef LOG_CPU
 
@@ -1318,6 +1322,12 @@ void update_state(ProcState *state) {
 #endif
 
   execute_instr(op_code.code, state);
+
+  if (state->is_interrupted) {
+    state->is_interrupted = 0;
+    state->inte = 0;
+    execute_instr(state->interrupt_instr, state);
+  }
 }
 
 void init_state(ProcState *state) {

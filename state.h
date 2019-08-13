@@ -21,6 +21,8 @@ typedef struct ProcState {
   unsigned short sp;
   unsigned char io[256];
   int inte; // Interrupts Enabled
+  int is_interrupted; // An interrupt has occurred
+  unsigned char interrupt_instr; // The instruction supplied via the interrupt
 } ProcState;
 
 #endif
