@@ -8,31 +8,8 @@
 #define LOG_CPU
 #define DIAGNOSTIC
 
-void update_state(ProcState *state) {
-  unsigned short pc = state->pc;
-  OpCode op_code = OP_CODES[state->mem[pc]];
-
-#ifdef LOG_CPU
-
-  printf("%4x: ", state->pc);
-
-  switch (op_code.size) {
-    case 1:
-      printf("%s", op_code.name);
-      break;
-    case 2:
-      printf("%s,0x%x", op_code.name, state->mem[state->pc+1]);
-      break;
-    case 3:
-      printf("%s 0x%x,0x%x", op_code.name, state->mem[state->pc+2], state->mem[state->pc+1]);
-      break;
-  }
-
-  printf("\n");
-
-#endif
-
-  switch (op_code.code) {
+void execute_instr(unsigned char op_code, ProcState *state) {
+  switch (op_code) {
 
     case 0x00:
       // NOP
@@ -1314,6 +1291,33 @@ void update_state(ProcState *state) {
       rst(7, state);
       break;
   }
+}
+
+void update_state(ProcState *state) {
+  unsigned short pc = state->pc;
+  OpCode op_code = OP_CODES[state->mem[pc]];
+
+#ifdef LOG_CPU
+
+  printf("%4x: ", state->pc);
+
+  switch (op_code.size) {
+    case 1:
+      printf("%s", op_code.name);
+      break;
+    case 2:
+      printf("%s,0x%x", op_code.name, state->mem[state->pc+1]);
+      break;
+    case 3:
+      printf("%s 0x%x,0x%x", op_code.name, state->mem[state->pc+2], state->mem[state->pc+1]);
+      break;
+  }
+
+  printf("\n");
+
+#endif
+
+  execute_instr(op_code.code, state);
 }
 
 void init_state(ProcState *state) {
