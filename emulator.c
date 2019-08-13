@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include "op_codes.h"
 #include "state_util.h"
@@ -1348,6 +1349,8 @@ void init_state(ProcState *state) {
 }
 
 int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
+  printf("%s\n", filename);
+
   FILE *file;
   unsigned long filesize;
 
@@ -1363,7 +1366,7 @@ int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
 	fseek(file, 0, SEEK_SET);
 
   if (filesize + offset <= sizeof state->mem) {
-    printf("Loading %ld bytes starting at memory address 0x%x -\n\n", filesize, offset);
+    printf("Loading %ld bytes starting at memory address 0x%x\n", filesize, offset);
   } else {
     printf("Failed to open file - file too large");
     return 0;
@@ -1376,14 +1379,34 @@ int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
   return 1;
 }
 
+int load_diagnostic(const char *path, ProcState *state) {
+  const int offset = 0x100;
+  return read_file_to_mem(path, offset, state);
+}
+
+int load_space_invaders(const char *dir, ProcState *state) {
+  size_t path_length = (strlen(dir)) + 12; // length of `/invaders.x`
+  char part_1[path_length];
+  char part_2[path_length];
+  char part_3[path_length];
+  char part_4[path_length];
+  snprintf(part_1, path_length, "%s/invaders.h", dir);
+  snprintf(part_2, path_length, "%s/invaders.g", dir);
+  snprintf(part_3, path_length, "%s/invaders.f", dir);
+  snprintf(part_4, path_length, "%s/invaders.e", dir);
+  if (!read_file_to_mem(part_1, 0x0000, state)) return 0;
+  if (!read_file_to_mem(part_2, 0x0800, state)) return 0;
+  if (!read_file_to_mem(part_3, 0x1000, state)) return 0;
+  if (!read_file_to_mem(part_4, 0x1800, state)) return 0;
+  return 1;
+}
+
 int main(int argc, char const *argv[]) {
   ProcState state;
   init_state(&state);
-  const int offset = 0x100;
 
-  // Read the input file into memory address `offset`
   if (argc == 2) {
-    int success = read_file_to_mem(argv[1], offset, &state);
+    int success = load_space_invaders(argv[1], &state);
     if (!success) {
       return 1;
     }
@@ -1402,7 +1425,7 @@ int main(int argc, char const *argv[]) {
   // Program Loop
   while (1) {
     update_state(&state);
-    usleep(5000);
+    usleep(50000);
   }
 
   return 0;
