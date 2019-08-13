@@ -1061,13 +1061,6 @@ void update_state(ProcState *state) {
 
     case 0xcd:
       // CALL
-      // TODO ...
-#ifdef DIAGNOSTIC
-      if (state->mem[pc+2] == 0x00 &&  state->mem[pc+1] == 0x05) {
-        printf("Entering BDOS\n");
-      } 
-      else
-#endif
       call(state);
       break;
 
