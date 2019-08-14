@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include "SDL.h"
+#include "SDL_events.h"
 #include "op_codes.h"
 #include "state_util.h"
 #include "instructions.h"
@@ -1422,11 +1424,27 @@ int main(int argc, char const *argv[]) {
   state.mem[0x59e] = 0x05;
 #endif
 
+  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+    return 1;
+  }
+
+  SDL_Event e;
+
   // Program Loop
   while (1) {
     update_state(&state);
     usleep(50000);
+
+    // Handle SDL Events
+    SDL_PollEvent(&e);
+    if (e.type == SDL_QUIT) {
+        SDL_Log("Program quit after %i ticks", e.quit.timestamp);
+        break;
+    }
   }
+
+  SDL_Quit();
 
   return 0;
 }
