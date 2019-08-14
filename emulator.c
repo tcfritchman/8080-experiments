@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "SDL.h"
 #include "SDL_events.h"
+#include "SDL_video.h"
 #include "op_codes.h"
 #include "state_util.h"
 #include "instructions.h"
@@ -1430,6 +1431,21 @@ int main(int argc, char const *argv[]) {
   }
 
   SDL_Event e;
+  SDL_Window *window;
+
+  window = SDL_CreateWindow(
+      "Emulator Window",
+      SDL_WINDOWPOS_UNDEFINED,
+      SDL_WINDOWPOS_UNDEFINED,
+      256,
+      224,
+      SDL_WINDOW_OPENGL
+  );
+
+  if (window == NULL) {
+    printf("Could not create window: %s\n", SDL_GetError());
+    return 1;
+  }
 
   // Program Loop
   while (1) {
