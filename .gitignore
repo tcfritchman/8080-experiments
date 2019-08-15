@@ -54,3 +54,6 @@ dkms.conf
 
 # Editor Config Files
 .vscode/
+.cproject
+.project
+.settings/
