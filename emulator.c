@@ -13,6 +13,11 @@
 #define LOG_CPU
 #define DIAGNOSTIC
 
+const int DISPLAY_WIDTH = 256;
+const int DISPLAY_HEIGHT = 224;
+const int VIDEO_BYTES = 7168; // (DISPLAY_WIDTH * DISPLAY_HEIGHT) / 8;
+const int PIXEL_BYTES = 229376; // DISPLAY_WIDTH * DISPLAY_HEIGHT * 4;
+
 void interrupt(unsigned char op_code, ProcState *state) {
   state->is_interrupted = 1;
   state->interrupt_instr = op_code;
@@ -1405,6 +1410,19 @@ int load_space_invaders(const char *dir, ProcState *state) {
   return 1;
 }
 
+void generate_pixels(unsigned char *pixels, unsigned char *video_memory) {
+  for (int i = 0; i < VIDEO_BYTES; i++) {
+    for (int j = 7; j >= 0; j--) {
+      unsigned char on = ((video_memory[i] >> j) & 1) ? 0xff : 0;
+      int k = (i << 5) + (j << 2);
+      pixels[k] = on;
+      pixels[k+1] = on;
+      pixels[k+2] = on;
+      pixels[k+3] = SDL_ALPHA_OPAQUE;
+    }
+  } 
+}
+
 int main(int argc, char const *argv[]) {
   ProcState state;
   init_state(&state);
@@ -1431,9 +1449,6 @@ int main(int argc, char const *argv[]) {
     return 1;
   }
 
-  const int DISPLAY_WIDTH = 256;
-  const int DISPLAY_HEIGHT = 224;
-
   SDL_Window *window = SDL_CreateWindow(
     "Emulator Window",
     SDL_WINDOWPOS_UNDEFINED,
@@ -1442,6 +1457,11 @@ int main(int argc, char const *argv[]) {
     DISPLAY_HEIGHT,
     SDL_WINDOW_OPENGL
   );
+
+  if (window == NULL) {
+    printf("Could not create window: %s\n", SDL_GetError());
+    return 1;
+  }
 
   SDL_Renderer *renderer = SDL_CreateRenderer(
     window,
@@ -1457,30 +1477,8 @@ int main(int argc, char const *argv[]) {
     DISPLAY_HEIGHT
   );
 
-  if (window == NULL) {
-    printf("Could not create window: %s\n", SDL_GetError());
-    return 1;
-  }
-
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-  SDL_RenderClear(renderer);
-
-  unsigned char pixels[DISPLAY_WIDTH * DISPLAY_HEIGHT * 4];
-  memset(pixels, 0, DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
-  pixels[0] = 0xff;
-  pixels[1] = 0xff;
-  pixels[2] = 0xff;
-  pixels[3] = SDL_ALPHA_OPAQUE;
-
-  SDL_UpdateTexture(
-    texture,
-    NULL,
-    &pixels[0],
-    DISPLAY_WIDTH * 4
-  );
-
-  SDL_RenderCopy(renderer, texture, NULL, NULL);
-  SDL_RenderPresent(renderer);
+  unsigned char pixels[PIXEL_BYTES];
+  memset(pixels, 0, PIXEL_BYTES);
 
   SDL_Event e;
 
@@ -1488,6 +1486,21 @@ int main(int argc, char const *argv[]) {
   while (1) {
     update_state(&state);
     usleep(50000);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(renderer);
+
+    generate_pixels(&pixels[0], &state.mem[0x2400]);
+
+    SDL_UpdateTexture(
+      texture,
+      NULL,
+      &pixels[0],
+      DISPLAY_WIDTH * 4
+    );
+
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderPresent(renderer);
 
     // Handle SDL Events
     SDL_PollEvent(&e);
