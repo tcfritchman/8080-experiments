@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "SDL.h"
-#include "SDL_events.h"
-#include "SDL_video.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_events.h"
+#include "SDL2/SDL_video.h"
+#include "SDL2/SDL_render.h"
 #include "op_codes.h"
 #include "state_util.h"
 #include "instructions.h"
@@ -1430,22 +1431,58 @@ int main(int argc, char const *argv[]) {
     return 1;
   }
 
-  SDL_Event e;
-  SDL_Window *window;
+  const int DISPLAY_WIDTH = 256;
+  const int DISPLAY_HEIGHT = 224;
 
-  window = SDL_CreateWindow(
-      "Emulator Window",
-      SDL_WINDOWPOS_UNDEFINED,
-      SDL_WINDOWPOS_UNDEFINED,
-      256,
-      224,
-      SDL_WINDOW_OPENGL
+  SDL_Window *window = SDL_CreateWindow(
+    "Emulator Window",
+    SDL_WINDOWPOS_UNDEFINED,
+    SDL_WINDOWPOS_UNDEFINED,
+    DISPLAY_WIDTH,
+    DISPLAY_HEIGHT,
+    SDL_WINDOW_OPENGL
+  );
+
+  SDL_Renderer *renderer = SDL_CreateRenderer(
+    window,
+    -1,
+    SDL_RENDERER_ACCELERATED
+  );
+
+  SDL_Texture* texture = SDL_CreateTexture(
+    renderer,
+    SDL_PIXELFORMAT_ARGB8888,
+    SDL_TEXTUREACCESS_STREAMING,
+    DISPLAY_WIDTH, 
+    DISPLAY_HEIGHT
   );
 
   if (window == NULL) {
     printf("Could not create window: %s\n", SDL_GetError());
     return 1;
   }
+
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+  SDL_RenderClear(renderer);
+
+  unsigned char pixels[DISPLAY_WIDTH * DISPLAY_HEIGHT * 4];
+  memset(pixels, 0, DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
+  pixels[0] = 0xff;
+  pixels[1] = 0xff;
+  pixels[2] = 0xff;
+  pixels[3] = SDL_ALPHA_OPAQUE;
+
+  SDL_UpdateTexture(
+    texture,
+    NULL,
+    &pixels[0],
+    DISPLAY_WIDTH * 4
+  );
+
+  SDL_RenderCopy(renderer, texture, NULL, NULL);
+  SDL_RenderPresent(renderer);
+
+  SDL_Event e;
 
   // Program Loop
   while (1) {
