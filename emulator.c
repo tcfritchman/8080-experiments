@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_events.h"
 #include "SDL2/SDL_video.h"

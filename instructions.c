@@ -656,13 +656,13 @@ void di(ProcState *state) {
 
 void in(ProcState *state) {
   unsigned char port = state->mem[state->pc+1];
-  state->reg_a = state->io[port];
+  state->reg_a = (state->inputs[port])();
   state->pc += 2;
 }
 
 void out(ProcState *state) {
   unsigned char port = state->mem[state->pc+1];
-  state->io[port] = state->reg_a;
+  (state->outputs[port])(state->reg_a);
   state->pc += 2;
 }
 

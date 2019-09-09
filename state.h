@@ -19,7 +19,8 @@ typedef struct ProcState {
   int aux_carry;
   unsigned short pc;
   unsigned short sp;
-  unsigned char io[256];
+  unsigned char (*inputs[256]) ();
+  void (*outputs[256]) (unsigned char data);
   int inte; // Interrupts Enabled
   int is_interrupted; // An interrupt has occurred
   unsigned char interrupt_instr; // The instruction supplied via the interrupt
