@@ -1341,6 +1341,15 @@ void update_state(ProcState *state) {
   }
 }
 
+unsigned char init_input_func_stub() {
+  printf("WARN: Attempt to read data from unmapped input device");
+  return 0;
+}
+
+void init_output_func_stub(unsigned char data) {
+  printf("WARN: Attempt to write data to unmapped output device");
+}
+
 void init_state(ProcState *state) {
   state->reg_a=0x00;
   state->reg_b=0x00;
@@ -1356,6 +1365,12 @@ void init_state(ProcState *state) {
   state->zero=0;
   state->parity=0;
   state->sign=0;
+  state->inte=1;
+  state->is_interrupted=0;
+  for (int i = 0; i < 256; i++) {
+    state->inputs[i] = init_input_func_stub;
+    state->outputs[i] = init_output_func_stub;
+  }
 }
 
 int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
