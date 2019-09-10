@@ -10,6 +10,7 @@
 #include "state_util.h"
 #include "instructions.h"
 #include "state.h"
+#include "io_devices.h"
 
 #define LOG_CPU
 #define DIAGNOSTIC
@@ -1442,6 +1443,7 @@ void generate_pixels(unsigned char *pixels, unsigned char *video_memory) {
 int main(int argc, char const *argv[]) {
   ProcState state;
   init_state(&state);
+  register_io_devices(&state);
 
   if (argc == 2) {
     int success = load_space_invaders(argv[1], &state);
@@ -1502,6 +1504,10 @@ int main(int argc, char const *argv[]) {
   while (1) {
     update_state(&state);
     usleep(50000);
+
+    if (state.pc == 0x1a34) {
+      interrupt(0xd7, &state);
+    }
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
