@@ -1342,12 +1342,12 @@ void update_state(ProcState *state) {
 }
 
 unsigned char init_input_func_stub() {
-  printf("WARN: Attempt to read data from unmapped input device");
+  printf("WARN: Attempt to read data from unmapped input device\n");
   return 0;
 }
 
 void init_output_func_stub(unsigned char data) {
-  printf("WARN: Attempt to write data to unmapped output device");
+  printf("WARN: Attempt to write data to unmapped output device\n");
 }
 
 void init_state(ProcState *state) {
