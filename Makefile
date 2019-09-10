@@ -10,7 +10,7 @@ emulator.o : emulator.c state_util.h instructions.h io_devices.h state.h
 instructions.o : instructions.c state_util.h state.h 
 	cc -c instructions.c
 
-io_devices.o : state.h
+io_devices.o : io_devices.c state.h
 	cc -c io_devices.c
 
 state_util.o : state_util.c state.h
