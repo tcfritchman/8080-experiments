@@ -1525,14 +1525,54 @@ int main(int argc, char const *argv[]) {
     SDL_RenderPresent(renderer);
 
     // Handle SDL Events
-    SDL_PollEvent(&e);
-    if (e.type == SDL_QUIT) {
+    while (SDL_PollEvent(&e)) {
+      if (e.type == SDL_QUIT) {
         SDL_Log("Program quit after %i ticks", e.quit.timestamp);
-        break;
+        SDL_Quit();
+        return 0;
+      } else if (e.type == SDL_KEYDOWN) {
+        switch (e.key.keysym.sym) {
+          case SDLK_SPACE:
+            p1_shot_on();
+            break;
+          case SDLK_RETURN:
+            p1_start_on();
+            break;
+          case SDLK_LEFT:
+            p1_left_on();
+            break;
+          case SDLK_RIGHT:
+            p1_right_on();
+            break;
+          case SDLK_t:
+            tilt_switch_on();
+            break;
+          case SDLK_c:
+            coin_switch_on();
+            break;
+        }
+      } else if (e.type == SDL_KEYUP) {
+        switch (e.key.keysym.sym) {
+          case SDLK_SPACE:
+            p1_shot_off();
+            break;
+          case SDLK_RETURN:
+            p1_start_off();
+            break;
+          case SDLK_LEFT:
+            p1_left_off();
+            break;
+          case SDLK_RIGHT:
+            p1_right_off();
+            break;
+          case SDLK_t:
+            tilt_switch_off();
+            break;
+          case SDLK_c:
+            coin_switch_off();
+            break;
+        }
+      }
     }
   }
-
-  SDL_Quit();
-
-  return 0;
 }
