@@ -81,3 +81,93 @@ void register_io_devices(ProcState *state) {
     state->outputs[5] = handle_port_5_sounds;
 }
 
+void coin_switch_on() {
+    // Port 1, bit 0
+    input_port_1 |= 1;
+}
+
+void coin_switch_off() {
+    input_port_1 &= ~1;
+}
+
+void tilt_switch_on() {
+    // Port 2, bit 2
+    input_port_2 |= (1 << 2);
+}
+
+void tilt_switch_off() {
+    input_port_2 &= ~(1 << 2);
+}
+
+void p1_start_on() {
+    // Port 1, bit 2
+    input_port_1 |= (1 << 2);
+}
+
+void p1_start_off() {
+    input_port_1 &= ~(1 << 2);
+}
+
+void p2_start_on() {
+    // Port 1, bit 1
+    input_port_1 |= (1 << 1);
+}
+
+void p2_start_off() {
+    input_port_1 &= ~(1 << 1);
+}
+
+void p1_shot_on() {
+    // Port 1, bit 4
+    input_port_1 |= (1 << 4);
+}
+
+void p1_shot_off() {
+    input_port_1 &= ~(1 << 4);
+}
+
+void p2_shot_on() {
+    // Port 2, bit 4
+    input_port_2 |= (1 << 4);
+}
+
+void p2_shot_off() {
+    input_port_2 &= ~(1 << 4);
+}
+
+void p1_left_on() {
+    // Port 1, bit 5
+    input_port_1 |= (1 << 5);
+}
+
+void p1_left_off() {
+    input_port_1 &= ~(1 << 5);
+}
+
+void p2_left_on() {
+    // Port 2, bit 5
+    input_port_2 |= (1 << 5);
+}
+
+void p2_left_off() {
+    input_port_2 &= ~(1 << 5);
+}
+
+void p1_right_on() {
+    // Port 1, bit 6
+    input_port_1 |= (1 << 6);
+}
+
+void p1_right_off() {
+    input_port_1 &= ~(1 << 6);
+}
+
+void p2_right_on() {
+    // Port 2, bit 6
+    input_port_2 |= (1 << 6);
+}
+
+void p2_right_off() {
+    input_port_2 &= ~(1 << 6);
+}
+
