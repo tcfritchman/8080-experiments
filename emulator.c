@@ -12,8 +12,8 @@
 #include "state.h"
 #include "io_devices.h"
 
-#define LOG_CPU
-#define DIAGNOSTIC
+//#define LOG_CPU
+//#define DIAGNOSTIC
 
 const int DISPLAY_WIDTH = 256;
 const int DISPLAY_HEIGHT = 224;
@@ -1500,77 +1500,86 @@ int main(int argc, char const *argv[]) {
 
   SDL_Event e;
 
+  // Screen refresh is 60 hz, 
+  //but there's an interrupt twice per refresh
+  Uint32 screen_refresh_timeout = SDL_GetTicks() + (1000 / 120);
+  int screen_refresh_halfway = 0;
+
   // Program Loop
   while (1) {
     update_state(&state);
-    usleep(50000);
+    usleep(2);
 
-    if (state.pc == 0x1a34) {
-      interrupt(0xd7, &state);
-    }
+    if (SDL_TICKS_PASSED(SDL_GetTicks(), screen_refresh_timeout)) {
+      // RST 1 when "halfway", RST 2 at "end of screen"
+      unsigned char interrupt_instr = screen_refresh_halfway ? 0xcf : 0xd7;
+      interrupt(interrupt_instr, &state);
+      screen_refresh_halfway = ~screen_refresh_halfway;
+      screen_refresh_timeout = SDL_GetTicks() + (1000 / 120);
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer);
+      SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+      SDL_RenderClear(renderer);
 
-    generate_pixels(&pixels[0], &state.mem[0x2400]);
+      generate_pixels(&pixels[0], &state.mem[0x2400]);
 
-    SDL_UpdateTexture(
-      texture,
-      NULL,
-      &pixels[0],
-      DISPLAY_WIDTH * 4
-    );
+      SDL_UpdateTexture(
+        texture,
+        NULL,
+        &pixels[0],
+        DISPLAY_WIDTH * 4
+      );
 
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_RenderPresent(renderer);
+      SDL_RenderCopy(renderer, texture, NULL, NULL);
+      SDL_RenderPresent(renderer);
 
-    // Handle SDL Events
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) {
-        SDL_Log("Program quit after %i ticks", e.quit.timestamp);
-        SDL_Quit();
-        return 0;
-      } else if (e.type == SDL_KEYDOWN) {
-        switch (e.key.keysym.sym) {
-          case SDLK_SPACE:
-            p1_shot_on();
-            break;
-          case SDLK_RETURN:
-            p1_start_on();
-            break;
-          case SDLK_LEFT:
-            p1_left_on();
-            break;
-          case SDLK_RIGHT:
-            p1_right_on();
-            break;
-          case SDLK_t:
-            tilt_switch_on();
-            break;
-          case SDLK_c:
-            coin_switch_on();
-            break;
-        }
-      } else if (e.type == SDL_KEYUP) {
-        switch (e.key.keysym.sym) {
-          case SDLK_SPACE:
-            p1_shot_off();
-            break;
-          case SDLK_RETURN:
-            p1_start_off();
-            break;
-          case SDLK_LEFT:
-            p1_left_off();
-            break;
-          case SDLK_RIGHT:
-            p1_right_off();
-            break;
-          case SDLK_t:
-            tilt_switch_off();
-            break;
-          case SDLK_c:
-            coin_switch_off();
-            break;
+      // Handle SDL Events
+      while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT) {
+          SDL_Log("Program quit after %i ticks", e.quit.timestamp);
+          SDL_Quit();
+          return 0;
+        } else if (e.type == SDL_KEYDOWN) {
+          switch (e.key.keysym.sym) {
+            case SDLK_SPACE:
+              p1_shot_on();
+              break;
+            case SDLK_RETURN:
+              p1_start_on();
+              break;
+            case SDLK_LEFT:
+              p1_left_on();
+              break;
+            case SDLK_RIGHT:
+              p1_right_on();
+              break;
+            case SDLK_t:
+              tilt_switch_on();
+              break;
+            case SDLK_c:
+              coin_switch_on();
+              break;
+          }
+        } else if (e.type == SDL_KEYUP) {
+          switch (e.key.keysym.sym) {
+            case SDLK_SPACE:
+              p1_shot_off();
+              break;
+            case SDLK_RETURN:
+              p1_start_off();
+              break;
+            case SDLK_LEFT:
+              p1_left_off();
+              break;
+            case SDLK_RIGHT:
+              p1_right_off();
+              break;
+            case SDLK_t:
+              tilt_switch_off();
+              break;
+            case SDLK_c:
+              coin_switch_off();
+              break;
+          }
         }
       }
     }
