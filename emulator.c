@@ -1054,7 +1054,7 @@ int execute_instr(unsigned char op_code, ProcState *state) {
   }
 }
 
-void update_state(ProcState *state) {
+int update_state(ProcState *state) {
   OpCode op_code = OP_CODES[state->mem[state->pc]];
 
 #ifdef LOG_CPU
@@ -1077,12 +1077,21 @@ void update_state(ProcState *state) {
 
 #endif
 
-  execute_instr(op_code.code, state);
-
   if (state->is_interrupted) {
+
+#ifdef LOG_CPU
+    printf("INTERRUPT -> %s\n", op_code.name);
+#endif
+
+    // Complete executing current instruction
+    int cycles_passed = execute_instr(op_code.code, state);
+    // Reset the interrupted and interrupt enabled flags
     state->is_interrupted = 0;
     state->inte = 0;
-    execute_instr(state->interrupt_instr, state);
+    // Execute the interrupt instruction
+    return cycles_passed + execute_instr(state->interrupt_instr, state);
+  } else {
+    return execute_instr(op_code.code, state);
   }
 }
 
@@ -1245,7 +1254,7 @@ int main(int argc, char const *argv[]) {
   SDL_Event e;
 
   // Screen refresh is 60 hz, 
-  //but there's an interrupt twice per refresh
+  // but there's an interrupt twice per refresh
   Uint32 screen_refresh_timeout = SDL_GetTicks() + (1000 / 120);
   int screen_refresh_halfway = 0;
 
