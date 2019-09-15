@@ -300,7 +300,7 @@ void execute_instr(unsigned char op_code, ProcState *state) {
 
     case 0x36:
       // MVI M
-      mvi(get_mem_byte(state), state);
+      mvi_m(get_mem_byte(state), state);
       break;
 
     case 0x37:
@@ -620,7 +620,7 @@ void execute_instr(unsigned char op_code, ProcState *state) {
 
     case 0x76:
       // HLT
-      //TODO
+      hlt(state);
       break;
 
     case 0x77:
