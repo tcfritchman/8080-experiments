@@ -12,8 +12,8 @@
 #include "state.h"
 #include "io_devices.h"
 
-//#define LOG_CPU
-//#define DIAGNOSTIC
+// #define LOG_CPU
+// #define DIAGNOSTIC
 
 const int DISPLAY_WIDTH = 256;
 const int DISPLAY_HEIGHT = 224;
@@ -1080,7 +1080,8 @@ int update_state(ProcState *state) {
   if (state->is_interrupted) {
 
 #ifdef LOG_CPU
-    printf("INTERRUPT -> %s\n", op_code.name);
+    OpCode interrupt_op_code = OP_CODES[state->interrupt_instr];
+    printf("INTERRUPT -> %s\n", interrupt_op_code.name);
 #endif
 
     // Complete executing current instruction
@@ -1220,6 +1221,7 @@ int main(int argc, char const *argv[]) {
     return 1;
   }
 
+  // Initialize SDL components
   SDL_Window *window = SDL_CreateWindow(
     "Emulator Window",
     SDL_WINDOWPOS_UNDEFINED,
@@ -1258,17 +1260,27 @@ int main(int argc, char const *argv[]) {
   Uint32 screen_refresh_timeout = SDL_GetTicks() + (1000 / 120);
   int screen_refresh_halfway = 0;
 
+  // Track the number of CPU cycles passed
+  int cycles = 0;
+  const int CYCLES_PER_FRAME = 1666; // 2 Mhz CPU clock speed over 120hz screen refresh rate = 1666
+
   // Program Loop
   while (1) {
-    update_state(&state);
-    usleep(2);
-
-    if (SDL_TICKS_PASSED(SDL_GetTicks(), screen_refresh_timeout)) {
+    // Update the CPU state and add to count of CPU cycles passed
+    if (cycles < CYCLES_PER_FRAME) { 
+      cycles += update_state(&state);
+      //usleep(100000);
+    
+    // Update the Screen once all the CPU cycles have completed AND the 120hz time period has elapsed
+    } else if (cycles >= CYCLES_PER_FRAME && SDL_TICKS_PASSED(SDL_GetTicks(), screen_refresh_timeout)) {
       // RST 1 when "halfway", RST 2 at "end of screen"
       unsigned char interrupt_instr = screen_refresh_halfway ? 0xcf : 0xd7;
       interrupt(interrupt_instr, &state);
+
+      // Flip the halfway bit, reset the screen timer and cycles count
       screen_refresh_halfway = ~screen_refresh_halfway;
       screen_refresh_timeout = SDL_GetTicks() + (1000 / 120);
+      cycles = 0;
 
       SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
       SDL_RenderClear(renderer);
