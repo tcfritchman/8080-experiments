@@ -1200,7 +1200,11 @@ int main(int argc, char const *argv[]) {
   register_io_devices(&state);
 
   if (argc == 2) {
+#ifdef DIAGNOSTIC
+    int success = load_diagnostic(argv[1], &state);
+#else
     int success = load_space_invaders(argv[1], &state);
+#endif
     if (!success) {
       return 1;
     }
@@ -1269,13 +1273,15 @@ int main(int argc, char const *argv[]) {
     // Update the CPU state and add to count of CPU cycles passed
     if (cycles < CYCLES_PER_FRAME) { 
       cycles += update_state(&state);
-      //usleep(100000);
+      usleep(10000);
     
     // Update the Screen once all the CPU cycles have completed AND the 120hz time period has elapsed
     } else if (cycles >= CYCLES_PER_FRAME && SDL_TICKS_PASSED(SDL_GetTicks(), screen_refresh_timeout)) {
       // RST 1 when "halfway", RST 2 at "end of screen"
       unsigned char interrupt_instr = screen_refresh_halfway ? 0xcf : 0xd7;
+#ifndef DIAGNOSTIC
       interrupt(interrupt_instr, &state);
+#endif
 
       // Flip the halfway bit, reset the screen timer and cycles count
       screen_refresh_halfway = ~screen_refresh_halfway;
