@@ -68,6 +68,10 @@ unsigned char handle_port_2_inputs() {
     return input_port_2;
 }
 
+void dummy_output_handler(unsigned char data) {
+    // do nothing
+}
+
 void register_io_devices(ProcState *state) {
     // Register the space invaders bit shift hardware handlers
     state->outputs[2] = handle_bit_shift_offset_write;
@@ -79,6 +83,8 @@ void register_io_devices(ProcState *state) {
     // Register sounds
     state->outputs[3] = handle_port_3_sounds;
     state->outputs[5] = handle_port_5_sounds;
+    // Register watch-dog with has no implementation
+    state->outputs[6] = dummy_output_handler;
 }
 
 void coin_switch_on() {
