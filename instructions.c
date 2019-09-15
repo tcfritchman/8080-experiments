@@ -13,7 +13,7 @@ int nop(ProcState *state) {
 
 int unused(ProcState *state) {
   printf("Encountered illegal instruction: addr 0x%x", state->pc);
-  return 0;
+  return 1;
 }
 
 int cmc(ProcState *state) {
@@ -773,5 +773,5 @@ int out(ProcState *state) {
 
 int hlt(ProcState *state) {
 	printf("Encountered HLT instruction: addr 0x%x", state->pc);
-	return 0;
+	return 1;
 }
