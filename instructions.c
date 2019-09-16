@@ -30,12 +30,20 @@ int stc(ProcState *state) {
 
 int inr(unsigned char *data, ProcState *state) {
   (*data)++;
+  state->zero = zero(*data);
+  state->parity = parity(*data);
+  state->sign = sign(*data);
+  // TODO: Aux carry
   state->pc += 1;
   return 5;
 }
 
 int dcr(unsigned char *data, ProcState *state) {
   (*data)--;
+  state->zero = zero(*data);
+  state->parity = parity(*data);
+  state->sign = sign(*data);
+  // TODO: Aux carry
   state->pc += 1;
   return 5;
 }
@@ -52,6 +60,9 @@ int daa(ProcState *state) {
   // diagnostic script. Not sure why, seems like maybe the
   // specification for this instruction in the handbook might 
   // not be accurate.
+  // As a result, I've stopped setting the Aux Carry bit in some
+  // of the instructions because this is the only instruction
+  // that relies on the Aux Carry being set.
 
   unsigned char lo_four = (state->reg_a & 0x0f);
   if (lo_four > 9 || state->aux_carry) {
