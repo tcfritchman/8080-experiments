@@ -188,6 +188,28 @@ unsigned char complement(unsigned char byte) {
   return byte ^ byte;
 }
 
+void print_registers_compact(ProcState *state) {
+  char sign = state->sign ? 'S' : '_';
+  char parity = state->parity ? 'P' : '_';
+  char zero = state->zero ? 'Z' : '_';
+  char carry = state->carry ? 'C' : '_';
+  char aux_carry = state->aux_carry ? 'A' : '_';
+  printf("b:%02x c:%02x d:%02x e:%02x h:%02x l:%02x a:%02x sp:%04x %c%c%c%c%c",
+    state->reg_b,
+    state->reg_c,
+    state->reg_d,
+    state->reg_e,
+    state->reg_h,
+    state->reg_l,
+    state->reg_a,
+    state->sp,
+    sign,
+    parity,
+    zero,
+    carry,
+    aux_carry);
+}
+
 void print_registers(ProcState state) {
   printf("\
 BC: 0x%02x 0x%02x\n\

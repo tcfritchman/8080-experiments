@@ -1055,44 +1055,45 @@ int execute_instr(unsigned char op_code, ProcState *state) {
 }
 
 int update_state(ProcState *state) {
-  OpCode op_code = OP_CODES[state->mem[state->pc]];
-
-#ifdef LOG_CPU
-
-  printf("%4x: ", state->pc);
-
-  switch (op_code.size) {
-    case 1:
-      printf("%s", op_code.name);
-      break;
-    case 2:
-      printf("%s,0x%x", op_code.name, state->mem[state->pc+1]);
-      break;
-    case 3:
-      printf("%s 0x%x,0x%x", op_code.name, state->mem[state->pc+2], state->mem[state->pc+1]);
-      break;
-  }
-
-  printf("\n");
-
-#endif
-
   if (state->is_interrupted) {
 
 #ifdef LOG_CPU
     OpCode interrupt_op_code = OP_CODES[state->interrupt_instr];
-    printf("INTERRUPT -> %s\n", interrupt_op_code.name);
+    printf("INTERRUPT -> %-9s", interrupt_op_code.name);
+    print_registers_compact(state);
+    printf("\n");
 #endif
 
-    // Complete executing current instruction
-    int cycles_passed = execute_instr(op_code.code, state);
     // Reset the interrupted and interrupt enabled flags
     state->is_interrupted = 0;
     state->inte = 0;
+    // back-up the program counter by one since the interrupt "injects" an 
+    // additional instruction into the execution
+    state->pc--; 
     // Execute the interrupt instruction
-    return cycles_passed + execute_instr(state->interrupt_instr, state);
+    return execute_instr(state->interrupt_instr, state);
   } else {
-    return execute_instr(op_code.code, state);
+
+#ifdef LOG_CPU
+    OpCode op_code = OP_CODES[state->mem[state->pc]];
+    printf("%4x: ", state->pc);
+    switch (op_code.size) {
+      case 1:
+        printf("%-9s          ", op_code.name);
+        break;
+      case 2:
+        printf("%-9s 0x%2x     ", op_code.name, state->mem[state->pc+1]);
+        break;
+      case 3:
+        printf("%-9s 0x%2x,0x%2x", op_code.name, state->mem[state->pc+2], state->mem[state->pc+1]);
+        break;
+    }
+    printf("   ");
+    print_registers_compact(state);
+    printf("\n");
+#endif
+
+    return execute_instr(state->mem[state->pc], state);
   }
 }
 
@@ -1273,7 +1274,7 @@ int main(int argc, char const *argv[]) {
     // Update the CPU state and add to count of CPU cycles passed
     if (cycles < CYCLES_PER_FRAME) { 
       cycles += update_state(&state);
-      usleep(10000);
+      //usleep(1000);
     
     // Update the Screen once all the CPU cycles have completed AND the 120hz time period has elapsed
     } else if (cycles >= CYCLES_PER_FRAME && SDL_TICKS_PASSED(SDL_GetTicks(), screen_refresh_timeout)) {
