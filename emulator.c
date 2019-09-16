@@ -1267,7 +1267,7 @@ int main(int argc, char const *argv[]) {
 
   // Track the number of CPU cycles passed
   int cycles = 0;
-  const int CYCLES_PER_FRAME = 1666; // 2 Mhz CPU clock speed over 120hz screen refresh rate = 1666
+  const int CYCLES_PER_FRAME = 16666; // 2 Mhz CPU clock speed over 120hz screen refresh rate = 16666
 
   // Program Loop
   while (1) {
