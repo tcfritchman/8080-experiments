@@ -15,7 +15,9 @@
 // #define LOG_CPU
 // #define DIAGNOSTIC
 
-const int DISPLAY_WIDTH = 256;
+// Screen is rotated 90 degress in the window from how it's represented in the game's code
+// so usually the width will be used as the height and vice versa.
+const int DISPLAY_WIDTH = 256; 
 const int DISPLAY_HEIGHT = 224;
 const int VIDEO_BYTES = 7168; // (DISPLAY_WIDTH * DISPLAY_HEIGHT) / 8;
 const int PIXEL_BYTES = 229376; // DISPLAY_WIDTH * DISPLAY_HEIGHT * 4;
@@ -1124,6 +1126,7 @@ void init_state(ProcState *state) {
   state->inte=1;
   state->is_interrupted=0;
   for (int i = 0; i < 256; i++) {
+    // Initialize the input and output handlers with a stub which logs an error message
     state->inputs[i] = init_input_func_stub;
     state->outputs[i] = init_output_func_stub;
   }
@@ -1278,12 +1281,12 @@ int main(int argc, char const *argv[]) {
     // Update the CPU state and add to count of CPU cycles passed
     if (cycles < CYCLES_PER_FRAME) { 
       cycles += update_state(&state);
-      //usleep(1000);
     
     // Update the Screen once all the CPU cycles have completed AND the 120hz time period has elapsed
     } else if (cycles >= CYCLES_PER_FRAME && SDL_TICKS_PASSED(SDL_GetTicks(), screen_refresh_timeout)) {
       // RST 1 when "halfway", RST 2 at "end of screen"
       unsigned char interrupt_instr = screen_refresh_halfway ? 0xcf : 0xd7;
+
 #ifndef DIAGNOSTIC
       interrupt(interrupt_instr, &state);
 #endif
@@ -1293,11 +1296,12 @@ int main(int argc, char const *argv[]) {
       screen_refresh_timeout = SDL_GetTicks() + (1000 / 120);
       cycles = 0;
 
+      // Prepare the renderer
       SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
       SDL_RenderClear(renderer);
 
+      // Transform the pixel data from emulated memory to the texture pixels
       generate_pixels(&pixels[0], &state.mem[0x2400]);
-
       SDL_UpdateTexture(
         texture,
         NULL,
@@ -1305,6 +1309,7 @@ int main(int argc, char const *argv[]) {
         DISPLAY_HEIGHT * 4
       );
 
+      // Display the texture on the screen
       SDL_RenderCopy(renderer, texture, NULL, NULL);
       SDL_RenderPresent(renderer);
 
