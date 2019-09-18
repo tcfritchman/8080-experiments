@@ -1183,16 +1183,20 @@ int load_space_invaders(const char *dir, ProcState *state) {
 }
 
 void generate_pixels(unsigned char *pixels, unsigned char *video_memory) {
-  for (int i = 0; i < VIDEO_BYTES; i++) {
-    for (int j = 7; j >= 0; j--) {
-      unsigned char on = ((video_memory[i] >> j) & 1) ? 0xff : 0;
-      int k = (i << 5) + (j << 2);
+  for (int i = 0; i < DISPLAY_HEIGHT; i++) {
+    for (int j = 0; j < DISPLAY_WIDTH; j++) {
+      unsigned short p_mem = (i * DISPLAY_WIDTH) + j; // pixel number in memory
+      unsigned char on = (video_memory[(p_mem / 8)] >> (p_mem % 8)) & 1 ? 0xff : 0;
+      unsigned int x = i;
+      unsigned int y = DISPLAY_WIDTH - j - 1;
+      unsigned int p_rot = (y * DISPLAY_HEIGHT) + x; // pixel number on rotated screen
+      unsigned int k = p_rot << 2;
       pixels[k] = on;
       pixels[k+1] = on;
       pixels[k+2] = on;
       pixels[k+3] = SDL_ALPHA_OPAQUE;
     }
-  } 
+  }   
 }
 
 int main(int argc, char const *argv[]) {
@@ -1231,8 +1235,8 @@ int main(int argc, char const *argv[]) {
     "Emulator Window",
     SDL_WINDOWPOS_UNDEFINED,
     SDL_WINDOWPOS_UNDEFINED,
-    DISPLAY_WIDTH,
     DISPLAY_HEIGHT,
+    DISPLAY_WIDTH,
     SDL_WINDOW_OPENGL
   );
 
@@ -1251,8 +1255,8 @@ int main(int argc, char const *argv[]) {
     renderer,
     SDL_PIXELFORMAT_ARGB8888,
     SDL_TEXTUREACCESS_STREAMING,
-    DISPLAY_WIDTH, 
-    DISPLAY_HEIGHT
+    DISPLAY_HEIGHT, 
+    DISPLAY_WIDTH
   );
 
   unsigned char pixels[PIXEL_BYTES];
@@ -1298,7 +1302,7 @@ int main(int argc, char const *argv[]) {
         texture,
         NULL,
         &pixels[0],
-        DISPLAY_WIDTH * 4
+        DISPLAY_HEIGHT * 4
       );
 
       SDL_RenderCopy(renderer, texture, NULL, NULL);
