@@ -13,15 +13,15 @@ unsigned char input_port_2 = 0b00000000;
 
 void handle_bit_shift_write(unsigned char data) {
     bit_shift_register >>= 8;
-    bit_shift_register &= (data << 8);    
+    bit_shift_register |= (data << 8); 
 }
 
 unsigned char handle_bit_shift_read() {
-    return (char) bit_shift_register >> (8 - bit_shift_offset);
+    return (char) bit_shift_register >> (bit_shift_offset);
 }
 
 void handle_bit_shift_offset_write(unsigned char data) {
-    bit_shift_offset = data;
+    bit_shift_offset = data & 0b111;
 }
 
 void handle_port_3_sounds(unsigned char data) {
@@ -73,7 +73,7 @@ void dummy_output_handler(unsigned char data) {
 }
 
 void register_io_devices(ProcState *state) {
-    // Register the space invaders bit shift hardware handlers
+    // Register the space invaders bit shift hardware 15dchandlers
     state->outputs[2] = handle_bit_shift_offset_write;
     state->outputs[4] = handle_bit_shift_write;
     state->inputs[3] = handle_bit_shift_read;
