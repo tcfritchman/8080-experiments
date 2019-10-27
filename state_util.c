@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "state.h"
 
-const int BYTE_SIZE_8080 = 8;
-
 int parity(unsigned char byte) {
   int set_bit_count = 0;
 

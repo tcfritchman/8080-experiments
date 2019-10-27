@@ -1,6 +1,9 @@
 #ifndef _STRUCT_PROC_STATE_
 #define _STRUCT_PROC_STATE_
 
+#define BYTE_SIZE_8080 8
+#define MEM_SIZE_8080 65536
+
 struct ProcState;
 
 typedef struct ProcState {

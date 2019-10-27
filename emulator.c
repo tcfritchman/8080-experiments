@@ -1129,7 +1129,7 @@ void init_state(ProcState *state) {
   }
 }
 
-int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
+int read_file_to_mem(const char *filename, const int offset, char *mem, size_t mem_size) {
   printf("%s\n", filename);
 
   FILE *file;
@@ -1146,14 +1146,14 @@ int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
 	filesize=ftell(file);
 	fseek(file, 0, SEEK_SET);
 
-  if (filesize + offset <= sizeof state->mem) {
+  if (filesize + offset <= mem_size) {
     printf("Loading %ld bytes starting at memory address 0x%x\n", filesize, offset);
   } else {
     printf("Failed to open file - file too large");
     return 0;
   }
 
-  unsigned char *buf = &state->mem[offset];
+  unsigned char *buf = mem + offset;
 
   fread(buf, filesize, 1, file);
 	fclose(file);
@@ -1162,7 +1162,7 @@ int read_file_to_mem(const char *filename, const int offset, ProcState *state) {
 
 int load_diagnostic(const char *path, ProcState *state) {
   const int offset = 0x100;
-  return read_file_to_mem(path, offset, state);
+  return read_file_to_mem(path, offset, state->mem, MEM_SIZE_8080);
 }
 
 int load_space_invaders(const char *dir, ProcState *state) {
@@ -1175,10 +1175,10 @@ int load_space_invaders(const char *dir, ProcState *state) {
   snprintf(part_2, path_length, "%s/invaders.g", dir);
   snprintf(part_3, path_length, "%s/invaders.f", dir);
   snprintf(part_4, path_length, "%s/invaders.e", dir);
-  if (!read_file_to_mem(part_1, 0x0000, state)) return 0;
-  if (!read_file_to_mem(part_2, 0x0800, state)) return 0;
-  if (!read_file_to_mem(part_3, 0x1000, state)) return 0;
-  if (!read_file_to_mem(part_4, 0x1800, state)) return 0;
+  if (!read_file_to_mem(part_1, 0x0000, state->mem, MEM_SIZE_8080)) return 0;
+  if (!read_file_to_mem(part_2, 0x0800, state->mem, MEM_SIZE_8080)) return 0;
+  if (!read_file_to_mem(part_3, 0x1000, state->mem, MEM_SIZE_8080)) return 0;
+  if (!read_file_to_mem(part_4, 0x1800, state->mem, MEM_SIZE_8080)) return 0;
   return 1;
 }
 
