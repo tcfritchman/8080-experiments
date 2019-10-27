@@ -26,37 +26,37 @@ void handle_bit_shift_offset_write(unsigned char data) {
 
 void handle_port_3_sounds(unsigned char data) {
     if (1 & data) {
-        printf("Playing SX1\n");      
+        //printf("Playing SX1\n");      
     }
     if (2 & data) {
-        printf("Playing SX2\n");
+        //printf("Playing SX2\n");
     }
     if (4 & data) {
-        printf("Playing SX3\n");       
+        //printf("Playing SX3\n");       
     }
     if (8 & data) {
-        printf("Playing SX4\n");
+        //printf("Playing SX4\n");
     }
     if (16 & data) {
-        printf("Playing SX5\n");
+        //printf("Playing SX5\n");
     }
 }
 
 void handle_port_5_sounds(unsigned char data) {
     if (1 & data) {
-        printf("Playing SX6\n");      
+        //printf("Playing SX6\n");      
     }
     if (2 & data) {
-        printf("Playing SX7\n");
+        //printf("Playing SX7\n");
     }
     if (4 & data) {
-        printf("Playing SX8\n");       
+        //printf("Playing SX8\n");       
     }
     if (8 & data) {
-        printf("Playing SX9\n");
+        //printf("Playing SX9\n");
     }
     if (16 & data) {
-        printf("Playing SX10\n");
+        //printf("Playing SX10\n");
     }
 }
 

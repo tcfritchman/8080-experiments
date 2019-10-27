@@ -1,7 +1,4 @@
 #include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <time.h>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_events.h"
 #include "SDL2/SDL_video.h"
@@ -12,7 +9,7 @@
 #include "state.h"
 #include "io_devices.h"
 
-// #define LOG_CPU
+#define LOG_CPU
 // #define DIAGNOSTIC
 
 // Screen is rotated 90 degress in the window from how it's represented in the game's code

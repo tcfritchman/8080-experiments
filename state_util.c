@@ -1,12 +1,12 @@
-#include <string.h>
-#include <limits.h>
 #include <stdio.h>
 #include "state.h"
+
+const int BYTE_SIZE_8080 = 8;
 
 int parity(unsigned char byte) {
   int set_bit_count = 0;
 
-  for (int i = 0; i < CHAR_BIT; i++) {
+  for (int i = 0; i < BYTE_SIZE_8080; i++) {
     unsigned char tmp = byte >> i;
     if (tmp & 1) {
       set_bit_count++;

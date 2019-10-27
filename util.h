@@ -1,0 +1,1 @@
+void log_msg(char *msg, ...);
