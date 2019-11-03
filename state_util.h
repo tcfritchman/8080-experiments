@@ -1,5 +1,7 @@
 #include "state.h"
 
+void init_state(State8080 *state);
+
 int parity(unsigned char byte);
 
 int sign(unsigned char byte);
