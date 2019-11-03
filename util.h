@@ -1,1 +1,1 @@
-void log_msg(char *msg, ...);
+int read_file_to_mem(const char *filename, const int offset, char *mem, size_t mem_size);
