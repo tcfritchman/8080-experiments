@@ -7,7 +7,7 @@
 #include "state_util.h"
 #include "instructions.h"
 #include "state.h"
-#include "io_devices.h"
+#include "invaders_io.h"
 
 // #define LOG_CPU
 // #define DIAGNOSTIC
