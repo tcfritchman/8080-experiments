@@ -12,6 +12,8 @@ void print_registers_compact(State8080 *state);
 
 void print_registers(State8080 state);
 
+void log_state(State8080 *state);
+
 void print_mem_r(unsigned short mem_addr, unsigned short pre_bytes, unsigned short post_bytes, State8080 *state);
 
 void print_mem_c(unsigned short mem_addr, unsigned short post_bytes, State8080 *state);

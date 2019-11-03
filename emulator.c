@@ -10,8 +10,8 @@
 #include "invaders_io.h"
 #include "util.h"
 
-// #define LOG_CPU
-// #define DIAGNOSTIC
+//  #define LOG_CPU
+//  #define DIAGNOSTIC
 
 // Screen is rotated 90 degress in the window from how it's represented in the game's code
 // so usually the width will be used as the height and vice versa.
@@ -1060,8 +1060,7 @@ int update_state(State8080 *state) {
 #ifdef LOG_CPU
     OpCode interrupt_op_code = OP_CODES[state->interrupt_instr];
     printf("INTERRUPT -> %-9s", interrupt_op_code.name);
-    print_registers_compact(state);
-    printf("\n");
+    log_state(state);
 #endif
 
     // Reset the interrupted and interrupt enabled flags
@@ -1075,22 +1074,7 @@ int update_state(State8080 *state) {
   } else {
 
 #ifdef LOG_CPU
-    OpCode op_code = OP_CODES[state->mem[state->pc]];
-    printf("%4x: ", state->pc);
-    switch (op_code.size) {
-      case 1:
-        printf("%-9s          ", op_code.name);
-        break;
-      case 2:
-        printf("%-9s 0x%2x     ", op_code.name, state->mem[state->pc+1]);
-        break;
-      case 3:
-        printf("%-9s 0x%2x,0x%2x", op_code.name, state->mem[state->pc+2], state->mem[state->pc+1]);
-        break;
-    }
-    printf("   ");
-    print_registers_compact(state);
-    printf("\n");
+  log_state(state);
 #endif
 
     return execute_instr(state->mem[state->pc], state);

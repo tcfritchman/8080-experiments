@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "state.h"
+#include "op_codes.h"
 
 unsigned char init_input_func_stub() {
   printf("WARN: Attempt to read data from unmapped input device\n");
@@ -104,6 +105,25 @@ PC: 0x%04x\n",
   state.aux_carry,
   state.sp,
   state.pc);
+}
+
+void log_state(State8080 *state) {
+  OpCode op_code = OP_CODES[state->mem[state->pc]];
+  printf("%4x: ", state->pc);
+  switch (op_code.size) {
+    case 1:
+      printf("%-9s          ", op_code.name);
+      break;
+    case 2:
+      printf("%-9s 0x%2x     ", op_code.name, state->mem[state->pc+1]);
+      break;
+    case 3:
+      printf("%-9s 0x%2x,0x%2x", op_code.name, state->mem[state->pc+2], state->mem[state->pc+1]);
+      break;
+  }
+  printf("   ");
+  print_registers_compact(state);
+  printf("\n");
 }
 
 void print_mem_r(unsigned short mem_addr, unsigned short pre_bytes, unsigned short post_bytes, State8080 *state) {
