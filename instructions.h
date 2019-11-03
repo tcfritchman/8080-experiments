@@ -4,234 +4,234 @@
  * NOP AND UNUSED INSTRUCTIONS
  */
 
-int nop(ProcState *state);
+int nop(State8080 *state);
 
-int unused(ProcState *state);
+int unused(State8080 *state);
 
 /*
  * CARRY BIT INSTRUCTIONS
  */
 
-int cmc(ProcState *state);
+int cmc(State8080 *state);
 
-int stc(ProcState *state);
+int stc(State8080 *state);
 
 /*
  * SINGLE REGISTER INSTRUCTIONS
  */
 
-int inr(unsigned char *data, ProcState *state);
+int inr(unsigned char *data, State8080 *state);
 
-int dcr(unsigned char *data, ProcState *state);
+int dcr(unsigned char *data, State8080 *state);
 
-int cma(ProcState *state);
+int cma(State8080 *state);
 
-int daa(ProcState *state);
+int daa(State8080 *state);
 
 /*
  * DATA TRANSFER INSTRUCTIONS
  */
 
-int mov(unsigned char data_src, unsigned char *mem_addr_dst, ProcState *state);
+int mov(unsigned char data_src, unsigned char *mem_addr_dst, State8080 *state);
 
-int stax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+int stax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, State8080 *state);
 
-int ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+int ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, State8080 *state);
 
 /*
  * REGISTER OR MEMORY TO ACCUMULATOR INSTRUCTIONS
  */
 
-int add(unsigned char mem_addr, ProcState *state);
+int add(unsigned char mem_addr, State8080 *state);
 
-int adc(unsigned char mem_addr, ProcState *state);
+int adc(unsigned char mem_addr, State8080 *state);
 
-int sub(unsigned char mem_addr, ProcState *state);
+int sub(unsigned char mem_addr, State8080 *state);
 
-int sbb(unsigned char mem_addr, ProcState *state);
+int sbb(unsigned char mem_addr, State8080 *state);
 
-int ana(unsigned char mem_addr, ProcState *state);
+int ana(unsigned char mem_addr, State8080 *state);
 
-int xra(unsigned char mem_addr, ProcState *state);
+int xra(unsigned char mem_addr, State8080 *state);
 
-int ora(unsigned char mem_addr, ProcState *state);
+int ora(unsigned char mem_addr, State8080 *state);
 
-int cmp(unsigned char mem_addr, ProcState *state);
+int cmp(unsigned char mem_addr, State8080 *state);
 
 /*
  * ROTATE ACCUMULATOR INSTRUCTIONS
  */
 
-int rlc(ProcState *state);
+int rlc(State8080 *state);
 
-int rrc(ProcState *state);
+int rrc(State8080 *state);
 
-int ral(ProcState *state);
+int ral(State8080 *state);
 
-int rar(ProcState *state);
+int rar(State8080 *state);
 
 /*
  * REGISTER PAIR INSTRUCTIONS
  */
 
-int push(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state);
+int push(unsigned char mem_addr_hi, unsigned char mem_addr_lo, State8080 *state);
 
-int push_psw(ProcState *state);
+int push_psw(State8080 *state);
 
-int pop(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+int pop(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, State8080 *state);
 
-int pop_psw(ProcState *state);
+int pop_psw(State8080 *state);
 
-int dad(unsigned char data_hi, unsigned char data_lo, ProcState *state);
+int dad(unsigned char data_hi, unsigned char data_lo, State8080 *state);
 
-int dad_16(unsigned short *data, ProcState *state);
+int dad_16(unsigned short *data, State8080 *state);
 
-int inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+int inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, State8080 *state);
 
-int inx_16(unsigned short *data, ProcState *state);
+int inx_16(unsigned short *data, State8080 *state);
 
-int dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state);
+int dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, State8080 *state);
 
-int dcx_16(unsigned short *data, ProcState *state);
+int dcx_16(unsigned short *data, State8080 *state);
 
-int xchg(ProcState *state);
+int xchg(State8080 *state);
 
-int xthl(ProcState *state);
+int xthl(State8080 *state);
 
-int sphl(ProcState *state);
+int sphl(State8080 *state);
 
 /*
  * IMMEDIATE INSTRUCTIONS
  */
 
-int lxi(unsigned char *dest_hi, unsigned char *dest_lo, ProcState *state);
+int lxi(unsigned char *dest_hi, unsigned char *dest_lo, State8080 *state);
 
-int lxi_16(unsigned short *dest, ProcState *state);
+int lxi_16(unsigned short *dest, State8080 *state);
 
-int mvi(unsigned char *dest, ProcState *state);
+int mvi(unsigned char *dest, State8080 *state);
 
-int mvi_m(unsigned char *dest, ProcState *state);
+int mvi_m(unsigned char *dest, State8080 *state);
 
-int adi(ProcState *state);
+int adi(State8080 *state);
 
-int aci(ProcState *state);
+int aci(State8080 *state);
 
-int sui(ProcState *state);
+int sui(State8080 *state);
 
-int sbi(ProcState *state);
+int sbi(State8080 *state);
 
-int ani(ProcState *state);
+int ani(State8080 *state);
 
-int xri(ProcState *state);
+int xri(State8080 *state);
 
-int ori(ProcState *state);
+int ori(State8080 *state);
 
-int cpi(ProcState *state);
+int cpi(State8080 *state);
 
 /*
  * DIRECT ADDRESSING INSTRUCTIONS
  */
 
-int sta(ProcState *state);
+int sta(State8080 *state);
 
-int lda(ProcState *state);
+int lda(State8080 *state);
 
-int shld(ProcState *state);
+int shld(State8080 *state);
 
-int lhld(ProcState *state);
+int lhld(State8080 *state);
 
 /*
  * JUMP INSTRUCTIONS
  */
 
-int pchl(ProcState *state);
+int pchl(State8080 *state);
 
-int jmp(ProcState *state);
+int jmp(State8080 *state);
 
-int jc(ProcState *state);
+int jc(State8080 *state);
 
-int jnc(ProcState *state);
+int jnc(State8080 *state);
 
-int jz(ProcState *state);
+int jz(State8080 *state);
 
-int jnz(ProcState *state);
+int jnz(State8080 *state);
 
-int jm(ProcState *state);
+int jm(State8080 *state);
 
-int jp(ProcState *state);
+int jp(State8080 *state);
 
-int jpe(ProcState *state);
+int jpe(State8080 *state);
 
-int jpo(ProcState *state);
+int jpo(State8080 *state);
 
 /*
  * CALL SUBROUTINE INSTRUCTIONS
  */
 
-int call(ProcState *state);
+int call(State8080 *state);
 
-int cc(ProcState *state);
+int cc(State8080 *state);
 
-int cnc(ProcState *state);
+int cnc(State8080 *state);
 
-int cz(ProcState *state);
+int cz(State8080 *state);
 
-int cnz(ProcState *state);
+int cnz(State8080 *state);
 
-int cm(ProcState *state);
+int cm(State8080 *state);
 
-int cp(ProcState *state);
+int cp(State8080 *state);
 
-int cpe(ProcState *state);
+int cpe(State8080 *state);
 
-int cpo(ProcState *state);
+int cpo(State8080 *state);
 
 /*
  * RETURN FROM SUBROUTINE INSTRUCTIONS
  */
 
-int ret(ProcState *state);
+int ret(State8080 *state);
 
-int rc(ProcState *state);
+int rc(State8080 *state);
 
-int rnc(ProcState *state);
+int rnc(State8080 *state);
 
-int rz(ProcState *state);
+int rz(State8080 *state);
 
-int rnz(ProcState *state);
+int rnz(State8080 *state);
 
-int rm(ProcState *state);
+int rm(State8080 *state);
 
-int rp(ProcState *state);
+int rp(State8080 *state);
 
-int rpe(ProcState *state);
+int rpe(State8080 *state);
 
-int rpo(ProcState *state);
+int rpo(State8080 *state);
 
 /*
  * RST INSTRUCTION
  */
 
-int rst(unsigned char exp, ProcState *state);
+int rst(unsigned char exp, State8080 *state);
 
 /*
  * INTERRUPT FLIP-FLOP INSTRUCTIONS
  */
 
-int ei(ProcState *state);
+int ei(State8080 *state);
 
-int di(ProcState *state);
+int di(State8080 *state);
 
 /*
  * INPUT/OUTPUT INSTRUCTIONS
  */
 
-int in(ProcState *state);
+int in(State8080 *state);
 
-int out(ProcState *state);
+int out(State8080 *state);
 
 /*
  * HALT INSTRUCTION
  */
 
-int hlt(ProcState *state);
+int hlt(State8080 *state);

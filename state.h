@@ -4,9 +4,9 @@
 #define BYTE_SIZE_8080 8
 #define MEM_SIZE_8080 65536
 
-struct ProcState;
+struct State8080;
 
-typedef struct ProcState {
+typedef struct State8080 {
   unsigned char mem[65536];
   unsigned char reg_b;
   unsigned char reg_c;
@@ -27,6 +27,6 @@ typedef struct ProcState {
   int inte; // Interrupts Enabled
   int is_interrupted; // An interrupt has occurred
   unsigned char interrupt_instr; // The instruction supplied via the interrupt
-} ProcState;
+} State8080;
 
 #endif

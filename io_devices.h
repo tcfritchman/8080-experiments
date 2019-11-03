@@ -1,6 +1,6 @@
 #include "state.h"
 
-void register_io_devices(ProcState *state);
+void register_io_devices(State8080 *state);
 
 void coin_switch_on();
 

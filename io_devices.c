@@ -72,7 +72,7 @@ void dummy_output_handler(unsigned char data) {
     // do nothing
 }
 
-void register_io_devices(ProcState *state) {
+void register_io_devices(State8080 *state) {
     // Register the space invaders bit shift hardware 15dchandlers
     state->outputs[2] = handle_bit_shift_offset_write;
     state->outputs[4] = handle_bit_shift_write;

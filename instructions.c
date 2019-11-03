@@ -6,29 +6,29 @@ const int BYTE_SIZE = 8;
 const int DOUBLE_BYTE_SIZE = 16;
 const int NIBBLE_SIZE = 4;
 
-int nop(ProcState *state) {
+int nop(State8080 *state) {
   state->pc += 1;
   return 4;
 }
 
-int unused(ProcState *state) {
+int unused(State8080 *state) {
   printf("Encountered illegal instruction: addr 0x%x", state->pc);
   return 1;
 }
 
-int cmc(ProcState *state) {
+int cmc(State8080 *state) {
   state->carry = !state->carry;
   state->pc += 1;
   return 4;
 }
 
-int stc(ProcState *state) {
+int stc(State8080 *state) {
   state->carry = 1;
   state->pc += 1;
   return 4;
 }
 
-int inr(unsigned char *data, ProcState *state) {
+int inr(unsigned char *data, State8080 *state) {
   (*data)++;
   state->zero = zero(*data);
   state->parity = parity(*data);
@@ -38,7 +38,7 @@ int inr(unsigned char *data, ProcState *state) {
   return 5;
 }
 
-int dcr(unsigned char *data, ProcState *state) {
+int dcr(unsigned char *data, State8080 *state) {
   (*data)--;
   state->zero = zero(*data);
   state->parity = parity(*data);
@@ -48,13 +48,13 @@ int dcr(unsigned char *data, ProcState *state) {
   return 5;
 }
 
-int cma(ProcState *state) {
+int cma(State8080 *state) {
   state->reg_a = ~state->reg_a;
   state->pc += 1;
   return 4;
 }
 
-int daa(ProcState *state) {
+int daa(State8080 *state) {
 
   // Note: this implementation does not pass the tests in the 
   // diagnostic script. Not sure why, seems like maybe the
@@ -85,27 +85,27 @@ int daa(ProcState *state) {
   return 4;
 }
 
-int mov(unsigned char data_src, unsigned char *mem_addr_dst, ProcState *state) {
+int mov(unsigned char data_src, unsigned char *mem_addr_dst, State8080 *state) {
   *mem_addr_dst = data_src;
   state->pc += 1;
   return 7;
 }
 
-int stax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+int stax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, State8080 *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->mem[mem_addr] = state->reg_a;
   state->pc += 1;
   return 7;
 }
 
-int ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+int ldax(unsigned char mem_addr_hi, unsigned char mem_addr_lo, State8080 *state) {
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->reg_a = state->mem[mem_addr];
   state->pc += 1;
   return 7;
 }
 
-int add(unsigned char data, ProcState *state) {
+int add(unsigned char data, State8080 *state) {
   unsigned int sum = data + state->reg_a;
   int carry_bit = (0x100 & sum) >> BYTE_SIZE;
   unsigned int aux_sum = (data & 0xf) + (state->reg_a & 0xf);
@@ -120,7 +120,7 @@ int add(unsigned char data, ProcState *state) {
   return 4;
 }
 
-int adc(unsigned char data, ProcState *state) {
+int adc(unsigned char data, State8080 *state) {
   unsigned int sum = data + state->reg_a + state->carry;
   int carry_bit = (0x100 & sum) >> BYTE_SIZE;
   unsigned int aux_sum = (data & 0xf) + (state->reg_a & 0xf) + state->carry;
@@ -135,7 +135,7 @@ int adc(unsigned char data, ProcState *state) {
   return 4;
 }
 
-int sub(unsigned char data, ProcState *state) {
+int sub(unsigned char data, State8080 *state) {
   // Flip only the last 8 bits of the value in data
   unsigned int data_flipped = (~(data | (~0xff)));
   // Perform sums using 2's compliment subtraction
@@ -153,7 +153,7 @@ int sub(unsigned char data, ProcState *state) {
   return 4;
 }
 
-int sbb(unsigned char data, ProcState *state) {
+int sbb(unsigned char data, State8080 *state) {
   // Flip only the last 8 bits of the value in data
   unsigned int data_flipped = (~((data + state->carry) | (~0xff)));
   // Perform sums using 2's compliment subtraction
@@ -171,7 +171,7 @@ int sbb(unsigned char data, ProcState *state) {
   return 4;
 }
 
-int ana(unsigned char data, ProcState *state) {
+int ana(unsigned char data, State8080 *state) {
   unsigned char result = state->reg_a & data;
   state->reg_a = result;
   state->carry = 0;
@@ -183,7 +183,7 @@ int ana(unsigned char data, ProcState *state) {
   return 4;
 }
 
-int xra(unsigned char data, ProcState *state) {
+int xra(unsigned char data, State8080 *state) {
   unsigned char result = state->reg_a ^ data;
   state->reg_a = result;
   state->carry = 0;
@@ -195,7 +195,7 @@ int xra(unsigned char data, ProcState *state) {
   return 4;
 }
 
-int ora(unsigned char data, ProcState *state) {
+int ora(unsigned char data, State8080 *state) {
   unsigned char result = state->reg_a | data;
   state->reg_a = result;
   state->carry = 0;
@@ -207,7 +207,7 @@ int ora(unsigned char data, ProcState *state) {
   return 4;
 }
 
-int cmp(unsigned char data, ProcState *state) {
+int cmp(unsigned char data, State8080 *state) {
   // Flip only the last 8 bits of the value in data
   unsigned int data_flipped = (~(data | (~0xff)));
   // Perform sums using 2's compliment subtraction
@@ -224,7 +224,7 @@ int cmp(unsigned char data, ProcState *state) {
   return 4;
 }
 
-int rlc(ProcState *state) {
+int rlc(State8080 *state) {
   unsigned int result = state->reg_a << 1;
   int carry_bit = (0x100 & result) >> BYTE_SIZE;
   result |= carry_bit;
@@ -234,7 +234,7 @@ int rlc(ProcState *state) {
   return 4;
 }
 
-int rrc(ProcState *state) {
+int rrc(State8080 *state) {
   int carry_bit = (0x1 & state->reg_a);
   unsigned int result = state->reg_a >> 1;
   result |= carry_bit << (BYTE_SIZE - 1);
@@ -244,7 +244,7 @@ int rrc(ProcState *state) {
   return 4;
 }
 
-int ral(ProcState *state) {
+int ral(State8080 *state) {
   unsigned int result = state->reg_a << 1;
   int old_carry_bit = state->carry;
   int new_carry_bit = (0x100 & result) >> BYTE_SIZE;
@@ -255,7 +255,7 @@ int ral(ProcState *state) {
   return 4;
 }
 
-int rar(ProcState *state) {
+int rar(State8080 *state) {
   int new_carry_bit = (0x1 & state->reg_a);
   unsigned int result = state->reg_a >> 1;
   int old_carry_bit = state->carry;
@@ -266,7 +266,7 @@ int rar(ProcState *state) {
   return 4;
 }
 
-int push(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state) {
+int push(unsigned char mem_addr_hi, unsigned char mem_addr_lo, State8080 *state) {
   unsigned short sp = state->sp;
   state->mem[sp-1] = mem_addr_hi;
   state->mem[sp-2] = mem_addr_lo;
@@ -275,7 +275,7 @@ int push(unsigned char mem_addr_hi, unsigned char mem_addr_lo, ProcState *state)
   return 11;
 }
 
-int push_psw(ProcState *state) {
+int push_psw(State8080 *state) {
   unsigned char psw_bits = 0 |
    state->sign << 7 |
    state->zero << 6 |
@@ -287,7 +287,7 @@ int push_psw(ProcState *state) {
    return 11;
 }
 
-int pop(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+int pop(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, State8080 *state) {
   unsigned short sp = state->sp;
   *mem_addr_lo = state->mem[sp];
   *mem_addr_hi = state->mem[sp+1];
@@ -296,7 +296,7 @@ int pop(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state
   return 10;
 }
 
-int pop_psw(ProcState *state) {
+int pop_psw(State8080 *state) {
   unsigned char psw_bits;
   pop(&state->reg_a, &psw_bits, state);
   state->sign = (0x80 & psw_bits) >> 7;
@@ -307,7 +307,7 @@ int pop_psw(ProcState *state) {
   return 10;
 }
 
-int dad_16(unsigned short *data, ProcState *state) {
+int dad_16(unsigned short *data, State8080 *state) {
   unsigned short hl_bits = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
   unsigned int sum = hl_bits + (*data);
   int carry_bit = (0x10000 & sum) >> DOUBLE_BYTE_SIZE;
@@ -318,13 +318,13 @@ int dad_16(unsigned short *data, ProcState *state) {
   return 10;
 }
 
-int dad(unsigned char data_hi, unsigned char data_lo, ProcState *state) {
+int dad(unsigned char data_hi, unsigned char data_lo, State8080 *state) {
   unsigned short in_bits = (data_hi << BYTE_SIZE) ^ data_lo;
   dad_16(&in_bits, state);
   return 10;
 }
 
-int inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+int inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, State8080 *state) {
   unsigned short in_bits = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
   in_bits++;
   *mem_addr_hi = in_bits >> BYTE_SIZE;
@@ -333,13 +333,13 @@ int inx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state
   return 5;
 }
 
-int inx_16(unsigned short *data, ProcState *state) {
+int inx_16(unsigned short *data, State8080 *state) {
   (*data)++;
   state->pc += 1;
   return 5;
 }
 
-int dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state) {
+int dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, State8080 *state) {
   unsigned short in_bits = (*mem_addr_hi << BYTE_SIZE) ^ *mem_addr_lo;
   in_bits--;
   *mem_addr_hi = in_bits >> BYTE_SIZE;
@@ -348,13 +348,13 @@ int dcx(unsigned char *mem_addr_hi, unsigned char *mem_addr_lo, ProcState *state
   return 5;
 }
 
-int dcx_16(unsigned short *data, ProcState *state) {
+int dcx_16(unsigned short *data, State8080 *state) {
   (*data)--;
   state->pc += 1;
   return 5;
 }
 
-int xchg(ProcState *state) {
+int xchg(State8080 *state) {
   unsigned char temp_a = state->reg_h;
   unsigned char temp_b = state->reg_l;
   state->reg_h = state->reg_d;
@@ -365,7 +365,7 @@ int xchg(ProcState *state) {
   return 4;
 }
 
-int xthl(ProcState *state) {
+int xthl(State8080 *state) {
   unsigned char temp_a = state->reg_h;
   unsigned char temp_b = state->reg_l;
   state->reg_h = state->mem[state->sp + 1];
@@ -376,100 +376,100 @@ int xthl(ProcState *state) {
   return 18;
 }
 
-int sphl(ProcState *state) {
+int sphl(State8080 *state) {
   unsigned short hl_bits = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
   state->sp = hl_bits;
   state->pc += 1;
   return 5;
 }
 
-int lxi(unsigned char *dest_hi, unsigned char *dest_lo, ProcState *state) {
+int lxi(unsigned char *dest_hi, unsigned char *dest_lo, State8080 *state) {
   *dest_hi = state->mem[state->pc+2];
   *dest_lo = state->mem[state->pc+1];
   state->pc += 3;
   return 10;
 }
 
-int lxi_16(unsigned short *dest, ProcState *state) {
+int lxi_16(unsigned short *dest, State8080 *state) {
   *dest = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->pc += 3;
   return 10;
 }
 
-int mvi(unsigned char *dest, ProcState *state) {
+int mvi(unsigned char *dest, State8080 *state) {
   *dest = state->mem[state->pc+1];
   state->pc += 2;
   return 7;
 }
 
-int mvi_m(unsigned char *dest, ProcState *state) {
+int mvi_m(unsigned char *dest, State8080 *state) {
 	mvi(dest, state);
 	return 10;
 }
 
-int adi(ProcState *state) {
+int adi(State8080 *state) {
   add(state->mem[state->pc+1], state);
   state->pc += 1;
   return 7;
 }
 
-int aci(ProcState *state) {
+int aci(State8080 *state) {
   adc(state->mem[state->pc+1], state);
   state->pc += 1;
   return 7;
 }
 
-int sui(ProcState *state) {
+int sui(State8080 *state) {
   sub(state->mem[state->pc+1], state);
   state->pc += 1;
   return 7;
 }
 
-int sbi(ProcState *state) {
+int sbi(State8080 *state) {
   sbb(state->mem[state->pc+1], state);
   state->pc += 1;
   return 7;
 }
 
-int ani(ProcState *state) {
+int ani(State8080 *state) {
   ana(state->mem[state->pc+1], state);
   state->pc += 1;
   return 7;
 }
 
-int xri(ProcState *state) {
+int xri(State8080 *state) {
   xra(state->mem[state->pc+1], state);
   state->pc += 1;
   return 7;
 }
 
-int ori(ProcState *state) {
+int ori(State8080 *state) {
   ora(state->mem[state->pc+1], state);
   state->pc += 1;
   return 7;
 }
 
-int cpi(ProcState *state) {
+int cpi(State8080 *state) {
   cmp(state->mem[state->pc+1], state);
   state->pc += 1;
   return 7;
 }
 
-int sta(ProcState *state) {
+int sta(State8080 *state) {
   unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->mem[mem_addr] = state->reg_a;
   state->pc += 3;
   return 13;
 }
 
-int lda(ProcState *state) {
+int lda(State8080 *state) {
   unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->reg_a = state->mem[mem_addr];
   state->pc += 3;
   return 13;
 }
 
-int shld(ProcState *state) {
+int shld(State8080 *state) {
   unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->mem[mem_addr] = state->reg_l;
   state->mem[mem_addr + 1] = state->reg_h;
@@ -477,7 +477,7 @@ int shld(ProcState *state) {
   return 16;
 }
 
-int lhld(ProcState *state) {
+int lhld(State8080 *state) {
   unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->reg_l = state->mem[mem_addr];
   state->reg_h = state->mem[mem_addr + 1];
@@ -485,19 +485,19 @@ int lhld(ProcState *state) {
   return 16;
 }
 
-int pchl(ProcState *state) {
+int pchl(State8080 *state) {
   unsigned short mem_addr = (state->reg_h << BYTE_SIZE) ^ state->reg_l;
   state->pc = mem_addr;
   return 5;
 }
 
-int jmp(ProcState *state) {
+int jmp(State8080 *state) {
   unsigned short mem_addr = (state->mem[state->pc+2] << BYTE_SIZE) ^ state->mem[state->pc+1];
   state->pc = mem_addr;
   return 10;
 }
 
-int jc(ProcState *state) {
+int jc(State8080 *state) {
   if (state->carry) {
     jmp(state);
   } else {
@@ -506,7 +506,7 @@ int jc(ProcState *state) {
   return 10;
 }
 
-int jnc(ProcState *state) {
+int jnc(State8080 *state) {
   if (!state->carry) {
     jmp(state);
   } else {
@@ -515,7 +515,7 @@ int jnc(ProcState *state) {
   return 10;
 }
 
-int jz(ProcState *state) {
+int jz(State8080 *state) {
   if (state->zero) {
     jmp(state);
   } else {
@@ -524,7 +524,7 @@ int jz(ProcState *state) {
   return 10;
 }
 
-int jnz(ProcState *state) {
+int jnz(State8080 *state) {
   if (!state->zero) {
     jmp(state);
   } else {
@@ -533,7 +533,7 @@ int jnz(ProcState *state) {
   return 10;
 }
 
-int jm(ProcState *state) {
+int jm(State8080 *state) {
   if (state->sign) {
     jmp(state);
   } else {
@@ -542,7 +542,7 @@ int jm(ProcState *state) {
   return 10;
 }
 
-int jp(ProcState *state) {
+int jp(State8080 *state) {
   if (!state->sign) {
     jmp(state);
   } else {
@@ -551,7 +551,7 @@ int jp(ProcState *state) {
   return 10;
 }
 
-int jpe(ProcState *state) {
+int jpe(State8080 *state) {
   if (state->parity) {
     jmp(state);
   } else {
@@ -560,7 +560,7 @@ int jpe(ProcState *state) {
   return 10;
 }
 
-int jpo(ProcState *state) {
+int jpo(State8080 *state) {
   if (!state->parity) {
     jmp(state);
   } else {
@@ -569,19 +569,19 @@ int jpo(ProcState *state) {
   return 10;
 }
 
-void _call(unsigned char mem_addr_hi, unsigned char mem_addr_lo, unsigned short instr_size, ProcState *state) {
+void _call(unsigned char mem_addr_hi, unsigned char mem_addr_lo, unsigned short instr_size, State8080 *state) {
   unsigned short return_addr = state->pc + instr_size;
   push(return_addr >> BYTE_SIZE, return_addr, state);
   unsigned short mem_addr = (mem_addr_hi << BYTE_SIZE) ^ mem_addr_lo;
   state->pc = mem_addr;
 }
 
-int call(ProcState *state) {
+int call(State8080 *state) {
   _call(state->mem[state->pc+2], state->mem[state->pc+1], 3, state);
   return 17;
 }
 
-int cc(ProcState *state) {
+int cc(State8080 *state) {
   if (state->carry) {
     call(state);
     return 17;
@@ -591,7 +591,7 @@ int cc(ProcState *state) {
   }
 }
 
-int cnc(ProcState *state) {
+int cnc(State8080 *state) {
   if (!state->carry) {
     call(state);
     return 17;
@@ -601,7 +601,7 @@ int cnc(ProcState *state) {
   }
 }
 
-int cz(ProcState *state) {
+int cz(State8080 *state) {
   if (state->zero) {
     call(state);
     return 17;
@@ -611,7 +611,7 @@ int cz(ProcState *state) {
   }
 }
 
-int cnz(ProcState *state) {
+int cnz(State8080 *state) {
   if (!state->zero) {
     call(state);
     return 17;
@@ -621,7 +621,7 @@ int cnz(ProcState *state) {
   }
 }
 
-int cm(ProcState *state) {
+int cm(State8080 *state) {
   if (state->sign) {
     call(state);
     return 17;
@@ -631,7 +631,7 @@ int cm(ProcState *state) {
   }
 }
 
-int cp(ProcState *state) {
+int cp(State8080 *state) {
   if (!state->sign) {
     call(state);
     return 17;
@@ -641,7 +641,7 @@ int cp(ProcState *state) {
   }
 }
 
-int cpe(ProcState *state) {
+int cpe(State8080 *state) {
   if (state->parity) {
     call(state);
     return 17;
@@ -651,7 +651,7 @@ int cpe(ProcState *state) {
   }
 }
 
-int cpo(ProcState *state) {
+int cpo(State8080 *state) {
   if (!state->parity) {
     call(state);
     return 17;
@@ -661,7 +661,7 @@ int cpo(ProcState *state) {
   }
 }
 
-int ret(ProcState *state) {
+int ret(State8080 *state) {
   unsigned char return_addr_hi;
   unsigned char return_addr_lo;
   pop(&return_addr_hi, &return_addr_lo, state);
@@ -670,7 +670,7 @@ int ret(ProcState *state) {
   return 10;
 }
 
-int rc(ProcState *state) {
+int rc(State8080 *state) {
   if (state->carry) {
     ret(state);
     return 11;
@@ -680,7 +680,7 @@ int rc(ProcState *state) {
   }
 }
 
-int rnc(ProcState *state) {
+int rnc(State8080 *state) {
   if (!state->carry) {
     ret(state);
     return 11;
@@ -690,7 +690,7 @@ int rnc(ProcState *state) {
   }
 }
 
-int rz(ProcState *state) {
+int rz(State8080 *state) {
   if (state->zero) {
     ret(state);
     return 11;
@@ -700,7 +700,7 @@ int rz(ProcState *state) {
   }
 }
 
-int rnz(ProcState *state) {
+int rnz(State8080 *state) {
   if (!state->zero) {
     ret(state);
     return 11;
@@ -710,7 +710,7 @@ int rnz(ProcState *state) {
   }
 }
 
-int rm(ProcState *state) {
+int rm(State8080 *state) {
   if (state->sign) {
     ret(state);
     return 11;
@@ -720,7 +720,7 @@ int rm(ProcState *state) {
   }
 }
 
-int rp(ProcState *state) {
+int rp(State8080 *state) {
   if (!state->sign) {
     ret(state);
     return 11;
@@ -730,7 +730,7 @@ int rp(ProcState *state) {
   }
 }
 
-int rpe(ProcState *state) {
+int rpe(State8080 *state) {
   if (state->parity) {
     ret(state);
     return 11;
@@ -740,7 +740,7 @@ int rpe(ProcState *state) {
   }
 }
 
-int rpo(ProcState *state) {
+int rpo(State8080 *state) {
   if (!state->parity) {
     ret(state);
     return 11;
@@ -750,39 +750,39 @@ int rpo(ProcState *state) {
   }
 }
 
-int rst(unsigned char exp, ProcState *state) {
+int rst(unsigned char exp, State8080 *state) {
   unsigned short jump_addr = (exp << 3) & 0x0038; // L.S. 3 bits of exp shifted 3 bits right
   _call(jump_addr >> BYTE_SIZE, jump_addr, 1, state); // Do a "CALL" type function
   return 11;
 }
 
-int ei(ProcState *state) {
+int ei(State8080 *state) {
   state->inte = 1;
   state->pc += 1;
   return 4;
 }
 
-int di(ProcState *state) {
+int di(State8080 *state) {
   state->inte = 0;
   state->pc += 1;
   return 4;
 }
 
-int in(ProcState *state) {
+int in(State8080 *state) {
   unsigned char port = state->mem[state->pc+1];
   state->reg_a = (state->inputs[port])();
   state->pc += 2;
   return 10;
 }
 
-int out(ProcState *state) {
+int out(State8080 *state) {
   unsigned char port = state->mem[state->pc+1];
   (state->outputs[port])(state->reg_a);
   state->pc += 2;
   return 10;
 }
 
-int hlt(ProcState *state) {
+int hlt(State8080 *state) {
 	printf("Encountered HLT instruction: addr 0x%x", state->pc);
 	return 1;
 }

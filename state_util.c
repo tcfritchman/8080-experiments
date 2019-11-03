@@ -22,7 +22,7 @@ int zero(unsigned char byte) {
   return byte == 0;
 }
 
-void print_registers_compact(ProcState *state) {
+void print_registers_compact(State8080 *state) {
   char sign = state->sign ? 'S' : '_';
   char parity = state->parity ? 'P' : '_';
   char zero = state->zero ? 'Z' : '_';
@@ -44,7 +44,7 @@ void print_registers_compact(ProcState *state) {
     aux_carry);
 }
 
-void print_registers(ProcState state) {
+void print_registers(State8080 state) {
   printf("\
 BC: 0x%02x 0x%02x\n\
 DE: 0x%02x 0x%02x\n\
@@ -73,21 +73,21 @@ PC: 0x%04x\n",
   state.pc);
 }
 
-void print_mem_r(unsigned short mem_addr, unsigned short pre_bytes, unsigned short post_bytes, ProcState *state) {
+void print_mem_r(unsigned short mem_addr, unsigned short pre_bytes, unsigned short post_bytes, State8080 *state) {
   for (int i = mem_addr - pre_bytes; i < mem_addr + post_bytes; i++) {
     printf("Ox%04x: 0x%02x\n", i, state->mem[i]);
   }
 }
 
-void print_mem_c(unsigned short mem_addr, unsigned short post_bytes, ProcState *state) {
+void print_mem_c(unsigned short mem_addr, unsigned short post_bytes, State8080 *state) {
   print_mem_r(mem_addr, 0, post_bytes, state);
 }
 
-void print_mem(unsigned short mem_addr, ProcState *state) {
+void print_mem(unsigned short mem_addr, State8080 *state) {
   print_mem_r(mem_addr, 0, 8, state);
 }
 
-unsigned char *get_mem_byte(ProcState *state) {
+unsigned char *get_mem_byte(State8080 *state) {
   unsigned short mem_addr = (state->reg_h << 8) ^ state->reg_l;
   return &state->mem[mem_addr];
 }

@@ -9,7 +9,7 @@
 #include "state.h"
 #include "io_devices.h"
 
-#define LOG_CPU
+// #define LOG_CPU
 // #define DIAGNOSTIC
 
 // Screen is rotated 90 degress in the window from how it's represented in the game's code
@@ -19,12 +19,12 @@ const int DISPLAY_HEIGHT = 224;
 const int VIDEO_BYTES = 7168; // (DISPLAY_WIDTH * DISPLAY_HEIGHT) / 8;
 const int PIXEL_BYTES = 229376; // DISPLAY_WIDTH * DISPLAY_HEIGHT * 4;
 
-void interrupt(unsigned char op_code, ProcState *state) {
+void interrupt(unsigned char op_code, State8080 *state) {
   state->is_interrupted = 1;
   state->interrupt_instr = op_code;
 }
 
-int execute_instr(unsigned char op_code, ProcState *state) {
+int execute_instr(unsigned char op_code, State8080 *state) {
   switch (op_code) {
 
     case 0x00:
@@ -1053,7 +1053,7 @@ int execute_instr(unsigned char op_code, ProcState *state) {
   }
 }
 
-int update_state(ProcState *state) {
+int update_state(State8080 *state) {
   if (state->is_interrupted) {
 
 #ifdef LOG_CPU
@@ -1105,7 +1105,7 @@ void init_output_func_stub(unsigned char data) {
   printf("WARN: Attempt to write data to unmapped output device\n");
 }
 
-void init_state(ProcState *state) {
+void init_state(State8080 *state) {
   state->reg_a=0x00;
   state->reg_b=0x00;
   state->reg_c=0x00;
@@ -1160,12 +1160,12 @@ int read_file_to_mem(const char *filename, const int offset, char *mem, size_t m
   return 1;
 }
 
-int load_diagnostic(const char *path, ProcState *state) {
+int load_diagnostic(const char *path, State8080 *state) {
   const int offset = 0x100;
   return read_file_to_mem(path, offset, state->mem, MEM_SIZE_8080);
 }
 
-int load_space_invaders(const char *dir, ProcState *state) {
+int load_space_invaders(const char *dir, State8080 *state) {
   size_t path_length = (strlen(dir)) + 12; // length of `/invaders.x`
   char part_1[path_length];
   char part_2[path_length];
@@ -1200,7 +1200,7 @@ void generate_pixels(unsigned char *pixels, unsigned char *video_memory) {
 }
 
 int main(int argc, char const *argv[]) {
-  ProcState state;
+  State8080 state;
   init_state(&state);
   register_io_devices(&state);
 
